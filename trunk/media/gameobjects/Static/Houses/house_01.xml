@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Trigger value="true"/>
+	<Name value="Dwarven House"/>
+	<Model value="house_01.x"/>
+	<Script value="house_01.script"/>
+	<Description value="Leopolds house. It keeps many secrets locked."/>
+</Config>

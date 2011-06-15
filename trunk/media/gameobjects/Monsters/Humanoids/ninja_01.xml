@@ -1,0 +1,41 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Disco Ninja"/>
+	<Model value="ninja_01.b3d"/>
+	<Monster value="true"/>
+	<Script value="ninja_01.script"/>
+	<Description value="This ninja likes to listen to the music and go out at night. He would like to record an album of folk music."/>
+	<Radius value="25"/>
+
+	<Animation name="Idle" start="206" end="250"/>
+	<Animation name="Walk" start="1" end="14"/>
+	<Animation name="Jump" start="94" end="102" />
+	<Animation name="Attack" start="45" end="59" />
+	<Animation name="Attack2" start="60" end="68" />
+	<Animation name="Die" start="166" end="173" />
+
+	<Ability>
+		<Strength value="6" min="1" max="10">
+		<Dexterity value="3" min="1" max="10">
+		<Inteligence value="9" min="1" max="10">
+		<Health value="10" min="1" max="10">
+		<Experience value="80" min="1" max="1000">
+		<Level value="3" min="1" max="20">
+	</Ability>
+
+	<Skills>
+		<Defense value="10" min="10" max="14">
+		<Attack value="10" min="4" max="20">
+		<Damage value="4" min="1" max="8">
+	</Skills>
+	
+	<Sounds>
+		<Sound_Ambient filename="ninja_ambient.mp3" loop="true"/>
+		<Sound_Attack filename="ninja_attack.mp3"/>
+		<Sound_Hello filename="ninja_hello.mp3"/>
+		<Sound_Hit filename="ninja_hit.mp3"/>
+		<Sound_Wound filename="ninja_wound.mp3"/>
+		<Sound_Die filename="ninja_die.mp3"/>
+	</Sounds>
+	
+</Config>

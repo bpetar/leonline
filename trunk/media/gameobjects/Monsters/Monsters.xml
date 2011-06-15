@@ -1,0 +1,18 @@
+<!-- Monsters Configuration File -->
+<Config>
+	<Animals>
+		<Monsters filename="ant01"/>
+		<Monsters filename="ant02"/>
+		<Monsters filename="cat"/>
+		<Monsters filename="dog"/>
+		<Monsters filename="rat"/>
+		<Monsters filename="turtle"/>
+	</Animals>
+	<Humanoids>
+		<Monsters filename="dwarf_01"/>
+		<Monsters filename="ninja_01"/>
+		<Monsters filename="micro-ninja"/>
+		<Monsters filename="zombie"/>
+	</Humanoids>
+	<Monsters filename="beast_01"/>
+</Config>

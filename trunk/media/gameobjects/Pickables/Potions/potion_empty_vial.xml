@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Empty Flask"/>
+	<Model value="potion_empty_vial.x"/>
+	<Pickable value="true"/>
+	<Script value="potion_empty_vial.script"/>
+	<Description value="Empty flask; suitable for potions."/>
+</Config>

@@ -1,0 +1,19 @@
+Animation ranges for the ant, based on "Blitz 3D" b3d format (for direct X -1)
+
+1-9	walk
+10-19	attack
+20-29	stun
+31-45	explode
+47-65	idle
+
+Free for use in Free, shareware, commercial software etc, just drop my name "Psionic" in the credits somewhere if you get time ;-))
+
+
+"antviewer.bb" is a Blitz 3D viewer program and you need Blitz 3D to run it, download the demo from...
+
+http://www.blitzbasic.com
+
+Have Fun!
+
+Psionic
+http://www.psionic3d.co.uk

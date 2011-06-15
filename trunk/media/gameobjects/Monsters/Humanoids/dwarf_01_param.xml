@@ -1,0 +1,12 @@
+<!-- Pickable Configuration File -->
+<Config>
+	<Pickable name="dagger_01">
+		<type value = "weapon"/>
+		<size value = "small"/>
+		<weight value = "12"/>
+		<dmg value = "32"/>
+		<AC value = "18"/>
+		<HP value = "12"/>
+		<description value="Simple small dagger caracteristic for Vandaar region"/>		
+	</Pickable>
+</Config>

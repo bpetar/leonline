@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Toy Tree 1"/>
+	<Model value="tree_01.x"/>
+	<Description value="Tree Toy."/>
+</Config>

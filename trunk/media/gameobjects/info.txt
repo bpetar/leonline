@@ -1,0 +1,75 @@
+
+How to add Models to Level Editor Program.
+------------------------------------------
+
+This directory structure is tightly conected to program functionality.
+If you add another directory here - new tab will appear in LevelEditor -> GameObject window.
+If you delete one of existing dirs, their tab will simply dissapear from GameObject window.
+Inside these dirs program is looking for xml file with same name as dir (in directory Static it looks for Static.xml).
+These xml files contain available model files structured in a tree. Xml file is read and tree of models is generated like this:
+
+-Animals
+	-turtle
+	-sheep
+	-bird
+-Humanoids
+	-dwarf
+	-combold
+	-zombie
++Dragons
++Other
+
+Program doesn't accutaly check if the model is present at this time, it just loads what is in the xml file. 
+If appropriate model is not there, warning will fire when model is selected in the program, and thats all.
+
+If you want to add new models to this LevelEditor simply add models name in xml file and save model in appropriate dir.
+For example, if you want to add animated model of rat to program, it would be best to put it in Monsters->Animals category to be with it's friends.
+Enter Monsters dir and open Monsters.xml, you'll see something like this:
+<Config>
+	<Animals>
+		<Monsters filename="turtle"/>
+		<Monsters filename="bird"/>
+		<Monsters filename="sheep"/>
+	</Animals>
+If you models name is Ratsy.x you would add it like this:
+ <Config>
+	<Animals>
+		<Monsters filename="turtle"/>
+		<Monsters filename="bird"/>
+		<Monsters filename="sheep"/>
+		<Monsters filename="Ratsy"/>
+	</Animals>
+Put the Ratsy.x file in Monsters/Animals folder and all it's textures should be in there too.
+
+Try not to make any unnecessary new folder in Monsters dir (like 'rats_leg_textures') cause it will be added as new tree node category.
+If you want to add new tree node category, for example "Furniture" under Static category, 
+you go to Static dir, create new dir Furniture, and to Static.xml file add <Furniture> </Furniture> tags.
+Then between those tags add new models <Static filename="new_model"> and don't forget to copy them to Furniture dir.
+
+All your changes will be present in next start of the program without recompiling, building or anything.
+
+Oh, yeah, one more thing: no sub sub dirs. Only one level of node parenting is supported. If you add new dir under Animals, like 
+Monsters/Animals/Flying, that won't work badly. Just don't do it for now. Better add it beside Animals like FlyingAnimals if you like.
+<Config>
+	<Animals>
+		<Flying>
+			<Monsters filename="THIS IS NO GOOD BECAUSE OF SUBDIRING SUBDIR">
+		</Flying>
+	</Animals>
+	<FlyingAnimals>
+		<Monsters filename="THIS WILL WORK NO PROBLEMO">
+	</FlyingAnimals>
+</Config>	
+
+-- TO BE CHANGED -- Notice there is no .x extension after "Ratsy", and uppercase R must be same as filename. 
+Program will load any model extension supported by irrlicht. Don't call your texture Ratsy.jpg cause it can cause 
+error in loading model. Call it somthing that doesn't contain "Ratsy" like Rat_tex.jpg.
+
+Finally, after model is working properly in the program, you can add properties to it using Ratsy.xml file, 
+that is xml file with the same name as your model. Program will automaticly load properties from xml file with the same name
+(so don't name your model "Static" or "Monsters" or anything already existing), and those properties should look like this:
+
+<Config>
+	<Container value="true"/>
+	<Invisible value="false"/>
+</Config>

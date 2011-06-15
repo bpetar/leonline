@@ -1,0 +1,6 @@
+<!-- Conditions List File -->
+
+<ScriptConditions>
+	<Altar1GobletPlaced default="1"/>
+	<Altar2GobletPlaced default="0"/>
+</ScriptConditions>

@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Lever 1"/>
+	<Model value="lever.b3d"/>
+  <Trigger value="true"/>
+  <Script value="lever.script"/>
+	<Description value="Lever is trigger that usually opens door or sometimes triggers the traps."/>
+</Config>

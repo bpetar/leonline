@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Plant 2"/>
+	<Model value="plant_02.x"/>
+	<Description value="Pink berries."/>
+</Config>

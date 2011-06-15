@@ -1,0 +1,30 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Very small ninja"/>
+	<Model value="micro-ninja.b3d"/>
+	<Monster value="true"/>
+	<Description value="Jiu jitzu."/>
+
+	<Animation name="Idle" start="206" end="250"/>
+	<Animation name="Walk" start="1" end="14"/>
+	<Animation name="Jump" start="94" end="102" />
+	<Animation name="Attack1" start="45" end="59" />
+	<Animation name="Attack2" start="60" end="68" />
+	<Animation name="Die" start="166" end="173" />
+
+	<Ability>
+		<Strength value="6" min="1" max="10">
+		<Dexterity value="3" min="1" max="10">
+		<Inteligence value="9" min="1" max="10">
+		<Health value="20" min="1" max="20">
+		<Experience value="1" min="1" max="1000">
+		<Level value="1" min="1" max="100">
+	</Ability>
+
+	<Skills>
+		<Defence value="6" min="1" max="100">
+		<Attack value="6" min="1" max="100">
+		<Magic value="6" min="1" max="100">
+		<Gardening value="16" min="1" max="100">
+	</Skills>
+</Config>

@@ -1,0 +1,81 @@
+
+<HTML>
+<TITLE>Tutorial 2: Chest Full of Treasure</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+
+
+<body bgcolor="black" link="yellow" vlink="#BBBB00">
+<font color="#909090" face="Arial" size="2">
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br><br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_01.html"> << Tutorial 1: Basic Map </a>
+</td>
+<td align="right">
+<a href="Tutorial_03.html">Tutorial 3: Pickable Scripts >></a>
+</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<font color="#FFFFCC" size="7" face="Arial"> Tutorial 2: Chest Full of Treasure </font>
+
+<div>
+
+<br>In this tutorial, we gonna make simple scene, then we'll add some items to container object.
+<br>
+<br>Start Level Editor.
+<br>You should be comfortable with laying objects around by now, so layout a simple map.
+<br>Add barrel model from the Static tab. In the properties window click on the button 
+<br>"Add Container Content" (make sure barrel is selected!). 
+<br>
+<br><img src="le_screenshot_container.jpg" hspace=10 vspace=8 align=top>
+<br>
+<br>In the popup window, select few items to add to the container. 
+<br>Click Ok. Save the map.
+<br>
+<br>In the game directory, open game_config.xml and change 'MapStart' attribute to point to your map.
+<br>Add your map to list of maps under 'Maps' tag like this: Level id="0" filename="mymap.map".
+<br>
+<br>Start GameExample.
+<br>You should see your map loaded.
+<br>Walk the turtle character to the container and click on it.
+<br>Get the prescious items to you inventory! Try putting them back to container.
+<br>
+<br><font color="#FFFFCC" size="5" face="Arial">Advanced topic:</font>
+<br>
+<br>To understand how this feature works, check out container content xml files (cc_mapname_id.xml) 
+<br>that are stored together with your map file. These are automatically generated files once you 
+<br>add some content to container.When game opens the map (irr file) it checks if any of the nodes 
+<br>are container objects. If they are, it searches for xml file describing their content. 
+<br>File name contains ID of the container node, and ID of the map it belongs to.
+<br>
+<br>
+<br>Petar Bajic
+<br>MPE (C) All Rights Reserved 
+<br>Homepage: www.mystic-peanut.com
+<br>July, 21 2008.
+<br>
+<br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_01.html"> << Tutorial 1: Basic Map </a>
+</td>
+<td align="right">
+<a href="Tutorial_03.html">Tutorial 3: Pickable Scripts >></a>
+</td>
+</tr>
+</table>
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br>
+<br>
+</font>
+</body>
+</html>

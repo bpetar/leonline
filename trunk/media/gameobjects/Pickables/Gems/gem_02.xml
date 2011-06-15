@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Ruby"/>
+	<Model value="gem_02.x"/>
+	<Pickable value="true"/>
+	<Script value="gem_02.script"/>
+	<Description value="Ruby. Value: 100gp."/>
+</Config>

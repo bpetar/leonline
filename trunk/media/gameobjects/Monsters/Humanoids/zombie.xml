@@ -1,0 +1,40 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Zombie"/>
+	<Model value="zombie.b3d"/>
+	<Monster value="true"/>
+	<Description value="Persistant slow walker."/>
+	<Radius value="25"/>
+
+	<Animation name="Idle" start="137" end="200"/>
+	<Animation name="Walk" start="2" end="20"/>
+	<Animation name="Run" start="22" end="36"/>
+	<Animation name="Jump" start="106" end="115" />
+	<Animation name="Attack" start="117" end="128" />
+	<Animation name="Die" start="59" end="75" />
+
+	<Ability>
+		<Strength value="6" min="1" max="10">
+		<Dexterity value="3" min="1" max="10">
+		<Inteligence value="9" min="1" max="10">
+		<Health value="20" min="1" max="20">
+		<Experience value="100" min="1" max="1000">
+		<Level value="1" min="1" max="100">
+	</Ability>
+
+	<Skills>
+		<Defense value="6" min="1" max="15">
+		<Attack value="6" min="1" max="20">
+		<Damage value="4" min="1" max="8">
+	</Skills>
+	
+	<Sounds>
+		<Sound_Ambient filename="zombie_ambient.mp3" loop="true"/>
+		<Sound_Attack filename="zombie_attack.mp3"/>
+		<Sound_Hello filename="zombie_hello.mp3"/>
+		<Sound_Hit filename="zombie_hit.mp3"/>
+		<Sound_Wound filename="zombie_wound.mp3"/>
+		<Sound_Die filename="zombie_die.mp3"/>
+	</Sounds>
+	
+</Config>

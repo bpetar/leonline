@@ -1,0 +1,5 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Old Paddock"/>
+	<Model value="paddock.x"/>
+</Config>

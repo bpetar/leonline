@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Container value="true"/>
+	<Name value="Horse Trough"/>
+	<Model value="trough.x"/>
+</Config>

@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Door Bars"/>
+	<Model value="doorbars.3ds"/>
+	<Description value="Prison door."/>
+</Config>

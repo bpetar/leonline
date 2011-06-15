@@ -1,0 +1,137 @@
+
+<HTML>
+<TITLE>Tutorial 4: Trigger Scripts</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+
+
+<body bgcolor="black" link="yellow" vlink="#BBBB00">
+<font color="#909090" face="Arial" size="2">
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br><br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_03.html"> << Tutorial 3: Pickable Scripts</a> 
+</td>
+<td align="right">
+<a href="Tutorial_05.html">Tutorial 5: NPC Conversation >></a>
+</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<font color="#FFFFCC" size="7" face="Arial"> Tutorial 4: Trigger Scripts </font>
+
+<div>
+
+<br>In this tutorial, we gonna make some scripts for trigger objects.
+<br>Trigger object is game object that can be clicked on to produce some action.
+<br>It is static object (can not be picked up) but provides certain interaction.
+<br>Here are several example trigger objects: 
+<br> - "Fountain of Health" - when player clicks on it it increases health to maximum.
+<br> - Door - take player to another level.
+<br> - Lever - opens a door.
+<br> - Well - player drinks water.
+<br> - Merchant - trading dialog opens.
+<br> - Button - fireball is fired toward player.
+<br>Trigger object can have various states, for example, door can be locked or unlocked.
+<br>If player clicks on locked door message is displayed: "Door is locked." and nothing happens.
+<br>If players clicks on unlocked door, he is taken to another level.
+<br>Another example would be town square statue, you could define two states for it:
+<br>Ok and Desecrated. If statue is desecrated, all townsfolk will be at angry state, 
+<br>only old apotekarus Gideon will be secretly happy, and willing to sell you a potion
+<br>for lower price then usual. You see, the posibilities are endless, and here is how you 
+<br>define trigger script for simple example "locked house":
+<br>You gonna need one house and one key on the map for this tutorial.
+<br>Click on the house, select Trigger checkbox and click "Trigger Script" button.
+<br>This dialog comes up:
+<br>
+<br><img src="le_triggerscript.jpg" hspace=10 vspace=8 align=top>
+<br>
+Note: Script is already written, so close this dialog, delete file media/scripts/static/house_01.script and start again.
+<br>
+<br>First you should add states to your trigger object. In "Add new state" edit box write "open"
+<br>and click "Add State" button. Then type "closed" and add that state too.
+<br>
+<br>Select "closed" state and click "Set Default State". This will make house locked when game 
+<br>starts. Add action to closed state: Select "Info" from the list of actions and type
+<br>"House is locked, you'll need a key" in the value edit box.
+<br>Select "open" state and add different action to this state: Select "LeadToMap" action, and
+<br>type in value - name of the map to move to: "maps/dwarven_house.irr".
+<br>
+<br>This is it for the house. Save the trigger script and close dialog.
+<br>You can find your house script in media/Scripts/Static directory. 
+<br>Leave it there for game example to find it.
+<br>
+<br>Now we need to make a key change the state of the house to open!
+<br>Memorize house id, you gonna need it bit later (you can find it in properties window when house is selected).
+<br>Select key, bring up Pick Script dialog. 
+<br>
+<br><img src="le_keyscript.jpg" hspace=10 vspace=8 align=top>
+<br>
+Note: Script is already written, so close this dialog, delete file media/scripts/pickables/key_01.script and start again.
+<br>
+<br>Check key as "Usable".
+<br>Select event "OnUseAgainst" and type in Event target id to be id of the house (memorized).
+<br>Add this event.
+<br>Add action to it: select "InfluenceState" action from the combo box,
+<br>select "id" from the action target combo,
+<br>type id of the house (memorized) in action target id, 
+<br>attribute can be left blank.
+<br>enter value "open".
+<br>Add action.
+<br>
+<br>Select new action from "Add New Action", select "Info".
+<br>Action target should be "none". (But generally it is ignored)
+<br>Action attribute is also empty.
+<br>Action value should be the message you want to display: "Door to red cottage have opened!"
+<br>Click "Add Action" button.
+<br>
+<br>Finally, select Disintegrate action.
+<br>Set Action target to be "self".
+<br>Click "Add Action" button.
+<br>This will cause key to disappear after usage.
+<br>
+<br>Save your map, edit game_config.xml to point to your map, and start game example 
+<br>to see how your script behaves in the game.
+<br>
+<br>Notice you could write anything for state names instaed of "open" and "close", 
+<br>it could be "locked", "unlocked", and it could even have more states like "semilocked"
+<br>Try making key change state of the house from locked to semilocked, and then mushroom 
+<br>finally changing state of the house from semilocked to unlocked. 
+<br>
+<br>You will see mushroom will chage state of the house to unlocked no matter what state
+<br>the house is in. If you want mushroom to be ineffective in locked state,
+<br>and to work only in semilocked state, you'll need to change mushroom script:
+<br>Type in attribute value: semilocked.
+<br>Adding attribute value will change state of target object 
+<br>only if it is in the specified 'attribute' state.
+<br>
+<br>Petar Bajic
+<br>MPE (C) All Rights Reserved 
+<br>Homepage: www.mystic-peanut.com
+<br>July, 21 2008.
+<br>
+<br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_03.html"> << Tutorial 3: Pickable Scripts</a> 
+</td>
+<td align="right">
+<a href="Tutorial_05.html">Tutorial 5: NPC Conversation >></a>
+</td>
+</tr>
+</table>
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br>
+<br>
+<span><a href="http://www.dodownload.com/games/action/turtle+shepherd.html"><img src="http://www.dodownload.com/images/av-buttons/turtle+shepherd.png" alt="Turtle Shepherd is safe to download" border="0"></a><br /><a href="http://www.dodownload.com/">Download Safe Software</a></span>
+
+</font>
+</body>
+</html>

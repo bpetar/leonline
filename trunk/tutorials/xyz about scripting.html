@@ -1,0 +1,91 @@
+
+<br>More blah blah on scripts:
+<br>
+<br>If you bring the Pick Script dialog again for the mushroom,
+<br>you will see that your script populates the dialog (assuming you already wrote one).
+<br>You can change it, by removing events and actions, and write other rules.
+<br>Notice that no matter how much mushrooms you put in your level, they will all behave
+<br>the same OnUse event - they will all increase the strength by +1.
+<br>If you want to have different mushroom that does something else when eaten,
+<br>you have to add another game object to the Level editor. 
+<br>For this, see How To Add New Game Objects to Level Editor tutorial.
+<br>
+<br>Other examples of Usable items would be: Apple, Key, Spell, Wand... 
+<br>and examples of Equipable items are: Axe, Shield, Helmet, Ring, Bracelet...
+<br>It is allowed for item to be both Usable and Equipable (chocolate dagger?), 
+<br>all that checking does is adding Events specific to that type of pickable object.
+<br>These events are defined for pickable items:
+<br>
+<br>DefaultEvents:
+<br>	OnApproach - event happens when player approaches item
+<br>	OnPick - event happens when player picks item
+<br>	OnDrop - item is dropped
+<br>	OnCombine - item is combined with another item
+<br>
+<br>Events specific to equipable items:
+<br>	OnEquip - event happens when player equips item (curses here we go)
+<br>	OnUnequip - and this is when item is removed from the body
+<br>
+<br>Events specific to usable items:
+<br>	OnUse - In case of apple, this would represent eating it, in case of wand it would represent firing it
+<br>	OnUseAgainst - This event is fired when item is clicked against other game object
+<br>
+<br>List of all possible actions is big, and rising, and can be found in file media/Scripts/actions.script
+<br>
+<br>Actions:
+<br>Disintegrate - deletes object from the map, weather it is mushroom you just eated, or a whole castle.
+<br>InfluenceAbility - Changes one ability score by the given value
+<br>InfluenceSkill - Changes selected skill score by the given value
+<br>InfluenceState - Changes state of selected object
+<br>Info - Writes message to game info console
+<br>LeadToMap - Loads another level (this action is called when player clicks on the door, for example)
+<br>... to mention just a few.
+<br>
+<br>Programming Tutorial: Scripts
+<br>
+<br>Scripts are introduced in attempt to remove programming from game making.
+<br>Programming is slow and hard and messy, and games are bigger and bigger.
+<br>But scrips usually end up just moving programming from one language (C,C++) to another (Lua, GameMonkey).
+<br>And not much is changed.
+<br>That is why we introduced completely new scripting system, designed to bring
+<br>as much ease as possible to game creation, without restricting the imagination.
+<br>
+<br>Event! Condition? => Action:
+<br>Event Condition Action (ECA) System reduces scripting to predefined constants that can be 
+<br>combined to desired effect. "Event" is something that happens in game, system is using events to
+<br>notify when player clicks on something, picks an item, opens a chest, attacks a monster...
+<br>Events have descriptive names like:
+<br> - SCRIPT_EVENT_CONTAINER_ONCLICK
+<br> - SCRIPT_EVENT_PICKABLE_ONPICK
+<br> - SCRIPT_EVENT_PICKABLE_ONUSE
+<br> - SCRIPT_EVENT_TRIGGER_ONCLICK
+<br> - etc.
+<br>Event constants should cover everything that can happen in your game, that requires some action in return.
+<br>Events for almost all possible situations are added to the system, if you need more you have to do some
+<br>programming. See Programming Tutorial for Adding Events to the Script System.
+<br>
+<br>Condition is something that is checked before executing an action. It is optional variable, and can be 
+<br>left out. You are free to define any condition you like without programming. Just add id to the list
+<br>of conditions in file media/Scripts/conditions.xml
+<br>This is how it works: You name a condition to describe the situation, for example, CONDITION_PLAYER_DRUNK.
+<br>You set condition initially to be false. When you write your script, you can now check if your player is drunk,
+<br>by checking the named condition variable. You can change the state of that variable in your game using actions.
+<br>Event "Player Drinks Beer" => Action "Change Condition CONDITION_PLAYER_DRUNK to true"
+<br>Event "Player Drinks Beer" Condition "CONDITION_PLAYER_DRUNK = true" => Action "Player pass out".
+<br>
+<br>Action is what you do when event occurs.
+<br>With actions you can move things around, make them dissaper, influence player abilities, change states of objects...
+<br>the more the merrier.
+<br>
+<br>Finally, all actions can be combined with all events and conditions, thus making your own game rules any way you like:
+<br>If player drinks beer => His strength goes up by 1.
+<br>If player eats mushroom => His house disappears.
+<br>If player clicks on the tree => tree falls down.
+<br>If player clicks on the tree (and he is drunk at the same time) => his strength goes up by 1.
+<br>
+<br>Will this game rules make sense, it is entirely up to your conscience.
+<br>
+<br>If you have loads of questions after these tutorials, like: "Whats with the strength attribute? 
+<br>What other attributes exist? Can I add my own attribute? Skills? HP? Magic? Defense? Attack?"
+<br>Then you seem to be on a good track. Writing scripts is where you stop following tutorials,
+<br>and start making your own game rules.

@@ -1,0 +1,88 @@
+
+<HTML>
+<TITLE>Tutorial 6: I created a Monster!</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+
+
+<body bgcolor="black" link="yellow" vlink="#BBBB00">
+<font color="#909090" face="Arial" size="2">
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br><br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_05.html"> << Tutorial 5: NPC Dialog</a> 
+</td>
+<td align="right">
+<a href="xyz about scripting.html">Go to more scripting chanting...</a>
+</td>
+</tr>
+</table>
+<br>
+<br>
+
+<font color="#FFFFCC" size="7" face="Arial"> Tutorial 6: I created a Monster! </font>
+
+<div>
+
+<br>In this tutorial we will talk about adding monsters to the map. 
+<br>In the "Game Objects" floating window switch to Monsters Tab. You select animated monster like any other
+object and put it on the map. Button "Monster Properties" in "Object Properties" window should be enabled. It opens monsters dialog.
+Monster dialog displays monster skills and attributes. The idea is to allow user to define its own set of
+skills and attributes for each monster, and to easily assign values to them later. 
+Each monster (each monster type) must have its own xml file where skills and attributes and other parameters are defined.
+For example, check Ant xml file "ant01.xml", Health value is 6, so each Ant you place on the map will have default value 6 for Health.
+For my own game examle, I defined following monster 'skills': Attack, Defense, Damage. Attributes are: Health and Expirience.
+<br>
+<br>Click "Monster Properties" button. This is Monster Properties dialog window:
+<br>
+<br><img src="le_monsterscript.jpg" hspace=10 vspace=8 align=top>
+<br>
+<br>In this window, you can change values of monster properties... 
+<br>If you click 'Save' values will be saved to map file together with the monster object.
+When you change properties of one monster, values different from default are saved to map file, indicating they are applied to that monster on that world only.
+
+<br>If you click 'Save for all' values will be saved to monsters xml config file, so all monsters of that type
+<br>will have new default values further on.
+<br>
+<br>Add one ant to the map.
+<br>Click "Monster Properties" button.
+<br>Change HP to 10.
+<br>Save for all.
+<br>Add new ant to the level.
+<br>Click "Monster Properties" button for new ant.
+<br>Notice he now has value 10 as default.
+<br>Change his HP to 20 and Save (not Save for all). 
+<br>Scale this ant a little bit, so he gets to be bigger the the rest.
+<br>Add few more ants. They all have HP 10, only the big one has 20.
+<br>
+<br>Save your map.
+<br>Edit game_config.xml to point to your map.
+<br>Start game example.
+<br>You should see your map loaded.
+<br>Fight ants by clicking on them. Be careful of the big one.
+<br>
+<br>Petar Bajic
+<br>MPE (C) All Rights Reserved 
+<br>Homepage: www.mystic-peanut.com
+<br>July, 21 2010.
+<br>
+<br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_05.html"> << Tutorial 5: NPC Dialog</a> 
+</td>
+<td align="right">
+<a href="xyz about scripting.html">Go to more scripting chanting...</a>
+</td>
+</tr>
+</table>
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br>
+<br>
+</font>
+</body>
+</html>

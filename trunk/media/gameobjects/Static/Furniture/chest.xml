@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Nice Chest"/>
+	<Model value="chest.3ds"/>
+	<Container value="true"/>
+	<Description value="Holds valuables. Never dirty socks."/>
+</Config>

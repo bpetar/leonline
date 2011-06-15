@@ -1,0 +1,18 @@
+<!-- Default Pickable Script Action File -->
+
+<DefaultEvents>
+	<OnApproach/>
+	<OnPick/>
+	<OnDrop/>
+	<OnCombine/>
+<DefaultEvents/>
+
+<EquipableEvents>
+	<OnEquip/>
+	<OnUnequip/>
+<EquipableEvents/>
+
+<UsableEvents>
+	<OnUse/>
+	<OnUseAgainst/>
+<UsableEvents/>

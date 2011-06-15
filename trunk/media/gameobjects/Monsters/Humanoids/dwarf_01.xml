@@ -1,0 +1,32 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Friendly Dwarf Leopold"/>
+	<Model value="dwarf_01.b3d"/>
+	<NPC value="true"/>
+	<Script value="dwarf_01.script"/>
+	<Description value="Leopold the friendly dwarf is very sturdy and good hearted fellow. Never lets go of his axe."/>
+
+	<Animation name="Idle" start="292" end="325"/>
+	<Animation name="Walk" start="2" end="14"/>
+	<Animation name="Run" start="16" end="26"/>
+	<Animation name="Jump" start="28" end="40" />
+	<Animation name="Attack1" start="112" end="126" />
+	<Animation name="Attack2" start="128" end="142" />
+	<Animation name="Die" start="230" end="251" />
+
+	<Ability>
+		<Strength value="6" min="1" max="10">
+		<Dexterity value="3" min="1" max="10">
+		<Inteligence value="9" min="1" max="10">
+		<Health value="20" min="1" max="20">
+		<Experience value="1" min="1" max="1000">
+		<Level value="1" min="1" max="100">
+	</Ability>
+
+	<Skills>
+		<Defence value="6" min="1" max="100">
+		<Attack value="6" min="1" max="100">
+		<Magic value="6" min="1" max="100">
+		<Gardening value="16" min="1" max="100">
+	</Skills>
+</Config>
