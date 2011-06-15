@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Long Sword"/>
+	<Model value="sword_01.x"/>
+	<Pickable value="true"/>
+	<Script value="sword_01.script"/>
+	<Description value="Long sword - best weapon for all."/>
+</Config>

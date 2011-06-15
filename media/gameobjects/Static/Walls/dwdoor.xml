@@ -1,0 +1,9 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Double Wooden Door"/>
+	<Model value="dwdoor.b3d"/>
+  <Wall value="true"/>
+	<Script value="dwdoor.script"/>
+	<Description value="Grand double wooden door."/>
+
+</Config>

@@ -1,0 +1,23 @@
+
+Game Example
+------------
+
+This game is example of how levels created in level editor behave in point and click kind of game.
+If you start the game you will see one very simple level with few game objects for demonstration.
+
+You character is little green turtle.
+Use your mouse to click on the ground and turtle will walk to that position.
+If you click on some object, turtle will approach and try to interact with it.
+Check little console for text info.
+To adjust the camera position, press and hold (and move) right mouse button.
+Use mouse scroll to change camera distance.
+You can use items in your inventory with right mouse click.
+You can save/load game (it makes sense if you make bigger levels)
+
+If you make your own levels in level editor, you can tell game example to load them by modifying game_config.xml
+Attribute "MapStart" points to the first level loaded by the game, and if you have more, list all your levels in <Maps> tag.
+
+Petar Bajic
+MPE (C) All Rights Reserved 
+Homepage: www.mystic-peanut.com
+January, 21 2010.

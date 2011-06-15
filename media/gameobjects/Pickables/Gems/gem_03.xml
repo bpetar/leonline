@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Pink"/>
+	<Model value="gem_03.x"/>
+	<Pickable value="true"/>
+	<Script value="gem_03.script"/>
+	<Description value="Magic Pink Gem. Value: 17gp."/>
+</Config>

@@ -1,0 +1,105 @@
+
+<HTML>
+<TITLE>Tutorial 1: Basic Map</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+
+
+<body bgcolor="black" link="yellow" vlink="#BBBB00">
+<font color="#909090" face="Arial" size="2">
+<br>
+
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_Index.html">Index</a>
+</td>
+<td align="right">
+<a href="Tutorial_02.html">Tutorial 2: Chest Full of Treasure >> </a>
+</td>
+</tr>
+</table>
+<br>
+<br>
+<br>
+<font color="#FFFFCC" size="7" face="Arial"> Tutorial 1: Basic Map </font>
+
+<div>
+
+<br>Level Editor is irrlicht based application used for making game levels/maps. 
+<br>
+<br>In this tutorial, we gonna learn how to place objects on the map, and how to manipulate them.
+<br>
+<br>Start Level Editor.
+<br>You should see game objects window with a list of placed game objects in a tree to the left. Tab 'scene' is empty at first, and gets populated as you place 3d models on the map. Other tabs (Monsters, Pickables, Static) contain available 3d models you can pick and place on the map.
+<br>
+<br><img src="le_screenshot.jpg" hspace=10 vspace=8 align=top>
+<br>
+<br>
+<br>Monsters are animated models used for enemies, NPCs, and playing characters.
+<br>Pickables are objects you can pick and place in your inventory.
+<br>Static are objects that are too big to pick up, usually not animated (but you can see a weaving tree in there, why not), and some of them could be interactive (later).
+<br>
+<br>
+Select tab with Static models, pick a house with mouse click and place it on the map with another click. Like house, place few more models to the map, don't be shy. While you hower with mouse pointer over models the model preview will be shown in the Object Preview window below.
+<br>
+<br><font color="#FFFFCC" size="5" face="Arial">Navigation</font>
+<br>
+<br>To navigate camera around in Level Editor use these controls:
+<br>Rotate map with right mouse press and hold.
+<br>Pan map with SHIFT + right mouse press and hold (or WASD or arrows keys).
+<br>Zoom map with mouse scroll.
+<br>
+<br>To move and rotate 3d model around use these controls:
+<br>Move selected object by clicking on it and dragging it around (left mouse press and hold).
+<br>Rotate selected object around Y axis by pressing SHIFT + left mouse press and hold.
+<br>Rotate selected model around X and Z axis by holding X and Z keys respectively plus mouse left click.
+<br>Scale selected object by pressing SHIFT + mouse scroll.
+<br>You can use Object Properties window buttons to change position and rotation of selected object.
+<br>Also you can enter coordinates in edit boxes and press 'Set' button (or just hit enter).
+<br>
+<br>
+Moving model around with mouse drag will interact with terrain. All Static objects become part of the terrain. That means you can place the barrel on the table. And dagger on the barrel easily. If there is no terrain, objects will collide with grid plane.
+<br>
+<br><font color="#FFFFCC" size="5" face="Arial">Save/Load</font>
+<br>
+<br>
+Maps can be saved in two format: irrlicht scene (*.irr) and our custom map format. Irr scene can be loaded to irr edit and vice versa. Use "File->Save to Irr Scene" to save map in irr format. Our custom format stores game related information, and can be loaded in game example provided. Save your map (go to File->Save Level) to some file in ./maps dir. In ./game directory you can find game_config.xml file. Edit 'MapStart' attribute to point to your map, for example: filename="maps/mymap.map". Add your map to list of maps under 'Maps' tag like this: Level id="0" filename="mymap.map". Start game example and it will load your map.
+<br>
+<br><font color="#FFFFCC" size="5" face="Arial">Advanced topic: Adding your own models to Level Editor:</font>
+<br>
+<br>
+If you want to add your own model to the Level Editor, copy model file along with all the textures in media/GameObjects/XXX drectory where XXX is either Static, Monster or Pickable directory, depending on the type of your model. After placing your model, for example race_car.3ds to Static directory, you should edit Static.xml file to include your file like this: Static filename="race_car", no extension on filename. Next thing to do is write race_car.xml file which will contain default attributes for your model like this:
+<br>
+<br>	&lt;Name value="My Race Car"/&gt;
+<br>	&lt;Model value="race_car.3ds"/&gt;
+<br>	&lt;Description value="Very fast car. Used for races."/&gt;
+<br>
+<br> See other models xml files to get the idea how it should look like. Next time you start Level Editor, your model race_car will appear in Static Tab. You can place it on the map and use it in the game.
+<br><br>
+If you are adding animated model, copy file to media/GameObjects/Monsters dir and use xml file to specify Animation frames.
+<br>
+&lt;Animation name="Idle" start="332" end="380"/&gt;
+<br>
+Only x and b3d animated models are proven to work. See other animated models xml files to get the idea how it should look like.
+<br>
+<br>Petar Bajic
+<br>MPE (C) All Rights Reserved 
+<br>Homepage: www.mystic-peanut.com
+<br>July, 21 2008.
+<br>
+<br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_Index.html">Index</a>
+</td>
+<td align="right">
+<a href="Tutorial_02.html">Tutorial 2: Chest Full of Treasure >> </a>
+</td>
+</tr>
+</table>
+<br><br>
+</div>
+</font>
+</body>
+</html>

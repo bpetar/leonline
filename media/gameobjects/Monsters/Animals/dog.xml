@@ -1,0 +1,39 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Dog"/>
+	<Model value="dog.b3d"/>
+	<Monster value="true"/>
+	<Description value="Best friend."/>
+	<Radius value="25"/>
+	
+	<Animation name="Idle" start="26" end="60"/>
+	<Animation name="Walk" start="2" end="14"/>
+	<Animation name="Run" start="16" end="24" />
+	<Animation name="Jump" start="16" end="24" />
+	<Animation name="Attack" start="16" end="24" />
+
+	<Ability>
+		<Strength value="9" min="1" max="20">
+		<Dexterity value="9" min="1" max="20">
+		<Inteligence value="6" min="1" max="20">
+		<Health value="8" min="1" max="8">
+		<Experience value="50" min="1" max="1000">
+		<Level value="2" min="1" max="20">
+	</Ability>
+
+	<Skills>
+		<Defense value="10" min="8" max="12">
+		<Attack value="10" min="1" max="20">
+		<Damage value="3" min="1" max="6">
+	</Skills>
+	
+	<Sounds>
+		<Sound_Ambient filename="dog_ambient.mp3" loop="true"/>
+		<Sound_Attack filename="dog_attack.mp3"/>
+		<Sound_Hello filename="dog_hello.mp3"/>
+		<Sound_Hit filename="dog_hit.mp3"/>
+		<Sound_Wound filename="dog_wound.mp3"/>
+		<Sound_Die filename="dog_die.mp3"/>
+	</Sounds>
+	
+</Config>

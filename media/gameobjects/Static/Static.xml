@@ -1,0 +1,56 @@
+<!-- Static Configuration File -->
+<Config>
+	<Furniture>
+		<Static filename="bed"/>
+		<Static filename="plate"/>
+		<Static filename="altar"/>
+		<Static filename="candlestick"/>
+		<Static filename="chest"/>
+    	<Static filename="shelf"/>
+		<Static filename="chair"/>
+		<Static filename="table"/>
+		<Static filename="closet"/>
+	</Furniture>
+	<Houses>
+		<Static filename="house_01"/>
+		<Static filename="barn_01"/>
+	</Houses>
+	<Terrain>
+		<Static filename="well"/>
+	</Terrain>
+	<Tiles>
+		<Static filename="grass1"/>
+		<Static filename="pgu1"/>
+		<Static filename="dyd"/>
+		<Static filename="bms"/>
+		<Static filename="rrt"/>
+	</Tiles>
+	<Vegetables>
+		<Static filename="flower_01"/>
+		<Static filename="plant_01"/>
+		<Static filename="plant_02"/>
+		<Static filename="tree_01"/>
+		<Static filename="tree_02"/>
+	</Vegetables>
+	<Walls>
+		<Static filename="wall"/>
+		<Static filename="stairs"/>
+		<Static filename="wallniche"/>
+		<Static filename="lever"/>
+		<Static filename="doorbars"/>
+		<Static filename="corner"/>
+		<Static filename="archway"/>
+		<Static filename="dwdoor"/>
+		<Static filename="door"/>
+		<Static filename="dwdframe"/>
+	</Walls>
+	<Static filename="tractor"/>
+	<Static filename="paddock"/>
+	<Static filename="tele"/>
+	<Static filename="circle"/>
+	<Static filename="barrel"/>
+	<Static filename="cubegreen"/>
+	<Static filename="cube"/>
+	<Static filename="trough"/>
+	<Static filename="start_flag"/>
+</Config>

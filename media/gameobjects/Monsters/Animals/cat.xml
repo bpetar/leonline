@@ -1,0 +1,36 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Cat"/>
+	<Model value="cat.b3d"/>
+	<Monster value="true"/>
+	<Description value="Kitty."/>
+	<Radius value="15"/>
+	
+	<Animation name="Idle" start="16" end="59"/>
+	<Animation name="Walk" start="2" end="14"/>
+	<Animation name="Attack" start="2" end="14" />
+
+	<Ability>
+		<Strength value="6" min="1" max="10">
+		<Dexterity value="3" min="1" max="10">
+		<Inteligence value="9" min="1" max="10">
+		<Health value="6" min="1" max="6">
+		<Experience value="20" min="1" max="1000">
+		<Level value="1" min="1" max="20">
+	</Ability>
+
+	<Skills>
+		<Defense value="8" min="6" max="10">
+		<Attack value="8" min="1" max="18">
+		<Damage value="2" min="1" max="4">
+	</Skills>
+	
+	<Sounds>
+		<Sound_Ambient filename="cat_ambient.mp3" loop="true"/>
+		<Sound_Attack filename="cat_hello.mp3"/>
+		<Sound_Hit filename="cat_hit.mp3"/>
+		<Sound_Wound filename="cat_wound.mp3"/>
+		<Sound_Die filename="cat_die.mp3"/>
+	</Sounds>
+	
+</Config>

@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="temple floor 1"/>
+	<Model value="dyd.3ds"/>
+  <Tile value="true"/>
+  <Terrain value="true"/>
+	<Description value="Seamless colored stone floor tile."/>
+</Config>

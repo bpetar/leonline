@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Mana Potion"/>
+	<Model value="potion_mana.x"/>
+	<Pickable value="true"/>
+	<Script value="potion_mana.script"/>
+	<Description value="Mana potion heals your magic mojo."/>
+</Config>

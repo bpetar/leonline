@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Stone candlestick"/>
+	<Description value="Movable, but heavy as hell."/>
+	<Model value="candlestick.3ds"/>
+</Config>

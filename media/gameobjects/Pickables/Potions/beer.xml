@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Beer"/>
+	<Model value="beer.x"/>
+	<Pickable value="true"/>
+	<Script value="beer.script"/>
+	<Description value="Who would make a game without beer?"/>
+</Config>

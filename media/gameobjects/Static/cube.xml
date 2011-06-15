@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Cube"/>
+	<Model value="cube.3ds"/>
+	<Script value="cube.script"/>
+	<Description value="just cube. Useful for invisible triggers"/>
+
+</Config>

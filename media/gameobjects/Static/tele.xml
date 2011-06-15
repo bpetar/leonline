@@ -1,0 +1,9 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Trigger value="true"/>
+	<Name value="Teleport"/>
+	<Model value="tele.3ds"/>
+	<Script value="tele.script"/>
+	<Description value="Teleport. Magic device that transports you to predefined location instantly."/>
+
+</Config>

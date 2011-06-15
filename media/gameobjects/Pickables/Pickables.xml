@@ -1,0 +1,25 @@
+<!-- Pickables Configuration File -->
+<Config>
+	<Gems>
+		<Pickables filename="gem_01" iconname="gem_01"/>
+		<Pickables filename="gem_02" iconname="gem_02"/>
+		<Pickables filename="gem_03" iconname="gem_03"/>
+	</Gems>
+	<Potions>
+		<Pickables filename="potion_empty_vial"/>
+		<Pickables filename="potion_healing"/>
+		<Pickables filename="potion_mana"/>
+		<Pickables filename="beer"/>
+	</Potions>
+	<Weapons>
+		<Pickables filename="dagger_01"/>
+		<Pickables filename="axe_01"/>
+		<Pickables filename="sword_01"/>
+		<Pickables filename="mace"/>
+	</Weapons>
+	<Pickables filename="chalice"/>
+	<Pickables filename="redmushroom"/>
+	<Pickables filename="rope"/>
+	<Pickables filename="note"/>
+	<Pickables filename="key_01"/>
+</Config>

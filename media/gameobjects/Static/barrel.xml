@@ -1,0 +1,9 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Container value="true"/>
+	<Name value="Water Barrel"/>
+	<Model value="barrel.x"/>
+	<Script value="barrel.script"/>
+	<Description value="Just a standard barrel. Unknown people keep valuable things in them."/>
+
+</Config>

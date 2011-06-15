@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Rusty Key"/>
+	<Model value="key_01.x"/>
+	<Pickable value="true"/>
+	<Script value="key_01.script"/>
+	<Description value="Rusty Key. Probably leads to a place not often visited."/>
+</Config>

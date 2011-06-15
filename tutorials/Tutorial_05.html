@@ -1,0 +1,134 @@
+
+<HTML>
+<TITLE>Tutorial 5: Chat With NPC</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+
+
+<body bgcolor="black" link="yellow" vlink="#BBBB00">
+<font color="#909090" face="Arial" size="2">
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br><br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_04.html"> << Tutorial 4: Trigger Scripts</a> 
+</td>
+<td align="right">
+<a href="Tutorial_06.html"> Tutorial 6: I created a Monster! >> </a>
+</td>
+</tr>
+</table>
+<br>
+<br>
+
+<font color="#FFFFCC" size="7" face="Arial"> Tutorial 5: Chat With NPC </font>
+
+<div>
+
+<br>In this tutorial we will talk about NPC conversation. In many games you have an option to
+<br>speak with other characters. It usually looks like several options player can chose to say,
+<br>and NPC will respond to each accordingly.
+<br>
+<br>To make things interesting, this tutorial is moved to one such dialog. If you start game example 04,
+<br>you can click on the beast model to talk to it. The beast will explain everything you want to know
+<br>about dialogs. You can then return here to try to make your own dialog.
+<br>
+<br>To make your own dialogs on your maps start Level Editor.
+<br>You should be comfortable with laying objects around by now, so layout a simple map.
+<br>Add one cat model from the Monsters tab (Animals group) and set it to be NPC in the properties panel.
+<br>Click "NPC Script" button.
+<br>
+<br><img src="le_npcscript.jpg" hspace=10 vspace=8 align=top>
+<br>
+Note: This is big dialog, lots of options, complicated subject, might need more time for this tutorial.
+<br> 
+<br>In this window, you can write dialog nodes and add dialog actions. 
+<br>
+When you create new dialog, there is only one node existing - RootNode. It should not be deleted or changed in any way.
+It is the parent of all nodes. 
+<br>Select the RootNode and click Add Node button. New dialog pops up where you can enter text: "hi roger". 
+This is what NPC says first when you click on it. 
+NPC can have many entry lines, but only one should be enabled at the time - one that he says when you click on it in the game. 
+Other lines can be enabled later, if you want him to say something else when you click on it ("Got my mouse already?").
+<br>
+<br>
+Select "hi roger" node. Add several nodes of player text:
+<br> - "Hello there can I ask you something?
+<br> - "Give me all you got!"
+<br> - "Nothing, good bye."
+<br>
+These will be players first dialog options. Next we add what NPC says to that. Select first player
+option and add node after it, NPC could say: "Shoot." 
+<br>
+On the second line ("Give me all you got") NPC could respond: "Here you are, all I have is this mushroom".
+<br>
+Leave third player option ("Nothing, good bye.") as is, this will automaticaly cause end of the dialog.
+<br>
+<br>
+Dialog branch should not end with NPC node cause it will not be displayed. 
+<br>
+You can remove nodes using button "Remove Dialog Node".
+<br>
+You can enable/disable nodes (if node is disabled it will disable all the children nodes as well).
+<br>
+You can link nodes so you conversation can return to the begining wihout exiting.
+<br>
+<br>To link two nodes, you first select one node, then click the button, then select the second node.
+<br>You always link Players node to NPC node, so when user clicks on that players text, NPC reply follows.
+<br>
+<br>If you disable dialog node, it will not appear in conversation. To make node appear in game, you use 
+<br>action "SetDialogNodeEnabled". You can put this action in pickable and trigger items, or in the dialog
+<br>itself. For example, player could say: "Do you have anything beside the bloody mushroom?" But this node
+<br>should appear only after NPC said: "Here you are, all I have is this mushroom".
+<br>
+<br>To add actions to dialog nodes, you first select the node you want action to be attached to.
+<br>Then you select action from drop down combo box, for example "SetDialogNodeEnabled" action. This 
+<br>action needs target value set to id of the dialog node you want to enable/disable (select id from 
+<br>drop down box, and type id number in edit box). Value field should contain text "true" or "false". 
+<br>Attribute field must contain the name of the dialog file (in the case of beast beast_01.dlg).
+<br>Thats right, you can enable/disable dialog nodes of other NPC dialogs, thus easilly making posible
+<br>NPC saying things like "I heard you spoke with Bidalf already... I have better proposal for you." 
+<br>Finally click "Add Action" button and action text should appear in the box on the left. 
+<br>You can add more actions to one dialog node.
+<br>
+<br>To make NPC and PC exchange items, you use action "GiveItemToPC", you can use this action to give
+<br>mushroom item to player once NPc says she is giving it. Value field contains the name of the item.
+<br>The item should first be added to NPC inventory, but that is in another tutorial...
+<br>
+<br>Conditions will be addressed later.
+<br>
+<br>Click ok on the dialog window to save your dialog and then save your map.
+<br>Edit game_config.xml to point to your map.
+<br>Start game example.
+<br>You should see your map loaded.
+<br>Walk to the cat and click on it.
+<br>Your dialog should popup. Try out the actions you added.
+<br>
+<br>Warning: Dialogs and actions should be added only after map is fully finished. If you change the map
+<br>later (delete models, add new ones, etc) actions might end up pointing to wrong objects and things 
+<br>might not work as they should, so keep that in mind when you create your game.
+<br>
+<br>Petar Bajic
+<br>MPE (C) All Rights Reserved 
+<br>Homepage: www.mystic-peanut.com
+<br>July, 21 2009.
+<br>
+<br>
+<table width="100%">
+<tr>
+<td>
+<a href="Tutorial_04.html"> << Tutorial 4: Trigger Scripts</a> 
+</td>
+<td align="right">
+<a href="Tutorial_06.html"> Tutorial 6: I created a Monster! >> </a>
+</td>
+</tr>
+</table>
+<br>
+<a href="Tutorial_Index.html">Index</a>
+<br>
+<br>
+</font>
+</body>
+</html>

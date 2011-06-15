@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Stone Altar"/>
+	<Description value="Suitable for serving cold dishes, and sacrificing virgins."/>
+	<Model value="altar.3ds"/>
+</Config>

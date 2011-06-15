@@ -1,0 +1,17 @@
+<!-- Script Action File -->
+
+<ScriptActions>
+	<SetDialogNodeEnabled/>
+	<Disintegrate/>
+	<InfluenceAbility/>
+	<InfluenceSkill/>
+	<InfluenceState/>
+	<Info/>
+	<InfoGUI/>
+	<LeadToMap/>
+	<GiveItem/>
+	<AnimateTrigger/>
+	<TranslateGameObject/>
+	<ChangeCondition/>
+	<PlacePickable/>
+</ScriptActions>
