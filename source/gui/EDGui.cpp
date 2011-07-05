@@ -26,75 +26,76 @@
  * \date July, 21 2008.
  */
 CEditorGUI::CEditorGUI()
+:
+	m_EditorManager(NULL),
+
+	m_PropCheckBox_Invisible(NULL),
+	m_PropCheckBox_Illusion(NULL),
+	m_PropCheckBox_Container(NULL),
+	m_PropCheckBox_Pickable(NULL),
+	m_PropCheckBox_Trigger(NULL),
+	m_PropCheckBox_NPC(NULL),
+	m_PropCheckBox_Monster(NULL),
+	m_PropEditBox_Name(NULL),
+	m_PropEditBox_Pos_X(NULL),
+	m_PropEditBox_Pos_Y(NULL),
+	m_PropEditBox_Pos_Z(NULL),
+	m_PropEditBox_Rot_X(NULL),
+	m_PropEditBox_Rot_Y(NULL),
+	m_PropEditBox_Rot_Z(NULL),
+
+	m_wnd_ContainerContent(0),
+	m_wnd_AddPickScriptAction(0),
+	m_wnd_AddTriggerScriptAction(0),
+	m_wnd_InsertTerrainHeightmap(0),
+	m_wnd_AddNPCScriptAction(0),
+	m_wnd_AddNPCNewText(0),
+	m_wnd_MonsterProperties(0),
+	m_wnd_ModelPreview(0),
+	m_wnd_Properties(0),
+	m_wnd_GameItems(0),
+	m_wnd_LevelMusic(0),
+	m_wnd_ParticleSystem(0),  
+
+	m_DialogButton_Warning(0),
+	m_DialogButton_AddText(0),
+	m_bLinkDialogNodes(false),
+	m_pPreviewPickableItem(0),
+	m_bIrrFileSaveDialog(false),
+	m_bIrrFileOpenDialog(false),
+	m_bMapSaveDialog(false),
+	m_bMapOpenDialog(false),
+	m_bHeightmapOpenDialog(false),
+	m_bLevelMusicOpenDialog(false),
+	m_bLevelSoundOpenDialog(false),
+	m_bLevelNarationOpenDialog(false),
+	m_bTextureOpenDialog(false),
+	m_bDetailOpenDialog(false),
+	m_bElementPicking(false),
+	m_bAddPickDirectly(false),
+	m_TreeSubmenuWasVisible(false),
+	m_TextureToRenderOn(0),
+	m_ContainerPickPreview_TextureToRenderOn(0),
+	m_SelectedPickItemIcon_Texture(0),
+	m_slotTex(0),
+	m_PhotoCamera(0),
+	m_PickCamera(0),
+	m_bGUIFocused(false),
+	m_bMoveModel(false),
+	m_bRotateModel(false),
+	m_eMoveDirection(LE_LAST),
+	m_eRotateDirection(LE_LAST),
+
+	m_LevelMusic_EditBox_MusicFile(0),
+	m_LevelMusic_EditBox_SoundFile(0),
+	m_LevelMusic_EditBox_NarationFile(0),
+	m_LevelMusic_Button_MusicBrowse(0),
+	m_LevelMusic_Button_SoundBrowse(0),
+	m_LevelMusic_Button_NarationBrowse(0),
+	m_LevelMusic_Button_Save(0),
+
+	m_Monsters_EditBox_Health(0)
 {
-	m_EditorManager = NULL;
-
-	m_PropCheckBox_Invisible = NULL;
-	m_PropCheckBox_Illusion = NULL;
-	m_PropCheckBox_Container = NULL;
-	m_PropCheckBox_Pickable = NULL;
-	m_PropCheckBox_Trigger = NULL;
-	m_PropCheckBox_NPC = NULL;
-	m_PropCheckBox_Monster = NULL;
-	m_PropEditBox_Name = NULL;
-	m_PropEditBox_Pos_X = NULL;
-	m_PropEditBox_Pos_Y = NULL;
-	m_PropEditBox_Pos_Z = NULL;
-	m_PropEditBox_Rot_X = NULL;
-	m_PropEditBox_Rot_Y = NULL;
-	m_PropEditBox_Rot_Z = NULL;
-
-	m_wnd_ContainerContent = 0;
-	m_wnd_AddPickScriptAction = 0;
-	m_wnd_AddTriggerScriptAction = 0;
-	m_wnd_InsertTerrainHeightmap = 0;
-	m_wnd_AddNPCScriptAction = 0;
-	m_wnd_AddNPCNewText = 0;
-	m_wnd_MonsterProperties = 0;
-	m_wnd_ModelPreview = 0;
-	m_wnd_Properties = 0;
-	m_wnd_GameItems = 0;
-	m_wnd_LevelMusic = 0;
-	m_wnd_ParticleSystem = 0;  
-
-	m_DialogButton_Warning = 0;
-	m_DialogButton_AddText = 0;
-	m_bLinkDialogNodes = false;
-	m_pPreviewPickableItem = 0;
-	m_bIrrFileSaveDialog = false;
-	m_bIrrFileOpenDialog = false;
-	m_bMapSaveDialog = false;
-	m_bMapOpenDialog = false;
-	m_bHeightmapOpenDialog = false;
-	m_bLevelMusicOpenDialog = false;
-	m_bLevelSoundOpenDialog = false;
-	m_bLevelNarationOpenDialog = false;
-	m_bTextureOpenDialog = false;
-	m_bDetailOpenDialog = false;
-	m_bElementPicking = false;
-	m_bAddPickDirectly = false;
-	m_TreeSubmenuWasVisible = false;
-	m_TextureToRenderOn = 0;
-	m_ContainerPickPreview_TextureToRenderOn = 0;
-	m_SelectedPickItemIcon_Texture = 0;
-	m_slotTex = 0;
-	m_PhotoCamera = 0;
-	m_PickCamera = 0;
-	m_bGUIFocused = false;
-	m_bMoveModel = false;
-	m_bRotateModel = false;
-	m_eMoveDirection = LE_LAST;
-	m_eRotateDirection = LE_LAST;
-
-	m_LevelMusic_EditBox_MusicFile = 0;
-	m_LevelMusic_EditBox_SoundFile = 0;
-	m_LevelMusic_EditBox_NarationFile = 0;
-	m_LevelMusic_Button_MusicBrowse = 0;
-	m_LevelMusic_Button_SoundBrowse = 0;
-	m_LevelMusic_Button_NarationBrowse = 0;
-	m_LevelMusic_Button_Save = 0;
-
-	m_Monsters_EditBox_Health = 0;
 }
 
 /**
@@ -111,6 +112,7 @@ void CEditorGUI::OnNewMap()
 	//recreate cameras
 	m_PhotoCamera = m_EditorManager->getSceneMngr()->addCameraSceneNode(0, vector3df(0,-10000,0), vector3df(0,-10000,-100));
 	m_PickCamera = m_EditorManager->getSceneMngr()->addCameraSceneNode(0, vector3df(0,-10000,0), vector3df(0,-10000,100));
+	
 	//clear scene tree and GUI properties
 	ClearTreeOfSceneNodes();
 }
@@ -156,9 +158,9 @@ void CEditorGUI::WriteNPCDialogScriptAction()
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CEditorGUI::SavePickScript(stringc file)
+void CEditorGUI::SavePickScript(const stringc &file)
 {
-	if (file != stringc(""))
+	if( file != stringc("") )
 	{
 		m_EditorManager->getDevice()->getFileSystem()->changeWorkingDirectoryTo(PICKABLES_SCRIPTS_DIR);
 
@@ -185,7 +187,7 @@ void CEditorGUI::SavePickScript(stringc file)
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CEditorGUI::SaveTriggerScript(stringc file)
+void CEditorGUI::SaveTriggerScript(const stringc &file)
 {
 	if (file != stringc(""))
 	{
@@ -302,7 +304,7 @@ void CEditorGUI::WriteElement(IXMLWriter* xml, TreeNode* node)
 }
 
 //Saves NPC conversation and actions related to dialog nodes in one XML like file
-void CEditorGUI::SaveDialog(stringc file)
+void CEditorGUI::SaveDialog(const stringc &file)
 {
 	if (file != stringc(""))
 	{
@@ -1207,7 +1209,7 @@ bool CEditorGUI::GUIWindowOpen()
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CEditorGUI::SetElementAtHand(stringw path, stringw name, bool isStatic)
+void CEditorGUI::SetElementAtHand(const stringw &path, const stringw &name, bool isStatic)
 {
 	//Init game object
 	CGameObject* go = new CGameObject(path,name,isStatic,m_EditorManager->getDriver());
@@ -1258,7 +1260,7 @@ void CEditorGUI::SetElementAtHand(stringw path, stringw name, bool isStatic)
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CEditorGUI::SetGameObjectToContainer(stringw parent, stringw name)
+void CEditorGUI::SetGameObjectToContainer(const stringw &parent, const stringw &name)
 {
 	stringw path = PICKABLES_DIR;
 	if(parent != "Root Node") path += parent + L"/"; //add slash to parent string, and add it to the path
@@ -1312,7 +1314,7 @@ void CEditorGUI::SetGameObjectToContainer(stringw parent, stringw name)
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CEditorGUI::SendModelToPhotoSession(stringw parent, stringw name)
+void CEditorGUI::SendModelToPhotoSession(const stringw &parent, const stringw &name)
 {
 	stringw path = OBJECT_DIR;
 	IGUITabControl* tabGameObjects = (IGUITabControl*) m_wnd_GameItems->getElementFromId(GUI_ID_TAB_GAME_OBJECTS,true);
@@ -1365,7 +1367,7 @@ void CEditorGUI::RemoveNodeFromSceneTree(s32 id)
 /**
  * \brief Add item to tree of scene nodes.
  */
-void CEditorGUI::AddNodeToSceneTree(s32 id, stringw name)
+void CEditorGUI::AddNodeToSceneTree(s32 id, const stringw &name)
 {
 	TreeNode* parentNode = m_SceneNodesTree->FindNode(-2);
 	m_SceneNodesTree->InsertNode(name, parentNode, id);

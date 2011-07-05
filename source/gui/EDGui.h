@@ -257,18 +257,18 @@ public:
 	void SetPropertiesPosition(f32 x, f32 y, f32 z);
 	void SetPropertiesRotation(f32 x, f32 y, f32 z);
 	void ClearProperties();
-	void SetElementAtHand(stringw path, stringw name, bool isStatic);
-	void SendModelToPhotoSession(stringw parent, stringw name);
-	void SetGameObjectToContainer(stringw parent, stringw name);
+	void SetElementAtHand(const stringw &path, const stringw &name, bool isStatic);
+	void SendModelToPhotoSession(const stringw &parent, const stringw &name);
+	void SetGameObjectToContainer(const stringw &parent, const stringw &name);
 	void WriteNPCDialogScriptAction();
-	void SavePickScript(stringc file);
-	void SaveTriggerScript(stringc file);
+	void SavePickScript(const stringc &file);
+	void SaveTriggerScript(const stringc &file);
 	void WriteElement(IXMLWriter* xml, TreeNode* node);
 	void CheckDialogNodeActions(TreeNode* node, u32 deletedNodeID);
-	void SaveDialog(stringc file);
+	void SaveDialog(const stringc &file);
 	bool OnEvent(const SEvent& event);
 	void RemoveNodeFromSceneTree(s32 id);
-	void AddNodeToSceneTree(s32 id, stringw name);
+	void AddNodeToSceneTree(s32 id, const stringw &name);
 	void ClearTreeOfSceneNodes();
 	void SetSelectedElementInTheTreeofSceneNodes(int id);
 	bool GUIWindowOpen();
@@ -479,4 +479,3 @@ public:
 
 
 #endif
-
