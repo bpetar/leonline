@@ -48,10 +48,7 @@ CGameManager::CGameManager()
  */
 CGameManager::~CGameManager()
 {
-	if(m_pLevelManager != NULL)
-	{
-		delete m_pLevelManager;
-	}
+	delete m_pLevelManager;
 
 	getSoundEngine()->drop();
 	getDevice()->drop();
