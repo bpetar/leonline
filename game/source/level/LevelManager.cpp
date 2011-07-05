@@ -476,6 +476,17 @@ u32 CLevelManager::FindNPCsOnMap(stringc mapname, stringc NPCNames[])
 {
 	u32 numNPCs = 0;
 	IXMLReader* reader = m_GameManager->getFS()->createXMLReader(mapname.c_str());
+
+	if(!reader)
+	{
+		//map doesn't exist
+		stringw message  = "Map: ";
+		message += mapname;
+		message += " can not be loaded! It is listed in game_config.xml and I can't find it!";
+		m_GameManager->getGUIEnvironment()->addMessageBox(L"Error Loading Map", message.c_str());
+		return 0;
+	}
+
 	while(reader->read())
 	{
 		//loop through scene nodes in xml
