@@ -16,6 +16,7 @@
 #include "GUIButtonHandler.h"
 #include "IGUITreeCtrl.h"
 #include "../level/GameObject.h"
+
 class CEditorManager;
 class CPickableItem;
 
@@ -246,6 +247,7 @@ enum GUI_ID
  */
 class CEditorGUI
 {
+
 public:
 	CEditorGUI();
 	~CEditorGUI();
