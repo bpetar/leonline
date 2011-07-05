@@ -1,8 +1,0 @@
-<!-- Game Project Configuration File -->
-<Game name="Millmans adventure">
-	<Maps>
-		<Level id="0" filename="solitude island.map"/>
-		<Level id="1" filename="planes of flowers.map"/>
-		<Level id="2" filename="bireaoucracy level.map"/>
-	</Maps>
-</Game>
