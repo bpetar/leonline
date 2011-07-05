@@ -13,6 +13,12 @@
 #include "../Utils.h"
 #include "IGUIContainer.h"
 
+// June 27 2011 - current irrlicht version 1.7
+// Reson: To use setlocale() function.
+// We are including this header file because some locales use the comma character for floating point values
+// and this caused a problem with reading the XML file within the game and the level editor.
+// TODO: If Irrlicht fixes this error in the future, will remove it.
+#include <locale>
 
 /**
  * \brief Standard constructor.
@@ -755,6 +761,8 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_EditorManager->backToWorkingDirectory();
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C"); // locale fix
+
 						m_EditorManager->getEdiLevel()->OnLoadMap(mapname);
 						//recreate cameras
 						m_PhotoCamera = m_EditorManager->getSceneMngr()->addCameraSceneNode(0, 
@@ -770,6 +778,8 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						//save the scene to selected map file
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C");
+
 						m_EditorManager->getEdiLevel()->SetMapName(mapname);
 						m_EditorManager->getEdiLevel()->OnSaveMap();
 						m_EditorManager->backToWorkingDirectory();
@@ -782,6 +792,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_EditorManager->backToWorkingDirectory();
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						m_EditorManager->getEdiLevel()->OnLoadMap_IrrScene(mapname);
 						//recreate cameras
 						m_PhotoCamera = m_EditorManager->getSceneMngr()->addCameraSceneNode(0, 
@@ -797,6 +808,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						//save the scene to selected map file
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						//we don't save our static preview cameras to the scene, so it is necessary to remove them
 						m_PickCamera->remove();
 						m_PhotoCamera->remove();
@@ -820,6 +832,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_bLevelMusicOpenDialog = false;
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						stringc file = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						u32 start = m_EditorManager->m_WorkingDirectory.size();
 						stringw local = file.subString(start+1,file.size()-m_EditorManager->m_WorkingDirectory.size());
 						m_LevelMusic_EditBox_MusicFile->setText(local.c_str());
@@ -830,6 +843,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_EditorManager->backToWorkingDirectory();
 						m_bLevelSoundOpenDialog = false;
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
+						setlocale(LC_ALL,"C");
 						stringc file = dialog->getFileName();
 						u32 start = m_EditorManager->m_WorkingDirectory.size();
 						stringw local = file.subString(start+1,file.size()-m_EditorManager->m_WorkingDirectory.size());
@@ -842,6 +856,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_bLevelNarationOpenDialog = false;
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						stringc file = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						u32 start = m_EditorManager->m_WorkingDirectory.size();
 						stringw local = file.subString(start+1,file.size()-m_EditorManager->m_WorkingDirectory.size());
 						m_LevelMusic_EditBox_NarationFile->setText(local.c_str());
@@ -852,6 +867,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_EditorManager->backToWorkingDirectory();
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						m_TH_EditBox_HeightmapFile->setText(stringw(mapname.c_str()).c_str());
 						m_bHeightmapOpenDialog = false;
 					}
@@ -861,6 +877,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_EditorManager->backToWorkingDirectory();
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						m_TH_EditBox_TexFile->setText(stringw(mapname.c_str()).c_str());
 						m_bTextureOpenDialog = false;
 					}
@@ -870,6 +887,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						m_EditorManager->backToWorkingDirectory();
 						IGUIFileOpenDialog* dialog = (IGUIFileOpenDialog*)event.GUIEvent.Caller;
 						mapname = dialog->getFileName();
+						setlocale(LC_ALL,"C");
 						m_TH_EditBox_DetailFile->setText(stringw(mapname.c_str()).c_str());
 						m_bDetailOpenDialog = false;
 					}
