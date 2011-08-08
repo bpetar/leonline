@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Introduction to Level Editor.
 #labels intro,info,quickstart
 
 = Introduction =
@@ -7,11 +7,11 @@ Level Editor is application used for making game levels/maps.
 You click on objects from the list and just drop them on the map.
 Beside creating levels, this editor can make levels really come to life: chests can contain magic items, monsters will talk to you, pools will replentish your health and doors will lead you to new levels...
 You use it for:
- - creating containers (like chests with items)
- - creating trigger objects (doors, buttons, levers...)
- - creating dialogs for conversations with NPCs
- - add monster behavior and AI
- - etc.
+ - creating containers (like chests with items)<br>
+ - creating trigger objects (doors, buttons, levers...)<br>
+ - creating dialogs for conversations with NPCs<br>
+ - add monster behavior and AI<br>
+ - etc.<br>
 
 = Details =
  
