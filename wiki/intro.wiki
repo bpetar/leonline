@@ -1,0 +1,42 @@
+#summary One-sentence summary of this page.
+#labels intro,info,quickstart
+
+= Introduction =
+
+Level Editor is application used for making game levels/maps.
+You click on objects from the list and just drop them on the map.
+Beside creating levels, this editor can make levels really come to life: chests can contain magic items, monsters will talk to you, pools will replentish your health and doors will lead you to new levels...
+You use it for:
+ - creating containers (like chests with items)
+ - creating trigger objects (doors, buttons, levers...)
+ - creating dialogs for conversations with NPCs
+ - add monster behavior and AI
+ - etc.
+
+= Details =
+ 
+Everything you make with Level Editor ends up in xml format. Easy to read and parse.
+Example game is made with Level Editor to demostrate its posibilities. 
+Tutorials cover all features; check tutorials dir.
+
+Disclaimer: Available models are for demonstration purposes only. They are mostly downloaded from web and can not be used in commercial purposes without author permission. You can easily add your models to Level Editor as described in Tutorial 1.
+
+Quick Start User Manual:
+Start Level Editor.
+You should see game objects window with tabs that have a list of available game objects in a tree to the left.
+First tab "Scene" is getting populated as you place objects on the map.
+Pick an item and click on the map to place it.
+
+Navigation:
+Move selected object by clicking on it and dragging it around (left mouse press and hold).
+Rotate selected object by pressing SHIFT + left mouse press and hold and move.
+Scale selected object by pressing SHIFT + mouse scroll.
+Rotate map with right mouse press and hold.
+Pan map with SHIFT + right mouse press and hold (or WASD keys).
+Zoom map with mouse scroll.
+
+Extra:
+You can declare object a container (check tutorial about adding content) and add content to it.
+You can write scripts for pickable and trigger objects, check tutorial on writting scripts.
+You can write NPC dialogs, there is tutorial for that too.
+You can add monsters to the game, and define their attributes.
