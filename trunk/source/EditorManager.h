@@ -16,6 +16,7 @@
 #include "level/EDLevel.h"
 #include "gui/EDGui.h"
 #include "Script.h"
+#include "UndoActions.h"
 
 using namespace irr;
 using namespace core;
@@ -74,6 +75,8 @@ public:
 	void backToWorkingDirectory();
 	virtual bool OnEvent(const SEvent& event);
 
+	void AddUndoAction(TUndoAction undoAction);
+
 	s32 m_ID;
 
 	stringw GetObjectParameter_State(s32 objectID);
@@ -113,6 +116,7 @@ private:
 	CEditorLevel* m_pEdiLevel;
 	CScript* m_ScriptEngine;
 	/*irr::gui::IGUIFont* m_pFont;*/
+	CUndoActions* m_UndoActionsManager;
 	
 	int lastFPS;
 };

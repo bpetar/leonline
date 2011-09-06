@@ -110,6 +110,7 @@ public:
 	ISceneNode* m_PreviewPickGameObject;
 	bool m_bSavedState;
 	bool m_bMoveSelectedNode;
+	bool m_bNodeBeingMoved; //used for undo move action
 	bool m_bElementAtHand;
 	bool m_bShiftPressed;
 	bool m_bCtrlPressed;
