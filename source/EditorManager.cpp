@@ -50,6 +50,7 @@ void CEditorManager::Init()
 	m_pEdiLevel = new CEditorLevel();
 	m_pEdiLevel->Init(this);
 	m_ScriptEngine = new CScript();
+	m_UndoActionsManager = new CUndoActions();
 	m_ScriptEngine->Init(m_pDevice,ACTIONS_SCRIPT_FILE);
 }
 
@@ -419,4 +420,9 @@ void CEditorManager::OnNewMap()
 {
 	m_pEdiLevel->OnNewMap();
 	m_pGuiManager->OnNewMap();
+}
+
+void CEditorManager::AddUndoAction(TUndoAction undoAction)
+{
+	m_UndoActionsManager->AddUndoAction(undoAction);
 }

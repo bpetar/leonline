@@ -38,6 +38,7 @@ CEditorLevel::CEditorLevel()
 	m_bCtrlPressed = false;
 	m_bKeyXPressed = false;
 	m_bKeyZPressed = false;
+	m_bNodeBeingMoved = false;
 	m_bElementAtHand = false;
 	m_bSavedState = true;
 	m_MultiSelectStart = false;
@@ -2038,6 +2039,12 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 		{
 			int id = m_SelectedGameObject->getID();
 			CGameObject* gameObject = _getGameObjectFromID(id);
+			
+			//first store undo action data, so user can undo delete
+			TUndoAction undoAction;
+			undoAction.type = E_UNDO_ACTION_DELETED;
+			m_EditorManager->AddUndoAction(undoAction);
+
 			if(gameObject->isStatic && m_SelectedGameObject->getTriangleSelector())
 			{
 				m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
@@ -2161,8 +2168,22 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 
 						if (m_bElementAtHand && m_bShiftPressed)
 							seedingAnother = true;
+
+						if (m_bElementAtHand)
+						{
+							TUndoAction undoAction;
+							undoAction.type = E_UNDO_ACTION_ADDED;
+							m_EditorManager->AddUndoAction(undoAction);
+						}
+						else if (m_bNodeBeingMoved)
+						{
+							TUndoAction undoAction;
+							undoAction.type = E_UNDO_ACTION_MOVED;
+							m_EditorManager->AddUndoAction(undoAction);
+						}
 					}
 				
+					m_bNodeBeingMoved = false;
 					m_MultiSelectStart = false;
 					m_MultiSelectPosStart = vector3df(0,0,0);
 					m_MultiSelectPosEnd = vector3df(0,0,0);
@@ -2216,6 +2237,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 				{
 					if(m_SelectedGameObject)
 					{
+						m_bNodeBeingMoved = true;
 						go = _getGameObjectFromID(m_SelectedGameObject->getID());
 						if(go->isTile)
 						{
