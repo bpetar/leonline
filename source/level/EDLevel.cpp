@@ -44,6 +44,7 @@ CEditorLevel::CEditorLevel()
 	m_MultiSelectStart = false;
 	m_MultiSelectPosStart = vector3df(0,0,0);
 	m_MultiSelectPosEnd = vector3df(0,0,0);
+	m_MoveOldPosition = vector3df(0,0,0);
 	m_CurrentZoom = vector3df(1.0f,1.0f,1.0f);
 	m_MapName = "untitled";
 	m_LevelMetaTriangleSelector = 0;
@@ -2117,6 +2118,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							//object is selected on click, and its position is memorized
 							//object is moved on event mouse move.
 							m_bMoveSelectedNode = true;
+							m_MoveOldPosition = m_SelectedGameObject->getPosition();
 							m_SelectedBox = m_SelectedGameObject->getBoundingBox();
 							m_CurrentZoom = m_SelectedGameObject->getScale();
 							m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
@@ -2179,6 +2181,8 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 						{
 							TUndoAction undoAction;
 							undoAction.type = E_UNDO_ACTION_MOVED;
+							undoAction.oldPos = m_MoveOldPosition;
+							undoAction.node = m_SelectedGameObject;
 							m_EditorManager->AddUndoAction(undoAction);
 						}
 					}
@@ -2187,6 +2191,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 					m_MultiSelectStart = false;
 					m_MultiSelectPosStart = vector3df(0,0,0);
 					m_MultiSelectPosEnd = vector3df(0,0,0);
+					m_MoveOldPosition = vector3df(0,0,0);
 					m_bMoveSelectedNode = false;
 					m_bRotateYSelectedNode = false;
 					m_bRotateXSelectedNode = false;

@@ -54,25 +54,31 @@ void CUndoActions::AddUndoAction(TUndoAction action)
  */
 void CUndoActions::Undo()
 {
-	TUndoAction action = m_ListOfUndoActions.getLast();
-
-	switch(action.type)
+	if(m_ListOfUndoActions.size()>0)
 	{
-		case E_UNDO_ACTION_ADDED:
-			{
-				//remove object
-			}
-			break;
-		case E_UNDO_ACTION_DELETED:
-			{
-				//recreate object
-			}
-			break;
-		case E_UNDO_ACTION_MOVED:
-			{
-				//move back object
-			}
-			break;
+		TUndoAction action = m_ListOfUndoActions.getLast();
+
+		switch(action.type)
+		{
+			case E_UNDO_ACTION_ADDED:
+				{
+					//remove object
+				}
+				break;
+			case E_UNDO_ACTION_DELETED:
+				{
+					//recreate object
+				}
+				break;
+			case E_UNDO_ACTION_MOVED:
+				{
+					//move back object
+					action.node->setPosition(action.oldPos);
+				}
+				break;
+		}
+
+		m_ListOfUndoActions.erase(m_ListOfUndoActions.size()-1);
 	}
 }
 

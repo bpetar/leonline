@@ -166,6 +166,12 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 			editorManager->getGUIEnvironment()->addFileOpenDialog(L"Please select map to open");
 		}
 		break;
+		//Edit->Undo
+		case GUI_ID_MENU_UNDO:
+		{
+			editorManager->Undo();
+		}
+		break;
 		//View->Object Properties
 		case GUI_ID_MENU_VIEW_OBJECT_PROPERTIES:
 		{
