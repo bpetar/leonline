@@ -105,6 +105,7 @@
     <ClCompile Include="source\level\RTSCamera.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Script.cpp" />
+    <ClCompile Include="source\UndoActions.cpp" />
     <ClCompile Include="source\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,7 @@
     <ClInclude Include="source\level\RTSCamera.h" />
     <ClInclude Include="source\level\STreeMesh.h" />
     <ClInclude Include="source\Script.h" />
+    <ClInclude Include="source\UndoActions.h" />
     <ClInclude Include="source\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
