@@ -12,6 +12,7 @@
 #include <irrlicht.h>
 using namespace irr;
 using namespace core;
+using namespace scene;
 //using namespace io;
 
 enum EUndoActionType
@@ -24,6 +25,8 @@ enum EUndoActionType
 typedef struct S_UndoAction 
 {
 	EUndoActionType type;
+	vector3df oldPos;
+	ISceneNode* node;
 }TUndoAction;
 
 class CUndoActions

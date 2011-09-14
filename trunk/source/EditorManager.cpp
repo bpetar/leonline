@@ -426,3 +426,8 @@ void CEditorManager::AddUndoAction(TUndoAction undoAction)
 {
 	m_UndoActionsManager->AddUndoAction(undoAction);
 }
+
+void CEditorManager::Undo()
+{
+	m_UndoActionsManager->Undo();
+}

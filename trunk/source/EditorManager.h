@@ -76,6 +76,7 @@ public:
 	virtual bool OnEvent(const SEvent& event);
 
 	void AddUndoAction(TUndoAction undoAction);
+	void Undo();
 
 	s32 m_ID;
 

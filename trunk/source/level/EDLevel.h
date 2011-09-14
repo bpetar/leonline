@@ -124,6 +124,7 @@ public:
 	bool m_MultiSelectStart;
 	vector3df m_MultiSelectPosStart;
 	vector3df m_MultiSelectPosEnd;
+	vector3df m_MoveOldPosition;
 
 	stringc m_MapName;
 	stringc m_LoadingDir;
