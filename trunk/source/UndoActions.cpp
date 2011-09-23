@@ -6,6 +6,8 @@
  * \date September, 1 2011.
  */
 
+
+#include "EditorManager.h"
 #include "UndoActions.h"
 
 /**
@@ -13,9 +15,9 @@
  * \author Petar Bajic 
  * \date September, 1 2011.
  */
-CUndoActions::CUndoActions()
+CUndoActions::CUndoActions(CEditorManager* em)
 {
-	
+	m_EditorManager = em;	
 }
 
 /**
@@ -68,6 +70,8 @@ void CUndoActions::Undo()
 			case E_UNDO_ACTION_DELETED:
 				{
 					//recreate object
+					action.go->name;
+					m_EditorManager->AddGameObjectToLevel(action.go);
 				}
 				break;
 			case E_UNDO_ACTION_MOVED:

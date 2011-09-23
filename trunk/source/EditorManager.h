@@ -74,6 +74,7 @@ public:
 	IFileSystem* getFS() {return m_FS;}
 	void backToWorkingDirectory();
 	virtual bool OnEvent(const SEvent& event);
+	void AddGameObjectToLevel(CGameObject* go);
 
 	void AddUndoAction(TUndoAction undoAction);
 	void Undo();

@@ -72,6 +72,7 @@ public:
 	void InsertFlag();
 	void CreateCamera(vector3df position);
 	void addTerrainSelector();
+	void AddGameObjectToLevel(CGameObject* go);
 	vector3df GetIntersectionPoint();
 	bool SetElementAtHand(CGameObject* go);
 	bool SendModelToPhotoSession(CGameObject* go);

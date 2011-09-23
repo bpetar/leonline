@@ -50,7 +50,7 @@ void CEditorManager::Init()
 	m_pEdiLevel = new CEditorLevel();
 	m_pEdiLevel->Init(this);
 	m_ScriptEngine = new CScript();
-	m_UndoActionsManager = new CUndoActions();
+	m_UndoActionsManager = new CUndoActions(this);
 	m_ScriptEngine->Init(m_pDevice,ACTIONS_SCRIPT_FILE);
 }
 
@@ -430,4 +430,11 @@ void CEditorManager::AddUndoAction(TUndoAction undoAction)
 void CEditorManager::Undo()
 {
 	m_UndoActionsManager->Undo();
+}
+
+void CEditorManager::AddGameObjectToLevel(CGameObject* go)
+{
+	m_pEdiLevel->AddGameObjectToLevel(go);
+	m_pGuiManager->SetProperties(go);
+	m_pGuiManager->AddNodeToSceneTree(go->id,go->name);
 }

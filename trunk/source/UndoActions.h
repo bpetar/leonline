@@ -6,14 +6,18 @@
  * \date September, 1 2011.
  */
 
-//#if !defined(AFX_SCRIPTMANAGER_H__AB04DC05_BB05_11D4_87CB_00C04F73BBBB__INCLUDED_)
-//#define AFX_SCRIPTMANAGER_H__AB04DC05_BB05_11D4_87CB_00C04F73BBBB__INCLUDED_
+#if !defined(AFX_SCRIPTMANAGER_H__AB04DC05_BB05_11D4_87CB_00C04F73BBBB__INCLUDED_3)
+#define AFX_SCRIPTMANAGER_H__AB04DC05_BB05_11D4_87CB_00C04F73BBBB__INCLUDED_3
 
 #include <irrlicht.h>
 using namespace irr;
 using namespace core;
 using namespace scene;
 //using namespace io;
+#include "level/GameObject.h"
+//#include "EditorManager.h"
+
+class CEditorManager;
 
 enum EUndoActionType
 {
@@ -27,13 +31,14 @@ typedef struct S_UndoAction
 	EUndoActionType type;
 	vector3df oldPos;
 	ISceneNode* node;
+	CGameObject* go;
 }TUndoAction;
 
 class CUndoActions
 {
 public:
 
-	CUndoActions();
+	CUndoActions(CEditorManager* em);
 	~CUndoActions();
 	void ClearAllUndoActions();
 	void AddUndoAction(TUndoAction action);
@@ -42,6 +47,7 @@ public:
 	//list of available undo actions
 	array <TUndoAction> m_ListOfUndoActions;
 
+	CEditorManager* m_EditorManager;
 };
 
-//#endif;
+#endif;
