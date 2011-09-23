@@ -406,6 +406,7 @@ bool CEditorLevel::SetElementAtHand(CGameObject* go)
 		//delete the bastard
 		m_SelectedGameObject->remove();
 		m_SelectedGameObject = NULL;
+		m_bElementAtHand = false;
 	}
 
 	IAnimatedMesh* m = m_EditorManager->getSceneMngr()->getMesh(stringc(go->path + go->mesh).c_str());
@@ -483,6 +484,51 @@ bool CEditorLevel::SetElementAtHand(CGameObject* go)
 	}
 
 	return true;
+}
+
+void CEditorLevel::AddGameObjectToLevel(CGameObject* go)
+{
+	IAnimatedMesh* m = m_EditorManager->getSceneMngr()->getMesh(stringc(go->path + go->mesh).c_str());
+	if (m)
+	{
+		m_SelectedGameObject = m_EditorManager->getSceneMngr()->addAnimatedMeshSceneNode(m);
+		m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+		m_SelectedGameObject->setMaterialFlag(EMF_LIGHTING, false);
+		((IAnimatedMeshSceneNode*)m_SelectedGameObject)->setAnimationSpeed(10);
+		if(go->isAnimated)
+		{
+			//set model to idle animation
+			((IAnimatedMeshSceneNode*)m_SelectedGameObject)->setFrameLoop(go->getAnimStart("Idle"),go->getAnimEnd("Idle"));
+		}
+		if(go->isInvisible)
+		{
+			//set semi-transparent material
+			m_SelectedGameObject->setMaterialType(EMT_TRANSPARENT_ADD_COLOR);
+		}
+		if(go->isIllusion)
+		{
+			//set model semi transparent, to indicate it will be invisible in game
+			m_SelectedGameObject->setMaterialType(EMT_TRANSPARENT_ADD_COLOR);
+		}
+
+		//set triangle selector for colision
+		ITriangleSelector *selector = m_EditorManager->getSceneMngr()->createTriangleSelector(((IAnimatedMeshSceneNode*)m_SelectedGameObject)->getMesh(), m_SelectedGameObject);
+		m_SelectedGameObject->setTriangleSelector(selector);
+		
+		//set model position from go property
+		m_SelectedGameObject->setPosition(go->pos);
+
+		//save object properties
+		m_SelectedGameObject->setName(go->name.c_str());
+		m_SelectedGameObject->setID(go->id);
+		m_ListOfGameObjects.push_back(go);
+	}
+	else
+	{
+		//allert message: "Model could not be loaded"
+		printf("Model could not be loaded");
+	}
+
 }
 
 void CEditorLevel::RemovePhotoSessionModel()
@@ -1989,7 +2035,15 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 		}
 		if(eventer.KeyInput.Key == KEY_KEY_Z)
 		{
-			m_bKeyZPressed = eventer.KeyInput.PressedDown;
+			if(m_bCtrlPressed)
+			{
+				if(eventer.KeyInput.PressedDown)
+					m_EditorManager->Undo();
+			}
+			else
+			{
+				m_bKeyZPressed = eventer.KeyInput.PressedDown;
+			}
 		}
 		if((eventer.KeyInput.Key == KEY_UP)&&m_bShiftPressed)
 		{
@@ -2044,6 +2098,8 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 			//first store undo action data, so user can undo delete
 			TUndoAction undoAction;
 			undoAction.type = E_UNDO_ACTION_DELETED;
+			undoAction.oldPos = m_SelectedGameObject->getPosition();
+			undoAction.go = gameObject;
 			m_EditorManager->AddUndoAction(undoAction);
 
 			if(gameObject->isStatic && m_SelectedGameObject->getTriangleSelector())
