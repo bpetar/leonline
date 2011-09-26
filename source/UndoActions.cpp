@@ -65,6 +65,7 @@ void CUndoActions::Undo()
 			case E_UNDO_ACTION_ADDED:
 				{
 					//remove object
+					m_EditorManager->RemoveGameObjectFromMap(action.go);
 				}
 				break;
 			case E_UNDO_ACTION_DELETED:
@@ -77,7 +78,8 @@ void CUndoActions::Undo()
 			case E_UNDO_ACTION_MOVED:
 				{
 					//move back object
-					action.node->setPosition(action.oldPos);
+					ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId(action.go->id);
+					node->setPosition(action.oldPos);
 				}
 				break;
 		}

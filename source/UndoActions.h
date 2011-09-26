@@ -30,7 +30,6 @@ typedef struct S_UndoAction
 {
 	EUndoActionType type;
 	vector3df oldPos;
-	ISceneNode* node;
 	CGameObject* go;
 }TUndoAction;
 

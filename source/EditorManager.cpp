@@ -438,3 +438,10 @@ void CEditorManager::AddGameObjectToLevel(CGameObject* go)
 	m_pGuiManager->SetProperties(go);
 	m_pGuiManager->AddNodeToSceneTree(go->id,go->name);
 }
+
+void CEditorManager::RemoveGameObjectFromMap(CGameObject* go)
+{
+	getGUIManager()->ClearProperties();
+	getGUIManager()->RemoveNodeFromSceneTree(go->id);
+	m_pEdiLevel->RemoveGameObjectFromMap(go);
+}
