@@ -75,6 +75,7 @@ public:
 	void backToWorkingDirectory();
 	virtual bool OnEvent(const SEvent& event);
 	void AddGameObjectToLevel(CGameObject* go);
+	void RemoveGameObjectFromMap(CGameObject* go);
 
 	void AddUndoAction(TUndoAction undoAction);
 	void Undo();

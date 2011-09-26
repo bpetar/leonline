@@ -514,6 +514,7 @@ void CEditorLevel::AddGameObjectToLevel(CGameObject* go)
 		//set triangle selector for colision
 		ITriangleSelector *selector = m_EditorManager->getSceneMngr()->createTriangleSelector(((IAnimatedMeshSceneNode*)m_SelectedGameObject)->getMesh(), m_SelectedGameObject);
 		m_SelectedGameObject->setTriangleSelector(selector);
+		m_LevelMetaTriangleSelector->addTriangleSelector(m_SelectedGameObject->getTriangleSelector());
 		
 		//set model position from go property
 		m_SelectedGameObject->setPosition(go->pos);
@@ -528,7 +529,19 @@ void CEditorLevel::AddGameObjectToLevel(CGameObject* go)
 		//allert message: "Model could not be loaded"
 		printf("Model could not be loaded");
 	}
+}
 
+void CEditorLevel::RemoveGameObjectFromMap(CGameObject* go)
+{
+	ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId(go->id);
+	if(go->isStatic && node->getTriangleSelector())
+	{
+		m_LevelMetaTriangleSelector->removeTriangleSelector(node->getTriangleSelector());
+	}
+	_eraseGameObject(go->id);
+	//delete the bastard
+	node->remove();
+	m_SelectedGameObject = NULL;
 }
 
 void CEditorLevel::RemovePhotoSessionModel()
@@ -786,8 +799,6 @@ void CEditorLevel::InsertParticles()
 	gameObject->description = L"Particle System";
 	gameObject->script = L"";
 	m_ListOfGameObjects.push_back(gameObject);
-
-
 
 	m_EditorManager->m_ID++;
 
@@ -2231,6 +2242,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 						{
 							TUndoAction undoAction;
 							undoAction.type = E_UNDO_ACTION_ADDED;
+							undoAction.go = go;
 							m_EditorManager->AddUndoAction(undoAction);
 						}
 						else if (m_bNodeBeingMoved)
@@ -2238,7 +2250,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							TUndoAction undoAction;
 							undoAction.type = E_UNDO_ACTION_MOVED;
 							undoAction.oldPos = m_MoveOldPosition;
-							undoAction.node = m_SelectedGameObject;
+							undoAction.go = go;
 							m_EditorManager->AddUndoAction(undoAction);
 						}
 					}
