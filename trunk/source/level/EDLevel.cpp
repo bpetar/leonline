@@ -2188,11 +2188,14 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							m_MoveOldPosition = m_SelectedGameObject->getPosition();
 							m_SelectedBox = m_SelectedGameObject->getBoundingBox();
 							m_CurrentZoom = m_SelectedGameObject->getScale();
-							m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
+							CGameObject* gameObject = _getGameObjectFromID(m_SelectedGameObject->getID());
+							if(gameObject->isStatic && m_SelectedGameObject->getTriangleSelector())
+							{
+								m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
+							}
 							m_objectMoveOffset = m_SelectedGameObject->getPosition() - GetIntersectionPoint();
 
 							//tell gui to change properties to this selected item
-							CGameObject* gameObject = _getGameObjectFromID(m_SelectedGameObject->getID());
 							m_EditorManager->getGUIManager()->SetProperties(gameObject);
 							m_EditorManager->getGUIManager()->SetSelectedElementInTheTreeofSceneNodes(m_SelectedGameObject->getID());
 						}
@@ -2220,7 +2223,10 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 						if(!m_bRotateYSelectedNode && !m_bRotateXSelectedNode)
 						{
 							//if static, if not in meta selector, add it to meta selector:
-							//if(go->isStatic)
+							//this static was not consitent, causing crash on delete/add
+							//either put static check everywhere when working with m_LevelMetaTriangleSelector
+							//or remove it from ewverywhere... cheeez...
+							if(go->isStatic)
 							{
 								//drop and recreate terrain triangle selector
 								/*if(m_SelectedGameObject->getType() == ESNT_TERRAIN)
