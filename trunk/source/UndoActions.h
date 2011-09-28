@@ -23,13 +23,15 @@ enum EUndoActionType
 {
 	E_UNDO_ACTION_ADDED,
 	E_UNDO_ACTION_DELETED,
-	E_UNDO_ACTION_MOVED
+	E_UNDO_ACTION_MOVED,
+	E_UNDO_ACTION_ROTATED,
+	E_UNDO_ACTION_SCALED
 };
 
 typedef struct S_UndoAction 
 {
 	EUndoActionType type;
-	vector3df oldPos;
+	vector3df oldValue;
 	CGameObject* go;
 }TUndoAction;
 

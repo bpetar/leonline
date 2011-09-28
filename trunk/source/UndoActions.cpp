@@ -71,7 +71,6 @@ void CUndoActions::Undo()
 			case E_UNDO_ACTION_DELETED:
 				{
 					//recreate object
-					action.go->name;
 					m_EditorManager->AddGameObjectToLevel(action.go);
 				}
 				break;
@@ -79,7 +78,31 @@ void CUndoActions::Undo()
 				{
 					//move back object
 					ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId(action.go->id);
-					node->setPosition(action.oldPos);
+					node->setPosition(action.oldValue);
+					action.go->pos = action.oldValue;
+					m_EditorManager->getEdiLevel()->m_SelectedGameObject = node;
+					//update gui
+					m_EditorManager->getGUIManager()->SetProperties(action.go);
+				}
+				break;
+			case E_UNDO_ACTION_ROTATED:
+				{
+					//rotate back object
+					ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId(action.go->id);
+					node->setRotation(action.oldValue);
+					action.go->rot = action.oldValue;
+					m_EditorManager->getEdiLevel()->m_SelectedGameObject = node;
+					//update gui
+					m_EditorManager->getGUIManager()->SetProperties(action.go);
+				}
+				break;
+			case E_UNDO_ACTION_SCALED:
+				{
+					//scale back object
+					ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId(action.go->id);
+					node->setScale(action.oldValue);
+					action.go->scale = action.oldValue;
+					m_EditorManager->getEdiLevel()->m_SelectedGameObject = node;
 				}
 				break;
 		}
