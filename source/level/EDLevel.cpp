@@ -2109,7 +2109,6 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 			//first store undo action data, so user can undo delete
 			TUndoAction undoAction;
 			undoAction.type = E_UNDO_ACTION_DELETED;
-			undoAction.oldPos = m_SelectedGameObject->getPosition();
 			undoAction.go = gameObject;
 			m_EditorManager->AddUndoAction(undoAction);
 
@@ -2142,6 +2141,8 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 	if(eventer.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		CGameObject* go = 0;
+		if(m_SelectedGameObject)
+			go = _getGameObjectFromID(m_SelectedGameObject->getID());
 
 		switch(eventer.MouseInput.Event)
 		{
@@ -2153,24 +2154,42 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 						m_NodeRotationX = eventer.MouseInput.X; 
 						//we have to include any already existing rotation of object
 						m_CurrentRotationOfSelectedNode = m_SelectedGameObject->getRotation(); 
+						//add undo rotate action
+						TUndoAction undoAction;
+						undoAction.type = E_UNDO_ACTION_ROTATED;
+						undoAction.go = go;
+						undoAction.oldValue = m_CurrentRotationOfSelectedNode;
+						m_EditorManager->AddUndoAction(undoAction);
 						//lets do the rotation! (see EMIE_MOUSE_MOVED below)
 						m_bRotateYSelectedNode = true;
 					}
-					else if (m_SelectedGameObject && m_bKeyXPressed)
+					else if (m_SelectedGameObject && m_bKeyXPressed && !m_bElementAtHand)
 					{
 						//we have to save first Y because rotation jerks on start, have no clue why
 						m_NodeRotationY = eventer.MouseInput.Y;
 						//we have to include any already existing rotation of object
 						m_CurrentRotationOfSelectedNode = m_SelectedGameObject->getRotation(); 
+						//add undo rotate action
+						TUndoAction undoAction;
+						undoAction.type = E_UNDO_ACTION_ROTATED;
+						undoAction.go = go;
+						undoAction.oldValue = m_CurrentRotationOfSelectedNode;
+						m_EditorManager->AddUndoAction(undoAction);
 						//lets do the rotation! (see EMIE_MOUSE_MOVED below)
 						m_bRotateXSelectedNode = true;
 					}
-					else if (m_SelectedGameObject && m_bKeyZPressed)
+					else if (m_SelectedGameObject && m_bKeyZPressed && !m_bElementAtHand)
 					{
 						//we have to save first Y because rotation jerks on start, have no clue why
 						m_NodeRotationY = eventer.MouseInput.Y;
 						//we have to include any already existing rotation of object
 						m_CurrentRotationOfSelectedNode = m_SelectedGameObject->getRotation(); 
+						//add undo rotate action
+						TUndoAction undoAction;
+						undoAction.type = E_UNDO_ACTION_ROTATED;
+						undoAction.go = go;
+						undoAction.oldValue = m_CurrentRotationOfSelectedNode;
+						m_EditorManager->AddUndoAction(undoAction);
 						//lets do the rotation! (see EMIE_MOUSE_MOVED below)
 						m_bRotateZSelectedNode = true;
 					}
@@ -2216,8 +2235,6 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 
 					if(m_SelectedGameObject)
 					{
-						go = _getGameObjectFromID(m_SelectedGameObject->getID());
-						
 						/* I think this is some old stuff? what is this for? im commenting this out!!!*/
 						/* Nope, this is used for stacking barrels on top of each other... */
 						if(!m_bRotateYSelectedNode && !m_bRotateXSelectedNode)
@@ -2255,7 +2272,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 						{
 							TUndoAction undoAction;
 							undoAction.type = E_UNDO_ACTION_MOVED;
-							undoAction.oldPos = m_MoveOldPosition;
+							undoAction.oldValue = m_MoveOldPosition;
 							undoAction.go = go;
 							m_EditorManager->AddUndoAction(undoAction);
 						}
@@ -2317,7 +2334,6 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 					if(m_SelectedGameObject)
 					{
 						m_bNodeBeingMoved = true;
-						go = _getGameObjectFromID(m_SelectedGameObject->getID());
 						if(go->isTile)
 						{
 							//intersect with invisible horizontal plane at Y=0
@@ -2398,11 +2414,19 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 					//Scale selected object with SHIFT + mouse wheel
 					if (m_SelectedGameObject && m_bShiftPressed && !m_bElementAtHand)
 					{
+						//add undo scale action
+						TUndoAction undoAction;
+						undoAction.type = E_UNDO_ACTION_SCALED;
+						undoAction.go = go;
+						undoAction.oldValue = m_SelectedGameObject->getScale();
+						m_EditorManager->AddUndoAction(undoAction);
+
 						if (eventer.MouseInput.Wheel > 0)
 							m_CurrentZoom += vector3df(0.1f,0.1f,0.1f);
 						else
 							m_CurrentZoom -= vector3df(0.1f,0.1f,0.1f);
 						m_SelectedGameObject->setScale(m_CurrentZoom);
+						go->scale = m_CurrentZoom;
 					}
 				}
 				break;
