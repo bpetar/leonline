@@ -892,12 +892,19 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	IrrlichtDevice* device = editorManager->getDevice();
 	CEditorGUI* edGui = editorManager->getGUIManager();
 
-	IGUIWindow* wnd_Music = env->addWindow(rect<s32>(270,90,700,450), false, L"Level Music", 0, GUI_ID_WINDOW_LEVEL_MUSIC);
+	IGUIWindow* wnd_Particles = env->addWindow(rect<s32>(370,90,800,450), false, L"Add Particles", 0, GUI_ID_WINDOW_LEVEL_MUSIC);
+
+	s32 itemHeight = 25;
+	s32 leftMarginX = 10;
+	s32 topMarginY = 40;
+	s32 spaceX = 10;
+	s32 spaceY = 5;
+	s32 widthX = 100;
 
 	//Layout GUI elements around
 	
-	//env->addStaticText(L"Music file:", rect<s32>(15,40,190,60), false, false, wnd_Music, -1, false);
-	//edGui->m_LevelMusic_EditBox_MusicFile = env->addEditBox(editorManager->getEdiLevel()->m_LevelMusic_MusicFile.c_str(), rect<s32>(15,60,290,80), true, wnd_Music, GUI_ID_EDITBOX_LEVELMUSIC_MUSIC_FILE);
+	env->addStaticText(L"Name:", rect<s32>(leftMarginX,topMarginY,leftMarginX+widthX,topMarginY+itemHeight), false, false, wnd_Particles, -1, false);
+	edGui->m_LevelParticles_EditBox_Name = env->addEditBox(L"Particles", rect<s32>(leftMarginX+widthX+spaceX,topMarginY,leftMarginX+2*widthX+spaceX,topMarginY+itemHeight), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_NAME);
 	//edGui->m_LevelMusic_Button_MusicBrowse = env->addButton(rect<s32>(300,60,390,80), wnd_Music, GUI_ID_BUTTON_LEVELMUSIC_MUSIC_BROWSE, L"Browse");
 	//env->addStaticText(L"Ambient sounds file:", rect<s32>(15,90,190,110), false, false, wnd_Music, -1, false);
 	//edGui->m_LevelMusic_EditBox_SoundFile = env->addEditBox(editorManager->getEdiLevel()->m_LevelMusic_SoundFile.c_str(), rect<s32>(15,110,290,130), true, wnd_Music, GUI_ID_EDITBOX_LEVELMUSIC_SOUND_FILE);
@@ -906,10 +913,10 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	//edGui->m_LevelMusic_EditBox_NarationFile = env->addEditBox(editorManager->getEdiLevel()->m_LevelMusic_NarationFile.c_str(), rect<s32>(15,150,290,170), true, wnd_Music, GUI_ID_EDITBOX_LEVELMUSIC_NARATION_FILE);
 	//edGui->m_LevelMusic_Button_NarationBrowse = env->addButton(rect<s32>(300,150,390,170), wnd_Music, GUI_ID_BUTTON_LEVELMUSIC_NARATION_BROWSE, L"Browse");
 
-	edGui->m_LevelMusic_Button_Save = env->addButton(rect<s32>(150,220,280,240), wnd_Music, GUI_ID_BUTTON_PARTICLESYSTEM_INSERT, L"Insert");
-	//env->setFocus(edGui->m_Music_Button_Save);
+	edGui->m_LevelParticle_Button_Save = env->addButton(rect<s32>(150,220,280,240), wnd_Particles, GUI_ID_BUTTON_PARTICLESYSTEM_INSERT, L"Insert");
+	env->setFocus(edGui->m_LevelParticle_Button_Save);
 
-	return wnd_Music;
+	return wnd_Particles;
 
 }
 

@@ -93,6 +93,7 @@ CEditorGUI::CEditorGUI()
 	m_LevelMusic_Button_SoundBrowse(0),
 	m_LevelMusic_Button_NarationBrowse(0),
 	m_LevelMusic_Button_Save(0),
+	m_LevelParticle_Button_Save(0),
 
 	m_Monsters_EditBox_Health(0)
 {
