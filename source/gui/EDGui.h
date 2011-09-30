@@ -97,6 +97,7 @@ enum GUI_ID
 	GUI_ID_BUTTON_LEVELMUSIC_NARATION_BROWSE,
 	GUI_ID_BUTTON_LEVELMUSIC_SAVE,
 	GUI_ID_BUTTON_PARTICLESYSTEM_INSERT,
+	GUI_ID_EDITBOX_LEVELPARTICLES_NAME,
 
 	GUI_ID_CHECKBOX_PROPERTY_ANCOR,
 	GUI_ID_CHECKBOX_PROPERTY_VISIBLE,
@@ -418,6 +419,10 @@ public:
 	IGUIButton* m_LevelMusic_Button_SoundBrowse;
 	IGUIButton* m_LevelMusic_Button_NarationBrowse;
 	IGUIButton* m_LevelMusic_Button_Save;
+
+	//particles
+	IGUIButton* m_LevelParticle_Button_Save;
+	IGUIEditBox* m_LevelParticles_EditBox_Name;
 
 	//monsters
 	IGUIComboBox* m_Monsters_ComboBox_Mood;
