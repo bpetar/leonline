@@ -33,6 +33,15 @@ using namespace gui;
 
 #define LE_MOVE_STEP 2
 
+typedef enum EEmiterType
+{
+	E_EMITERTYPE_BOX,
+	E_EMITERTYPE_SPHERE
+
+} TEEmiterType;
+
+
+
 class CEditorManager;
 
 /**
@@ -66,7 +75,7 @@ public:
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	void OnSaveMap();
 	CTreeSceneNode* createTree(PROCEDURAL_TREE_TYPE treeType);
-	void CEditorLevel::InsertParticles();
+	void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name);
 	void InsertTree(PROCEDURAL_TREE_TYPE treeType);
 	void InsertTerrainGrass(int param);
 	void InsertFlag();

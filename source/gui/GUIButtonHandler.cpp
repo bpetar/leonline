@@ -926,6 +926,7 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 		// Add Particles
 		case GUI_ID_BUTTON_PARTICLESYSTEM_INSERT:
 		{
+			//Parse particles parameters and call EDLevel function to insert particles to map.
 			editorManager->getEdiLevel()->InsertParticles();
 			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Particles");
 

@@ -93,8 +93,23 @@ CEditorGUI::CEditorGUI()
 	m_LevelMusic_Button_SoundBrowse(0),
 	m_LevelMusic_Button_NarationBrowse(0),
 	m_LevelMusic_Button_Save(0),
-	m_LevelParticle_Button_Save(0),
 
+	m_LevelParticle_Button_Save(0),
+	m_LevelParticles_EditBox_Name(0),
+	m_LevelParticles_EditBox_TextureFile(0),
+	m_LevelParticles_Button_TextureBrowse(0),
+	m_LevelParticles_ComboBox_Emiter(0),
+	m_LevelParticles_EditBox_DirectionX(0),
+	m_LevelParticles_EditBox_DirectionY(0),
+	m_LevelParticles_EditBox_DirectionZ(0),
+	m_LevelParticles_EditBox_EmitRateMin(0),
+	m_LevelParticles_EditBox_EmitRateMax(0),
+	m_LevelParticles_EditBox_EmiterSizeXMin(0),
+	m_LevelParticles_EditBox_EmiterSizeXMax(0),
+	m_LevelParticles_EditBox_EmiterSizeYMin(0),
+	m_LevelParticles_EditBox_EmiterSizeYMax(0),
+	m_LevelParticles_EditBox_EmiterSizeZMin(0),
+	m_LevelParticles_EditBox_EmiterSizeZMax(0),
 	m_Monsters_EditBox_Health(0)
 {
 }
