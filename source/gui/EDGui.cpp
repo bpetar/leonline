@@ -110,6 +110,7 @@ CEditorGUI::CEditorGUI()
 	m_LevelParticles_EditBox_EmiterSizeYMax(0),
 	m_LevelParticles_EditBox_EmiterSizeZMin(0),
 	m_LevelParticles_EditBox_EmiterSizeZMax(0),
+	m_LevelParticles_EditBox_Angle(0),
 	m_Monsters_EditBox_Health(0)
 {
 }

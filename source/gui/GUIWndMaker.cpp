@@ -892,7 +892,7 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	IrrlichtDevice* device = editorManager->getDevice();
 	CEditorGUI* edGui = editorManager->getGUIManager();
 
-	IGUIWindow* wnd_Particles = env->addWindow(rect<s32>(370,90,800,450), false, L"Add Particles", 0, GUI_ID_WINDOW_LEVEL_MUSIC);
+	IGUIWindow* wnd_Particles = env->addWindow(rect<s32>(370,90,800,470), false, L"Add Particles", 0, GUI_ID_WINDOW_LEVEL_MUSIC);
 
 	s32 itemHeight = 25;
 	s32 leftMarginX = 10;
@@ -921,7 +921,7 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	
 	env->addStaticText(L"Direction:", rect<s32>(leftMarginX,topMarginY+3*itemHeight+3*spaceY,leftMarginX+widthX,topMarginY+4*itemHeight+3*spaceY), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_DirectionX = env->addEditBox(L"0.0", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+3*itemHeight+3*spaceY,(s32)(leftMarginX+1.4*widthX+spaceX),topMarginY+4*itemHeight+3*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_X);
-	edGui->m_LevelParticles_EditBox_DirectionY = env->addEditBox(L"0.1", rect<s32>((s32)(leftMarginX+1.4*widthX+2*spaceX),topMarginY+3*itemHeight+3*spaceY,(s32)(leftMarginX+1.8*widthX+2*spaceX),topMarginY+4*itemHeight+3*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Y);
+	edGui->m_LevelParticles_EditBox_DirectionY = env->addEditBox(L"0.01", rect<s32>((s32)(leftMarginX+1.4*widthX+2*spaceX),topMarginY+3*itemHeight+3*spaceY,(s32)(leftMarginX+1.8*widthX+2*spaceX),topMarginY+4*itemHeight+3*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Y);
 	edGui->m_LevelParticles_EditBox_DirectionZ = env->addEditBox(L"0.0", rect<s32>((s32)(leftMarginX+1.8*widthX+3*spaceX),topMarginY+3*itemHeight+3*spaceY,(s32)(leftMarginX+2.2*widthX+3*spaceX),topMarginY+4*itemHeight+3*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Z);
 
 	env->addStaticText(L"Min", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+4*itemHeight+5*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+5*itemHeight+5*spaceY), false, false, wnd_Particles, -1, false);
@@ -930,6 +930,8 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	env->addStaticText(L"Emit Rate:", rect<s32>(leftMarginX,topMarginY+5*itemHeight+4*spaceY,leftMarginX+widthX,topMarginY+6*itemHeight+4*spaceY), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_EmitRateMin = env->addEditBox(L"80", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+5*itemHeight+4*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+6*itemHeight+4*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITRATE_MIN);
 	edGui->m_LevelParticles_EditBox_EmitRateMax = env->addEditBox(L"100", rect<s32>((s32)(leftMarginX+1.5*widthX+2*spaceX),topMarginY+5*itemHeight+4*spaceY,leftMarginX+2*widthX+2*spaceX,topMarginY+6*itemHeight+4*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITRATE_MAX);
+	edGui->m_LevelParticles_EditBox_EmitRateMin->setToolTipText(L"Minimum number of particles per second");
+	edGui->m_LevelParticles_EditBox_EmitRateMax->setToolTipText(L"Maximum number of particles per second");
 
 	env->addStaticText(L"Emiter Size:", rect<s32>(leftMarginX,topMarginY+6*itemHeight+5*spaceY,leftMarginX+widthX,topMarginY+7*itemHeight+5*spaceY), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_EmiterSizeXMin = env->addEditBox(L"-20", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+6*itemHeight+5*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+7*itemHeight+5*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_XMIN);
@@ -939,7 +941,10 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	edGui->m_LevelParticles_EditBox_EmiterSizeZMin = env->addEditBox(L"-20", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+8*itemHeight+7*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+9*itemHeight+7*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMIN);
 	edGui->m_LevelParticles_EditBox_EmiterSizeZMax = env->addEditBox(L"20", rect<s32>((s32)(leftMarginX+1.5*widthX+2*spaceX),topMarginY+8*itemHeight+7*spaceY,leftMarginX+2*widthX+2*spaceX,topMarginY+9*itemHeight+7*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMAX);
 
-	edGui->m_LevelParticle_Button_Save = env->addButton(rect<s32>(150,320,280,340), wnd_Particles, GUI_ID_BUTTON_PARTICLESYSTEM_INSERT, L"Insert");
+	env->addStaticText(L"Angle:", rect<s32>(leftMarginX,topMarginY+9*itemHeight+8*spaceY,leftMarginX+widthX,topMarginY+10*itemHeight+8*spaceY), false, false, wnd_Particles, -1, false);
+	edGui->m_LevelParticles_EditBox_Angle = env->addEditBox(L"0", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+9*itemHeight+8*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+10*itemHeight+8*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE);
+
+	edGui->m_LevelParticle_Button_Save = env->addButton(rect<s32>(150,340,280,360), wnd_Particles, GUI_ID_BUTTON_PARTICLESYSTEM_INSERT, L"Insert");
 	env->setFocus(edGui->m_LevelParticle_Button_Save);
 
 	return wnd_Particles;

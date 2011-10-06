@@ -112,6 +112,7 @@ enum GUI_ID
 	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_YMAX,
 	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMIN,
 	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMAX,
+GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE,
 
 	GUI_ID_CHECKBOX_PROPERTY_ANCOR,
 	GUI_ID_CHECKBOX_PROPERTY_VISIBLE,
@@ -451,6 +452,7 @@ public:
 	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeYMax;
 	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeZMin;
 	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeZMax;
+	IGUIEditBox* m_LevelParticles_EditBox_Angle;
 
 	//monsters
 	IGUIComboBox* m_Monsters_ComboBox_Mood;

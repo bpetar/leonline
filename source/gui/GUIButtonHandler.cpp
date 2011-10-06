@@ -939,9 +939,17 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 			f32 emiterSizeYmax = 20;
 			f32 emiterSizeZmin = -20;
 			f32 emiterSizeZmax = 20;
-			f32 directionX = 0.0;
-			f32 directionY = 0.01;
-			f32 directionZ = 0.0;
+			f32 directionX = 0.0f;
+			f32 directionY = 0.01f;
+			f32 directionZ = 0.0f;
+			f32 angle = 0.0f;
+
+			//name and texture
+			name = edGui->m_LevelParticles_EditBox_Name->getText();
+			texture = edGui->m_LevelParticles_EditBox_TextureFile->getText();
+
+			//emiter type
+			emiterType = (TEEmiterType) edGui->m_LevelParticles_ComboBox_Emiter->getSelected();
 
 			//emiterSize
 			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeXMin->getText(),L"%f",&emiterSizeXmin);
@@ -962,9 +970,11 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 			swscanf_s(edGui->m_LevelParticles_EditBox_DirectionZ->getText(), L"%f",&directionZ);
 			direction = vector3df(directionX,directionY,directionZ);
 
-			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax);
-			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Particles");
+			//angle
+			swscanf_s(edGui->m_LevelParticles_EditBox_Angle->getText(), L"%f",&angle);
 
+			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle);
+			edGui->AddNodeToSceneTree(editorManager->m_ID,name);
 			edGui->m_wnd_ParticleSystem->remove();
 			edGui->m_wnd_ParticleSystem = 0;
 			edGui->m_bGUIFocused = false;
