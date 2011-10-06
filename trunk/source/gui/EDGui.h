@@ -98,6 +98,20 @@ enum GUI_ID
 	GUI_ID_BUTTON_LEVELMUSIC_SAVE,
 	GUI_ID_BUTTON_PARTICLESYSTEM_INSERT,
 	GUI_ID_EDITBOX_LEVELPARTICLES_NAME,
+	GUI_ID_EDITBOX_LEVELPARTICLES_TEXTURE_FILE,
+	GUI_ID_BUTTON_LEVELPARTICLES_TEXTURE_BROWSE,
+	GUI_ID_COMBOBOX_LEVELPARTICLES_EMITER,
+	GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_X,
+	GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Y,
+	GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Z,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITRATE_MIN,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITRATE_MAX,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_XMIN,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_XMAX,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_YMIN,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_YMAX,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMIN,
+	GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMAX,
 
 	GUI_ID_CHECKBOX_PROPERTY_ANCOR,
 	GUI_ID_CHECKBOX_PROPERTY_VISIBLE,
@@ -423,6 +437,20 @@ public:
 	//particles
 	IGUIButton* m_LevelParticle_Button_Save;
 	IGUIEditBox* m_LevelParticles_EditBox_Name;
+	IGUIEditBox* m_LevelParticles_EditBox_TextureFile;
+	IGUIButton* m_LevelParticles_Button_TextureBrowse;
+	IGUIComboBox* m_LevelParticles_ComboBox_Emiter;
+	IGUIEditBox* m_LevelParticles_EditBox_DirectionX;
+	IGUIEditBox* m_LevelParticles_EditBox_DirectionY;
+	IGUIEditBox* m_LevelParticles_EditBox_DirectionZ;
+	IGUIEditBox* m_LevelParticles_EditBox_EmitRateMin;
+	IGUIEditBox* m_LevelParticles_EditBox_EmitRateMax;
+	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeXMin;
+	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeXMax;
+	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeYMin;
+	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeYMax;
+	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeZMin;
+	IGUIEditBox* m_LevelParticles_EditBox_EmiterSizeZMax;
 
 	//monsters
 	IGUIComboBox* m_Monsters_ComboBox_Mood;
