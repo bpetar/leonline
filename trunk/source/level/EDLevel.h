@@ -36,10 +36,10 @@ using namespace gui;
 typedef enum EEmiterType
 {
 	E_EMITERTYPE_BOX,
-	E_EMITERTYPE_SPHERE,
 	E_EMITERTYPE_RING,
-	E_EMITERTYPE_POINT,
-	E_EMITERTYPE_CYLINDER
+	E_EMITERTYPE_SPHERE,
+	E_EMITERTYPE_CYLINDER,
+	E_EMITERTYPE_POINT
 
 } TEEmiterType;
 
@@ -78,7 +78,7 @@ public:
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	void OnSaveMap();
 	CTreeSceneNode* createTree(PROCEDURAL_TREE_TYPE treeType);
-	void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax);
+	void InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, f32 angle);
 	void InsertTree(PROCEDURAL_TREE_TYPE treeType);
 	void InsertTerrainGrass(int param);
 	void InsertFlag();

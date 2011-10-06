@@ -755,7 +755,7 @@ CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 	return tree;
 }
 
-void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax)
+void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, f32 angle)
 {
 	// create a particle system
 	IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
@@ -768,7 +768,7 @@ void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize
 			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
 					SColor(0,55,55,55),       // darkest color
 					SColor(0,255,255,255),    // brightest color
-					3000,12000,180,           // min and max age, angle
+					3000,12000,angle,           // min and max age, angle
 					dimension2df(5.f,5.f),    // min size
 					dimension2df(15.f,15.f)); // max size
 		}
@@ -801,13 +801,15 @@ void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize
 
 	CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = PARTICLE_GAME_OBJECT;
-	gameObject->name = "Particles";
+	gameObject->name = name;
 	
 	gameObject->isArea = true; //area can detect players presence - used for teleports
 	gameObject->id = m_EditorManager->m_ID;
 	gameObject->description = L"Particle System";
 	gameObject->script = L"";
 	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->getGUIManager()->SetProperties(gameObject);
 
 	m_EditorManager->m_ID++;
 
