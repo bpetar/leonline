@@ -927,7 +927,42 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 		case GUI_ID_BUTTON_PARTICLESYSTEM_INSERT:
 		{
 			//Parse particles parameters and call EDLevel function to insert particles to map.
-			editorManager->getEdiLevel()->InsertParticles();
+			TEEmiterType emiterType = E_EMITERTYPE_BOX;
+			vector3df direction = vector3df(0.0f,0.01f,0.0f);
+			stringc texture = "media/particle1.bmp";
+			stringc name = "particles";
+			s32 emitRateMin = 80;
+			s32 emitRateMax = 100;
+			f32 emiterSizeXmin = -20;
+			f32 emiterSizeXmax = 20;
+			f32 emiterSizeYmin = -2;
+			f32 emiterSizeYmax = 20;
+			f32 emiterSizeZmin = -20;
+			f32 emiterSizeZmax = 20;
+			f32 directionX = 0.0;
+			f32 directionY = 0.01;
+			f32 directionZ = 0.0;
+
+			//emiterSize
+			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeXMin->getText(),L"%f",&emiterSizeXmin);
+			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeYMin->getText(),L"%f",&emiterSizeYmin);
+			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeZMin->getText(),L"%f",&emiterSizeZmin);
+			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeXMax->getText(),L"%f",&emiterSizeXmax);
+			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeYMax->getText(),L"%f",&emiterSizeYmax);
+			swscanf_s(edGui->m_LevelParticles_EditBox_EmiterSizeZMax->getText(),L"%f",&emiterSizeZmax);
+			aabbox3df emiterSize = aabbox3d<f32>(emiterSizeXmin, emiterSizeYmin, emiterSizeZmin, emiterSizeXmax, emiterSizeYmax, emiterSizeZmax);
+
+			//emit rate min and max
+			swscanf(edGui->m_LevelParticles_EditBox_EmitRateMin->getText(),L"%d",&emitRateMin);
+			swscanf(edGui->m_LevelParticles_EditBox_EmitRateMax->getText(),L"%d",&emitRateMax);
+
+			//direction
+			swscanf_s(edGui->m_LevelParticles_EditBox_DirectionX->getText(), L"%f",&directionX);
+			swscanf_s(edGui->m_LevelParticles_EditBox_DirectionY->getText(), L"%f",&directionY);
+			swscanf_s(edGui->m_LevelParticles_EditBox_DirectionZ->getText(), L"%f",&directionZ);
+			direction = vector3df(directionX,directionY,directionZ);
+
+			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax);
 			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Particles");
 
 			edGui->m_wnd_ParticleSystem->remove();

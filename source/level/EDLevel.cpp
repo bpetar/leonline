@@ -755,21 +755,30 @@ CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 	return tree;
 }
 
-void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name)
+void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax)
 {
 	// create a particle system
-	scene::IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
+	IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
+	IParticleEmitter* em;
 
-	scene::IParticleEmitter* em = ps->createBoxEmitter(
-		core::aabbox3d<f32>(-20,-2,-20,20,20,20), // emitter size
-		core::vector3df(0.0f,0.01f,0.0f),   // initial direction
-		80,100,                             // emit rate
-		video::SColor(0,55,55,55),       // darkest color
-		video::SColor(0,255,255,255),       // brightest color
-		3000,12000,0,                         // min and max age, angle
-		core::dimension2df(5.f,5.f),         // min size
-		core::dimension2df(15.f,15.f));        // max size
-
+	switch(emiterType)
+	{
+	case E_EMITERTYPE_BOX:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,180,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_SPHERE:
+		{
+			//em = ps->createSphereEmitter(vector3df(0.0f,0.01f,0.0f),...);
+		}
+		break;
+	}
 	ps->setEmitter(em); // this grabs the emitter
 	em->drop(); // so we can drop it here without deleting it
 
@@ -782,10 +791,10 @@ void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize
 	ps->setScale(core::vector3df(2,2,2));
 	ps->setMaterialFlag(video::EMF_LIGHTING, false);
 	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
-	ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
+	ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture(texture));
 	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
 	ps->setID(m_EditorManager->m_ID);
-	ps->setName("Particles");
+	ps->setName(name);
 
 	m_SelectedGameObject = ps;
 	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
