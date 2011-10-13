@@ -78,7 +78,7 @@ public:
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	void OnSaveMap();
 	CTreeSceneNode* createTree(PROCEDURAL_TREE_TYPE treeType);
-	void InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, f32 angle);
+	void InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void InsertTree(PROCEDURAL_TREE_TYPE treeType);
 	void InsertTerrainGrass(int param);
 	void InsertFlag();

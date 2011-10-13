@@ -973,7 +973,11 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 			//angle
 			swscanf_s(edGui->m_LevelParticles_EditBox_Angle->getText(), L"%f",&angle);
 
-			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle);
+			//outline
+			bool outline = false;
+
+			//insert particles
+			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle, outline);
 			edGui->AddNodeToSceneTree(editorManager->m_ID,name);
 			edGui->m_wnd_ParticleSystem->remove();
 			edGui->m_wnd_ParticleSystem = 0;
