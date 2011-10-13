@@ -940,6 +940,10 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	edGui->m_LevelParticles_EditBox_EmiterSizeYMax = env->addEditBox(L"20", rect<s32>((s32)(leftMarginX+1.5*widthX+2*spaceX),topMarginY+7*itemHeight+6*spaceY,leftMarginX+2*widthX+2*spaceX,topMarginY+8*itemHeight+6*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_YMAX);
 	edGui->m_LevelParticles_EditBox_EmiterSizeZMin = env->addEditBox(L"-20", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+8*itemHeight+7*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+9*itemHeight+7*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMIN);
 	edGui->m_LevelParticles_EditBox_EmiterSizeZMax = env->addEditBox(L"20", rect<s32>((s32)(leftMarginX+1.5*widthX+2*spaceX),topMarginY+8*itemHeight+7*spaceY,leftMarginX+2*widthX+2*spaceX,topMarginY+9*itemHeight+7*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_EMITERSIZE_ZMAX);
+	edGui->m_LevelParticles_EditBox_EmiterSizeYMin->setToolTipText(L"In case of Ring emiter, Y size of the box is used for Ring Thickness.");
+	edGui->m_LevelParticles_EditBox_EmiterSizeYMax->setToolTipText(L"In case of Ring emiter, Y size of the box is used for Ring Thickness.");
+	edGui->m_LevelParticles_EditBox_EmiterSizeXMin->setToolTipText(L"In case of Ring,Sphere emiter, X size of the box is used for Radius parameter.");
+	edGui->m_LevelParticles_EditBox_EmiterSizeXMax->setToolTipText(L"In case of Ring,Sphere emiter, X size of the box is used for Radius parameter.");
 
 	env->addStaticText(L"Angle:", rect<s32>(leftMarginX,topMarginY+9*itemHeight+8*spaceY,leftMarginX+widthX,topMarginY+10*itemHeight+8*spaceY), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_Angle = env->addEditBox(L"0", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+9*itemHeight+8*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+10*itemHeight+8*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE);

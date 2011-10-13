@@ -755,11 +755,11 @@ CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 	return tree;
 }
 
-void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, f32 angle)
+void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
 {
 	// create a particle system
 	IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
-	IParticleEmitter* em;
+	IParticleEmitter* em = 0;
 
 	switch(emiterType)
 	{
@@ -773,12 +773,63 @@ void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize
 					dimension2df(15.f,15.f)); // max size
 		}
 		break;
-	case E_EMITERTYPE_SPHERE:
+	case E_EMITERTYPE_RING:
 		{
-			//em = ps->createSphereEmitter(vector3df(0.0f,0.01f,0.0f),...);
+			em = ps->createRingEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, emiterSize.getExtent().Y, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
 		}
 		break;
+	case E_EMITERTYPE_SPHERE:
+		{
+			em = ps->createSphereEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_CYLINDER:
+		{
+			vector3df normal = vector3df(10.f,10.f,10.f);
+			em = ps->createCylinderEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, normal, emiterSize.getExtent().Y, outlineOnly, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_POINT:
+		{
+			em = ps->createPointEmitter(direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	default:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
 	}
+
+	if(em == 0)
+	{
+		//Abort! 
+	}
+
 	ps->setEmitter(em); // this grabs the emitter
 	em->drop(); // so we can drop it here without deleting it
 
