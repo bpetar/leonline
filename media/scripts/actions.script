@@ -1,4 +1,5 @@
 <!-- Script Action File -->
+<!-- For actions usage description see documentation -->
 
 <ScriptActions>
 	<SetDialogNodeEnabled/>
@@ -14,4 +15,5 @@
 	<TranslateGameObject/>
 	<ChangeCondition/>
 	<PlacePickable/>
+	<ParticleEffect/>
 </ScriptActions>

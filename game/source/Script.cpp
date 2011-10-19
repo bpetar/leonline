@@ -743,6 +743,16 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		m_GameManager->getGameGUI()->m_pDraggedPickableItem = 0;
 		m_GameManager->getGameGUI()->m_bDraggingPickableItem = false;
 	}
+	else if(action->name == stringw("ParticleEffect"))
+	{
+		//Create particle effect
+		//effect type = action->value; // whirl, blast, field, fire, smoke
+		//effect color = action->attribute //red, blue, green, yellow
+		//effect position = action->target
+		printf("create particle..\n");
+
+		m_GameManager->CreateParticleEffect();
+	}
 	else
 	{
 		m_GameManager->getGameGUI()->AddConsoleText(L"Unrecognized script action...");
