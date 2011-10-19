@@ -15,6 +15,7 @@
 #include "RTSCamera.h"
 #include "Level.h"
 #include "../GameManager.h"
+#include "../Particles.h"
 
 using namespace irr;
 using namespace core;

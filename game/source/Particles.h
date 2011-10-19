@@ -33,6 +33,17 @@ enum PARTICLES_EFFECT_TYPE
 	PARTICLES_EFFECT_SMOKE
 };
 
+//! Particle effect color.
+/** Particle effect color can be red, green, blue, etc... */
+enum PARTICLES_EFFECT_COLOR
+{
+	//!Particles color red
+	PARTICLES_EFFECT_RED = 0,
+
+	//!Particles color green
+	PARTICLES_EFFECT_GREEN
+};
+
 class CGameManager;
 
 class CParticles

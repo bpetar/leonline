@@ -11,6 +11,7 @@ using namespace irr;
 using namespace io;
 #include "Script.h"
 #include "GameManager.h"
+#include "Particles.h"
 
 /**
  * \brief Standard constructor.
@@ -747,11 +748,13 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	{
 		//Create particle effect
 		//effect type = action->value; // whirl, blast, field, fire, smoke
+		PARTICLES_EFFECT_TYPE particles_type = PARTICLES_EFFECT_WHIRL;
 		//effect color = action->attribute //red, blue, green, yellow
+		PARTICLES_EFFECT_COLOR particles_color = PARTICLES_EFFECT_GREEN;
 		//effect position = action->target
 		printf("create particle..\n");
 
-		m_GameManager->CreateParticleEffect();
+		m_GameManager->CreateParticleEffect(particles_type, particles_color);
 	}
 	else
 	{
