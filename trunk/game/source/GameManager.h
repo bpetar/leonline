@@ -21,6 +21,8 @@
 #include "gui/GameGUI.h"
 #include "Script.h"
 #include "level/CGoToArrows.h"
+#include "Particles.h"
+
 
 #include <irrKlang.h>
 
@@ -93,6 +95,7 @@ public:
 	stringw getRootNameFromPathName(stringw meshName);
 	stringc getRootNameFromPathName(stringc meshName);
 	virtual bool OnEvent(const SEvent& event);
+	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color);
 	bool LoadPC(stringc playerFile);
 	void resetArrows();
 	void PCMoveEnd();

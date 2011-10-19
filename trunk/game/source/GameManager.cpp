@@ -1141,4 +1141,6 @@ bool CGameManager::_isNodeClose(vector3df pos1, vector3df pos2)
 	return false;
 }
 
-
+void CGameManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color)
+{
+}
