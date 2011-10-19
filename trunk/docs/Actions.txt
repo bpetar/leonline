@@ -1,0 +1,39 @@
+Actions
+
+This document describes all actions that can be used with scripting.
+
+* SetDialogNodeEnabled/>
+
+* Disintegrate/>
+
+* InfluenceAbility/>
+
+* InfluenceSkill/>
+
+* InfluenceState/>
+
+* Info/>
+
+* InfoGUI/>
+
+* LeadToMap/>
+
+* GiveItem/>
+
+* AnimateTrigger/>
+
+* TranslateGameObject/>
+
+* ChangeCondition/>
+
+* PlacePickable/>
+Puts pickable on the map. This action is used when you want some pickable object from users inventory to snap to some position on the map. For example, player takes the statue from the inventory and click on piedestal with it. Statue is placed on piedestal in precise position.
+
+* ParticleEffect/>
+This action can be used to induce particle effect in the game. For example, when player drinks healing potion, we see blue whirlwind around him indicating magical healing has cured his body. 
+- Action target can be player (effect happens around the player), or id of some object on the map (effect happens in place of this object). You can even place invisible objects on the map just to be ancor for the effect. 
+- Action value defines type of effect. It can be: whirl, blast, field, fire, smoke (will add more if needed). You can see what those effects look like in Level Editor, chose Insert Particles from menu, and select predefined templates.
+- Action attribute defines color of effect (red, green, blue, yellow).
+Effects really do need much more attributes to be able to customize in scripts, like size of particles, speed, and area of effect and duration... but I want to keep scripting as simple as possible and for all other changes you have to do some coding.
+
+
