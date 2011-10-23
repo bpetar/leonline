@@ -55,7 +55,7 @@ public:
 	void Update(IVideoDriver* driver, IrrlichtDevice* pDevice, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font);
 	ISceneNode* GetClickedMonster(line3d<f32> picking_line);
 	void SetMonstersCollisionAnimator();
-	void AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, bool loop, s32 animationSpeed);
+	void AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, bool loop, f32 animationSpeed);
 	void TranslateGameObject(ISceneNode* node, vector3df translationVectorEndPosition, u32 translationTime);
 	void  RemoveContainerContent(int containerID);
 	void RemoveContainerContent(s32 containerID, s32 itemID);
@@ -73,6 +73,7 @@ public:
 	bool isObjectMonster(int id);
 	bool isNudgedMonsterColliding(s32 nudgerId, float nudgerRadius, s32 id, vector3df pos, vector3df targetPos);
 	bool isMonsterColliding(s32 id, float nudgerRadius, vector3df pos, vector3df targetPos, vector3df* obstaclePos);
+	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player);
 	stringc GetLevelAmbientSound();
 	stringc GetLevelMusicTheme();
 	stringc GetLevelNarationFile();

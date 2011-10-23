@@ -12,6 +12,7 @@
 #include <irrlicht.h>
 #include "GameObject.h"
 #include "../CMonster.h"
+#include "../Particles.h"
 
 using namespace irr;
 using namespace core;
@@ -72,6 +73,7 @@ public:
 	ISceneNode* isMonsterUnderMousePointer(); //returns node address != 0 if there is
 	CGameObject* getClickedGameObject(position2d<s32> mousePos);
 	vector3df getMonsterHealthBarPos(s32 id);
+	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player);
 	bool isActuator(ISceneNode* node);
 	bool isObjectContainer(int id);
 	bool isObjectPickable(int id);
