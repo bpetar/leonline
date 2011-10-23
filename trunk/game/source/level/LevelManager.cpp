@@ -259,7 +259,7 @@ bool CLevelManager::Init(CGameManager* gameMngr, CGameGUI* gameGUI)
  * \author Petar Bajic 
  * \date July, 21 2011.
  */
-void CLevelManager::AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, bool loop, s32 animationSpeed)
+void CLevelManager::AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, bool loop, f32 animationSpeed)
 {
 	IAnimatedMeshSceneNode* node = (IAnimatedMeshSceneNode*) m_pLevels[m_LevelIndex]->m_SMGR->getSceneNodeFromId(id);
 	if(node)
@@ -885,4 +885,9 @@ void CLevelManager::MoveCamera(vector3df pos)
 	vector3df move = pos - m_pCamera->getTarget();
 	m_pCamera->setTarget(pos);
 	m_pCamera->setPosition(m_pCamera->getPosition()+move);
+}
+
+void CLevelManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player)
+{
+	m_pLevels[m_LevelIndex]->CreateParticleEffect(type,color,target,follow_player);
 }

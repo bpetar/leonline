@@ -95,7 +95,7 @@ public:
 	stringw getRootNameFromPathName(stringw meshName);
 	stringc getRootNameFromPathName(stringc meshName);
 	virtual bool OnEvent(const SEvent& event);
-	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color);
+	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player);
 	bool LoadPC(stringc playerFile);
 	void resetArrows();
 	void PCMoveEnd();
@@ -107,7 +107,7 @@ public:
 	void PCChangeAbility(stringw name, s32 value);
 	void PCChangeHealth(s32 value, stringw deathReason);
 	void AddPCExperience(s32 experience);
-	void AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, s32 animationSpeed);
+	void AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, f32 animationSpeed);
 	void TranslateGameObject(s32 id, vector3df translationVectorEndPosition, u32 translationTime);
 	void TranslatePlayer(vector3df translationVectorEndPosition, u32 translationTime);
 	void ChangeLevel(stringc mapname, s32 startPositionFlagID);

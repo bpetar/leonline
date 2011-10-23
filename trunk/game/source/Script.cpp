@@ -35,7 +35,7 @@ CScript::~CScript()
 vector3df getVectorFromString(stringw str) 
 { 
    vector3df vector; 
-   swscanf(str.c_str(), L"%f %f %f", &vector.X,&vector.Y,&vector.Z ); 
+   swscanf_s(str.c_str(), L"%f %f %f", &vector.X,&vector.Y,&vector.Z ); 
    return vector; 
 }
 
@@ -564,11 +564,11 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 			bool isInteger = (hasdot == -1);
 			if(isInteger)
 			{
-				sscanf(value.c_str(),"%d",&intValue);
+				sscanf_s(value.c_str(),"%d",&intValue);
 			}
 			else
 			{
-				sscanf(value.c_str(),"%f",&fValue);
+				sscanf_s(value.c_str(),"%f",&fValue);
 			}
 
 			m_GameManager->PCChangeAbility(action->attribute, intValue + (s32)fValue /*one of two is 0, so we can add them*/);
@@ -609,7 +609,7 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		else //target is id
 		{
 			u32 targetID;
-			swscanf(action->target.c_str(), L"%d", &targetID);
+			swscanf_s(action->target.c_str(), L"%d", &targetID);
 			m_GameManager->getLevelManager()->SetObjectState(targetID,action->value);
 		}
 	}
@@ -695,7 +695,7 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		stringc keyframeEndStr = action->value;
 		s32 keyframeStart = atoi(keyframeStartStr.c_str());
 		s32 keyframeEnd = atoi(keyframeEndStr.c_str());
-		s32 animationSpeed = 15;
+		f32 animationSpeed = 15;
 		if(keyframeStart<0)
 		{
 			keyframeStart = -keyframeStart;
@@ -749,12 +749,25 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		//Create particle effect
 		//effect type = action->value; // whirl, blast, field, fire, smoke
 		PARTICLES_EFFECT_TYPE particles_type = PARTICLES_EFFECT_WHIRL;
+		if(action->value.equals_ignore_case("blast"))
+			particles_type = PARTICLES_EFFECT_BLAST;
+		if(action->value.equals_ignore_case("field"))
+			particles_type = PARTICLES_EFFECT_FIELD;
+		if(action->value.equals_ignore_case("fire"))
+			particles_type = PARTICLES_EFFECT_FIRE;
+		if(action->value.equals_ignore_case("smoke"))
+			particles_type = PARTICLES_EFFECT_SMOKE;
 		//effect color = action->attribute //red, blue, green, yellow
-		PARTICLES_EFFECT_COLOR particles_color = PARTICLES_EFFECT_GREEN;
+		PARTICLES_EFFECT_COLOR particles_color = PARTICLES_EFFECT_COLOR_RED;
+		if(action->attribute.equals_ignore_case("green"))
+			particles_color = PARTICLES_EFFECT_COLOR_GREEN;
 		//effect position = action->target
-		printf("create particle..\n");
+		bool follow_player = false;
+		if(action->target.equals_ignore_case("player"))
+			follow_player = true;
 
-		m_GameManager->CreateParticleEffect(particles_type, particles_color);
+		printf("create particle..\n");
+		m_GameManager->CreateParticleEffect(particles_type, particles_color, action->target, follow_player);
 	}
 	else
 	{

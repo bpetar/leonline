@@ -591,7 +591,7 @@ void CGameManager::PCMoveEnd()
  * for example doors opening upon click.
  * when such action is executed from Script.cpp, this function is called.
  */
-void CGameManager::AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, s32 animationSpeed)
+void CGameManager::AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, f32 animationSpeed)
 {
 	m_pLevelManager->AnimateTrigger(id, keyStart, keyEnd, false, animationSpeed);
 }
@@ -1141,6 +1141,7 @@ bool CGameManager::_isNodeClose(vector3df pos1, vector3df pos2)
 	return false;
 }
 
-void CGameManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color)
+void CGameManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player)
 {
+	m_pLevelManager->CreateParticleEffect(type,color,target,follow_player);
 }

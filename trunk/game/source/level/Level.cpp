@@ -1085,3 +1085,145 @@ vector3df CLevel::GetObjectPosition(int id)
 	printf("ERROR! GetObjectPosition: Object with id: %d doesn't exist!",id);
 	return vector3df(0,10,0);
 }
+
+void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player)
+{
+	//m_pLevels[m_LevelIndex]->CreateParticleEffect(type,color,target,follow_player);
+
+	// create a particle system
+	IParticleSystemSceneNode* ps = m_SMGR->addParticleSystemSceneNode(false);
+	IParticleEmitter* em = 0;
+
+	vector3df particle_position;
+
+	if(follow_player)
+	{
+		particle_position = m_GameManager->getPC()->getPosition();
+	}
+	else
+	{
+		s32 targetID = 0;
+		swscanf_s(target.c_str(), L"%d", &targetID);
+		particle_position = GetObjectPosition(targetID);
+	}
+
+	switch(type)
+	{
+	case PARTICLES_EFFECT_WHIRL:
+		{
+			vector3df normal = vector3df(0.f,0.1f,0.f);
+			em = ps->createCylinderEmitter(particle_position, 6, normal, 2, true, vector3df(0.f,0.01f,0.f), 50, 100, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,0,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+	}
+
+/*
+		em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_RING:
+		{
+			em = ps->createRingEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, emiterSize.getExtent().Y, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_SPHERE:
+		{
+			em = ps->createSphereEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_CYLINDER:
+		{
+			vector3df normal = vector3df(10.f,10.f,10.f);
+			em = ps->createCylinderEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, normal, emiterSize.getExtent().Y, outlineOnly, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_POINT:
+		{
+			em = ps->createPointEmitter(direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	default:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+	}
+*/
+
+	if(em == 0)
+	{
+		//Abort! 
+	}
+
+	ps->setEmitter(em); // this grabs the emitter
+	em->drop(); // so we can drop it here without deleting it
+
+	scene::IParticleAffector* paf = ps->createFadeOutParticleAffector();
+
+	ps->addAffector(paf); // same goes for the affector
+	paf->drop();
+
+	ps->setPosition(core::vector3df(0,-60,0));
+	ps->setScale(core::vector3df(2,2,2));
+	ps->setMaterialFlag(video::EMF_LIGHTING, false);
+	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
+	switch(color)
+	{
+	case PARTICLES_EFFECT_COLOR_RED:
+		{
+			ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_red.bmp"));
+		}
+	case PARTICLES_EFFECT_COLOR_GREEN:
+		{
+			ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_green.bmp"));
+		}
+	}
+	//ps->setMaterialTexture(0, m_pDriver->getTexture(texture));
+	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
+	//ps->setID(m_EditorManager->m_ID);
+	ps->setName(L"ParticleEffect");
+
+	/*CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = PARTICLE_GAME_OBJECT;
+	gameObject->name = name;
+	
+	gameObject->isArea = true; //area can detect players presence - used for teleports
+	gameObject->id = m_EditorManager->m_ID;
+	gameObject->description = L"Particle System";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);*/
+
+}
