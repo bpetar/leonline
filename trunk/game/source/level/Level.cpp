@@ -1111,11 +1111,12 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	{
 	case PARTICLES_EFFECT_WHIRL:
 		{
-			vector3df normal = vector3df(0.f,0.1f,0.f);
-			em = ps->createCylinderEmitter(particle_position, 6, normal, 2, true, vector3df(0.f,0.01f,0.f), 50, 100, 
+			vector3df normal = vector3df(0.f,3.1f,0.f);
+			vector3df relative_position = vector3df(0.f,0.f,0.f);
+			em = ps->createCylinderEmitter(relative_position, 5, normal, 4, true, vector3df(0.f,0.01f,0.f), 50, 100, 
 					SColor(0,55,55,55),       // darkest color
 					SColor(0,255,255,255),    // brightest color
-					3000,12000,0,           // min and max age, angle
+					1000,3000,0,           // min and max age, angle
 					dimension2df(5.f,5.f),    // min size
 					dimension2df(15.f,15.f)); // max size
 		}
@@ -1191,12 +1192,16 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	ps->setEmitter(em); // this grabs the emitter
 	em->drop(); // so we can drop it here without deleting it
 
-	scene::IParticleAffector* paf = ps->createFadeOutParticleAffector();
-
+	IParticleAffector* paf = ps->createFadeOutParticleAffector();
 	ps->addAffector(paf); // same goes for the affector
 	paf->drop();
 
-	ps->setPosition(core::vector3df(0,-60,0));
+	ps->setPosition(particle_position);
+
+	paf = ps->createRotationAffector(vector3df(0.0f,300.0f,0.0f), particle_position); //rotation afector
+	ps->addAffector(paf);
+	paf->drop();
+
 	ps->setScale(core::vector3df(2,2,2));
 	ps->setMaterialFlag(video::EMF_LIGHTING, false);
 	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
