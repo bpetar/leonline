@@ -33,6 +33,15 @@ typedef struct
 
 typedef struct
 {
+	float lifeTime;
+	float afterLifeTime;
+	bool followPlayer;
+	IParticleRotationAffector* rotationAftector;
+	IParticleSystemSceneNode* ps;
+} TemporaryParticleEffect;
+
+typedef struct
+{
 	ISceneNode* node;
 	f32 radius;
 	bool entered;
@@ -59,6 +68,7 @@ public:
 	void NotifyMonsterOfAttack(s32 id);
 	void UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font, ICameraSceneNode* cam);
 	void UpdateTranslateGameObject(f32 elapsed_time);
+	void UpdateParticles(f32 elapsed_time);
 	void AddTranslateGameObject(ISceneNode* node, vector3df translationVectorEndPosition, u32 translationTime);
 	void ReadSceneNode(IXMLReader* reader);
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
@@ -119,5 +129,7 @@ public:
 
 	CGameManager* m_GameManager;
 	CGameObject* getGameObjectFromID(int id);
+
+	array<TemporaryParticleEffect> m_ListOfTemporaryParticleEffects;
 
 };

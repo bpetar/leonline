@@ -705,6 +705,43 @@ void CLevel::UpdateMonsterHealthBar(s32 id, s32 value)
 	}
 }
 
+void CLevel::UpdateParticles(f32 elapsed_time)
+{
+	u32 size = m_ListOfTemporaryParticleEffects.size();
+
+	for (u32 i = 0; i< size; i++)
+	{
+		m_ListOfTemporaryParticleEffects[i].lifeTime -= elapsed_time;
+		if(m_ListOfTemporaryParticleEffects[i].lifeTime < 0)
+		{
+			//remove particle effect
+			m_ListOfTemporaryParticleEffects[i].ps->getEmitter()->setMinParticlesPerSecond(0);
+			m_ListOfTemporaryParticleEffects[i].ps->getEmitter()->setMaxParticlesPerSecond(0);
+
+			m_ListOfTemporaryParticleEffects[i].afterLifeTime -= elapsed_time;
+			if(m_ListOfTemporaryParticleEffects[i].afterLifeTime < 0)
+			{
+				m_ListOfTemporaryParticleEffects[i].ps->removeAllAffectors();
+				m_ListOfTemporaryParticleEffects[i].ps->removeAnimators();
+				m_ListOfTemporaryParticleEffects[i].ps->remove();
+				m_ListOfTemporaryParticleEffects.erase(i);
+				break;
+			}
+		}
+		
+		if(m_ListOfTemporaryParticleEffects[i].followPlayer)
+		{
+			//if player moved, move the particle effect..
+			m_ListOfTemporaryParticleEffects[i].ps->setPosition(m_GameManager->getPC()->getPosition() + vector3df(0.f,2.2f,0.f));
+			if(m_ListOfTemporaryParticleEffects[i].rotationAftector)
+			{
+				m_ListOfTemporaryParticleEffects[i].rotationAftector->setPivotPoint(m_GameManager->getPC()->getPosition());
+			}
+		}
+	}
+}
+
+
 void CLevel::UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font, ICameraSceneNode* cam)
 {
 	for (u32 i=0; i < m_ListOfMonsters.size(); i++)
@@ -1089,6 +1126,7 @@ vector3df CLevel::GetObjectPosition(int id)
 void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player)
 {
 	//m_pLevels[m_LevelIndex]->CreateParticleEffect(type,color,target,follow_player);
+	TemporaryParticleEffect tpe;
 
 	// create a particle system
 	IParticleSystemSceneNode* ps = m_SMGR->addParticleSystemSceneNode(false);
@@ -1099,10 +1137,12 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	if(follow_player)
 	{
 		particle_position = m_GameManager->getPC()->getPosition();
+		tpe.followPlayer = true;
 	}
 	else
 	{
 		s32 targetID = 0;
+		tpe.followPlayer = false;
 		swscanf_s(target.c_str(), L"%d", &targetID);
 		particle_position = GetObjectPosition(targetID);
 	}
@@ -1111,15 +1151,54 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	{
 	case PARTICLES_EFFECT_WHIRL:
 		{
-			vector3df normal = vector3df(0.f,3.1f,0.f);
+			/*vector3df normal = vector3df(0.f,3.1f,0.f);
 			vector3df relative_position = vector3df(0.f,0.f,0.f);
 			em = ps->createCylinderEmitter(relative_position, 5, normal, 4, true, vector3df(0.f,0.01f,0.f), 50, 100, 
 					SColor(0,55,55,55),       // darkest color
 					SColor(0,255,255,255),    // brightest color
-					1000,3000,0,           // min and max age, angle
+					1000,2000,0,           // min and max age, angle
 					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
+					dimension2df(15.f,15.f)); // max size*/
+			
+			em = ps->createAnimatedMeshSceneNodeEmitter(m_GameManager->getPC()->node,true, 
+				vector3df(0.f,0.01f,0.f),20.f,-1,false,60,100,SColor(0,55,55,55), SColor(0,255,255,255),1000,2000,0,
+				dimension2df(6.f,6.f),dimension2df(12.f,12.f));
+			tpe.lifeTime = 1.0f; //1 second
+			tpe.afterLifeTime = 2.0f; //must be equal to max age parameter
+
+			IParticleRotationAffector* praf = ps->createRotationAffector(vector3df(0.0f,300.0f,0.0f), particle_position); //rotation afector
+			ps->addAffector(praf);
+			tpe.rotationAftector = praf;
+
+			IParticleAffector* paf = ps->createFadeOutParticleAffector();
+			ps->addAffector(paf); // same goes for the affector
+			paf->drop();
 		}
+		break;
+
+	case PARTICLES_EFFECT_BLAST:
+		{
+			em = ps->createPointEmitter(vector3df(0.f,0.2f,0.f), 800, 800,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					400,600,180,           // min and max age, angle
+					dimension2df(9.f,9.f),    // min size
+					dimension2df(22.f,22.f)); // max size
+
+			/*em = ps->createAnimatedMeshSceneNodeEmitter(m_GameManager->getPC()->node,true, 
+				vector3df(0.f,0.2f,0.f),10.f,-1,false,200,200,SColor(0,55,55,55), SColor(0,255,255,255),
+				200,400,0, dimension2df(9.f,9.f),dimension2df(22.f,22.f));*/
+
+			tpe.lifeTime = 0.4f; //200 miliseconds
+			tpe.afterLifeTime = 0.4f; //must be greater or equal to max age parameter
+
+			IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),100);
+			ps->addAffector(paf); // same goes for the affector
+			paf->drop();
+
+			tpe.rotationAftector = 0;
+		}
+		break;
 	}
 
 /*
@@ -1192,15 +1271,9 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	ps->setEmitter(em); // this grabs the emitter
 	em->drop(); // so we can drop it here without deleting it
 
-	IParticleAffector* paf = ps->createFadeOutParticleAffector();
-	ps->addAffector(paf); // same goes for the affector
-	paf->drop();
+	
 
-	ps->setPosition(particle_position);
-
-	paf = ps->createRotationAffector(vector3df(0.0f,300.0f,0.0f), particle_position); //rotation afector
-	ps->addAffector(paf);
-	paf->drop();
+	ps->setPosition(particle_position + vector3df(0.f,2.2f,0.f));
 
 	ps->setScale(core::vector3df(2,2,2));
 	ps->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -1211,15 +1284,20 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 		{
 			ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_red.bmp"));
 		}
+		break;
 	case PARTICLES_EFFECT_COLOR_GREEN:
 		{
 			ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_green.bmp"));
 		}
+		break;
 	}
 	//ps->setMaterialTexture(0, m_pDriver->getTexture(texture));
 	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
 	//ps->setID(m_EditorManager->m_ID);
 	ps->setName(L"ParticleEffect");
+	tpe.ps = ps;
+
+	m_ListOfTemporaryParticleEffects.push_back(tpe);
 
 	/*CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = PARTICLE_GAME_OBJECT;

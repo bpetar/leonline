@@ -111,6 +111,7 @@ void CLevelManager::Update(IVideoDriver* driver, IrrlichtDevice* pDevice, f32 el
 {
 	m_pLevels[m_LevelIndex]->UpdateMonsters(driver, elapsed_time, pc, font, m_pCamera);
 	m_pLevels[m_LevelIndex]->UpdateTranslateGameObject(elapsed_time);
+	m_pLevels[m_LevelIndex]->UpdateParticles(elapsed_time);
 
 	//debug draw bounding box:
 	//drawObjectBoundingBox(m_pLevels[m_LevelIndex]->dNode,driver,m_pLevels[m_LevelIndex]->dWorldBox);
