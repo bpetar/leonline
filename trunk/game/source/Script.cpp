@@ -762,9 +762,24 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		if(action->attribute.equals_ignore_case("green"))
 			particles_color = PARTICLES_EFFECT_COLOR_GREEN;
 		//effect position = action->target
+		
 		bool follow_player = false;
+		u32 targetID = 0;
+
 		if(action->target.equals_ignore_case("player"))
+		{
 			follow_player = true;
+		}
+		else if (action->target.equals_ignore_case("self"))
+		{
+			//particle target is "self" which id is "id"
+			targetID = id;
+		}
+		else //target is id
+		{
+			//sending action target string so no need to parse id here
+			//swscanf_s(action->target.c_str(), L"%d", &targetID);
+		}
 
 		printf("create particle..\n");
 		m_GameManager->CreateParticleEffect(particles_type, particles_color, action->target, follow_player);

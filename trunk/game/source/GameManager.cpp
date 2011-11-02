@@ -1143,5 +1143,5 @@ bool CGameManager::_isNodeClose(vector3df pos1, vector3df pos2)
 
 void CGameManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player)
 {
-	m_pLevelManager->CreateParticleEffect(type,color,target,follow_player);
+	m_pLevelManager->CreateParticleEffect(type, color, target, follow_player);
 }

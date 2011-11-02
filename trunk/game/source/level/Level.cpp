@@ -1127,6 +1127,8 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 {
 	//m_pLevels[m_LevelIndex]->CreateParticleEffect(type,color,target,follow_player);
 	TemporaryParticleEffect tpe;
+	bool bTextureSet = false;
+	bool bTemporary = true;
 
 	// create a particle system
 	IParticleSystemSceneNode* ps = m_SMGR->addParticleSystemSceneNode(false);
@@ -1196,6 +1198,25 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 			ps->addAffector(paf); // same goes for the affector
 			paf->drop();
 
+			tpe.rotationAftector = 0;
+		}
+		break;
+	case PARTICLES_EFFECT_FIRE:
+		{
+			em = ps->createBoxEmitter(aabbox3d<f32>(-5,-1,-5,5,1,5), vector3df(0.0f,0.03f,0.0f), 220,400,
+				 SColor(0,55,55,55), SColor(0,255,255,255), 300,900,0,dimension2df(5.f,5.f),dimension2df(15.f,15.f));
+
+			//not creating tpe for constant effects..
+
+			IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),500);
+			ps->addAffector(paf); // same goes for the affector
+			paf->drop();
+
+			ps->setMaterialTexture(0, m_pDriver->getTexture("media/fire.bmp"));
+			bTextureSet = true;
+			//bTemporary = false;
+			tpe.lifeTime = 4000.0f; //200 miliseconds
+			tpe.afterLifeTime = 0.9f; //must be greater or equal to max age parameter
 			tpe.rotationAftector = 0;
 		}
 		break;
@@ -1278,18 +1299,21 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	ps->setScale(core::vector3df(2,2,2));
 	ps->setMaterialFlag(video::EMF_LIGHTING, false);
 	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
-	switch(color)
+	if(!bTextureSet)
 	{
-	case PARTICLES_EFFECT_COLOR_RED:
+		switch(color)
 		{
-			ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_red.bmp"));
+		case PARTICLES_EFFECT_COLOR_RED:
+			{
+				ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_red.bmp"));
+			}
+			break;
+		case PARTICLES_EFFECT_COLOR_GREEN:
+			{
+				ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_green.bmp"));
+			}
+			break;
 		}
-		break;
-	case PARTICLES_EFFECT_COLOR_GREEN:
-		{
-			ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle_green.bmp"));
-		}
-		break;
 	}
 	//ps->setMaterialTexture(0, m_pDriver->getTexture(texture));
 	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
@@ -1297,7 +1321,10 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	ps->setName(L"ParticleEffect");
 	tpe.ps = ps;
 
-	m_ListOfTemporaryParticleEffects.push_back(tpe);
+	//if(bTemporary)
+	{
+		m_ListOfTemporaryParticleEffects.push_back(tpe);
+	}
 
 	/*CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = PARTICLE_GAME_OBJECT;
