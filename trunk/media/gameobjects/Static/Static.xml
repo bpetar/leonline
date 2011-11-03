@@ -10,6 +10,7 @@
 		<Static filename="chair"/>
 		<Static filename="table"/>
 		<Static filename="closet"/>
+		<Static filename="torch"/>
 	</Furniture>
 	<Houses>
 		<Static filename="house_01"/>
@@ -34,6 +35,7 @@
 	</Vegetables>
 	<Walls>
 		<Static filename="wall"/>
+		<Static filename="fireplace"/>
 		<Static filename="stairs"/>
 		<Static filename="wallniche"/>
 		<Static filename="lever"/>

@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Fireplace 1"/>
+	<Model value="fireplace.3ds"/>
+  <Wall value="true"/>
+	<Description value="Stone fireplace."/>
+</Config>

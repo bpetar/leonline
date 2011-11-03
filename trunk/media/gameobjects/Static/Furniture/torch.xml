@@ -1,0 +1,5 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Torch"/>
+	<Model value="torch.3ds"/>
+</Config>
