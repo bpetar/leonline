@@ -1204,7 +1204,7 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	case PARTICLES_EFFECT_FIRE:
 		{
 			em = ps->createBoxEmitter(aabbox3d<f32>(-5,-1,-5,5,1,5), vector3df(0.0f,0.03f,0.0f), 220,400,
-				 SColor(0,55,55,55), SColor(0,255,255,255), 300,900,0,dimension2df(5.f,5.f),dimension2df(15.f,15.f));
+				 SColor(0,55,55,55), SColor(0,255,255,255), 300,900,30,dimension2df(5.f,5.f),dimension2df(15.f,15.f));
 
 			//not creating tpe for constant effects..
 
