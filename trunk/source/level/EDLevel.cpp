@@ -788,7 +788,7 @@ void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize
 			em = ps->createSphereEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, direction, emitRateMin, emitRateMax, 
 					SColor(0,55,55,55),       // darkest color
 					SColor(0,255,255,255),    // brightest color
-					3000,12000,angle,           // min and max age, angle
+					100,300,angle,           // min and max age, angle
 					dimension2df(5.f,5.f),    // min size
 					dimension2df(15.f,15.f)); // max size
 		}
@@ -833,7 +833,7 @@ void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize
 	ps->setEmitter(em); // this grabs the emitter
 	em->drop(); // so we can drop it here without deleting it
 
-	scene::IParticleAffector* paf = ps->createFadeOutParticleAffector();
+	scene::IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
 
 	ps->addAffector(paf); // same goes for the affector
 	paf->drop();

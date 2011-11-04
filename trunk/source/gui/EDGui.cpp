@@ -99,6 +99,7 @@ CEditorGUI::CEditorGUI()
 	m_LevelParticles_EditBox_TextureFile(0),
 	m_LevelParticles_Button_TextureBrowse(0),
 	m_LevelParticles_ComboBox_Emiter(0),
+	m_LevelParticles_ComboBox_Template(0),
 	m_LevelParticles_EditBox_DirectionX(0),
 	m_LevelParticles_EditBox_DirectionY(0),
 	m_LevelParticles_EditBox_DirectionZ(0),
@@ -1047,6 +1048,39 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 				}
 				break;
 			
+				//combo changed
+				case EGET_COMBO_BOX_CHANGED:
+				{
+					if(m_wnd_ParticleSystem && (m_LevelParticles_ComboBox_Template->getID() == event.GUIEvent.Caller->getID()))
+					{
+						//fill gui elements with template values!
+						if(m_LevelParticles_ComboBox_Template->getSelected() == 2)
+						{
+							//fire template
+							m_LevelParticles_ComboBox_Emiter->setSelected(2); //sphere
+							m_LevelParticles_EditBox_TextureFile->setText(L"media/fire.bmp");
+							m_LevelParticles_EditBox_Name->setText(L"Fire");
+
+							m_LevelParticles_EditBox_EmiterSizeXMin->setText(L"-1");
+							m_LevelParticles_EditBox_EmiterSizeXMax->setText(L"1");
+							m_LevelParticles_EditBox_EmiterSizeYMin->setText(L"-2");
+							m_LevelParticles_EditBox_EmiterSizeYMax->setText(L"2");
+							m_LevelParticles_EditBox_EmiterSizeZMin->setText(L"-2");
+							m_LevelParticles_EditBox_EmiterSizeZMax->setText(L"2");
+
+							m_LevelParticles_EditBox_DirectionX->setText(L"0.0");
+							m_LevelParticles_EditBox_DirectionY->setText(L"0.1");
+							m_LevelParticles_EditBox_DirectionZ->setText(L"0.0");
+
+							m_LevelParticles_EditBox_EmitRateMin->setText(L"280");
+							m_LevelParticles_EditBox_EmitRateMax->setText(L"430");
+							m_LevelParticles_EditBox_Angle->setText(L"20");
+
+						}
+					}
+				}
+				break;
+
 				//button clicked
 				case EGET_BUTTON_CLICKED:
 				{
