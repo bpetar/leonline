@@ -892,17 +892,24 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	IrrlichtDevice* device = editorManager->getDevice();
 	CEditorGUI* edGui = editorManager->getGUIManager();
 
-	IGUIWindow* wnd_Particles = env->addWindow(rect<s32>(370,90,800,470), false, L"Add Particles", 0, GUI_ID_WINDOW_LEVEL_MUSIC);
+	IGUIWindow* wnd_Particles = env->addWindow(rect<s32>(370,90,800,510), false, L"Add Particles", 0, GUI_ID_WINDOW_LEVEL_MUSIC);
 
 	s32 itemHeight = 25;
 	s32 leftMarginX = 10;
-	s32 topMarginY = 40;
+	s32 topMarginY = 80;
 	s32 spaceX = 10;
 	s32 spaceY = 5;
 	s32 widthX = 100;
 
 	//Layout GUI elements around
 	
+	env->addStaticText(L"Template:", rect<s32>(leftMarginX,topMarginY-40,leftMarginX+widthX,topMarginY-20), false, false, wnd_Particles, -1, false);
+	edGui->m_LevelParticles_ComboBox_Template = env->addComboBox(rect<s32>(leftMarginX+widthX+spaceX,topMarginY-40,leftMarginX+3*widthX+spaceX,topMarginY-20), wnd_Particles, GUI_ID_COMBOBOX_LEVELPARTICLES_TEMPLATE);
+	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Teleport");
+	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Whirl");
+	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Fire");
+	edGui->m_LevelParticles_ComboBox_Template->setSelected(0);
+
 	env->addStaticText(L"Name:", rect<s32>(leftMarginX,topMarginY,leftMarginX+widthX,topMarginY+itemHeight), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_Name = env->addEditBox(L"Particles", rect<s32>(leftMarginX+widthX+spaceX,topMarginY,leftMarginX+3*widthX+spaceX,topMarginY+itemHeight), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_NAME);
 	
@@ -948,7 +955,7 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	env->addStaticText(L"Angle:", rect<s32>(leftMarginX,topMarginY+9*itemHeight+8*spaceY,leftMarginX+widthX,topMarginY+10*itemHeight+8*spaceY), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_Angle = env->addEditBox(L"0", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+9*itemHeight+8*spaceY,(s32)(leftMarginX+1.5*widthX+spaceX),topMarginY+10*itemHeight+8*spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE);
 
-	edGui->m_LevelParticle_Button_Save = env->addButton(rect<s32>(150,340,280,360), wnd_Particles, GUI_ID_BUTTON_PARTICLESYSTEM_INSERT, L"Insert");
+	edGui->m_LevelParticle_Button_Save = env->addButton(rect<s32>(150,topMarginY+300,280,topMarginY+320), wnd_Particles, GUI_ID_BUTTON_PARTICLESYSTEM_INSERT, L"Insert");
 	env->setFocus(edGui->m_LevelParticle_Button_Save);
 
 	return wnd_Particles;

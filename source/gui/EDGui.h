@@ -101,6 +101,7 @@ enum GUI_ID
 	GUI_ID_EDITBOX_LEVELPARTICLES_TEXTURE_FILE,
 	GUI_ID_BUTTON_LEVELPARTICLES_TEXTURE_BROWSE,
 	GUI_ID_COMBOBOX_LEVELPARTICLES_EMITER,
+	GUI_ID_COMBOBOX_LEVELPARTICLES_TEMPLATE,
 	GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_X,
 	GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Y,
 	GUI_ID_EDITBOX_LEVELPARTICLES_DIRECTION_Z,
@@ -441,6 +442,7 @@ public:
 	IGUIEditBox* m_LevelParticles_EditBox_TextureFile;
 	IGUIButton* m_LevelParticles_Button_TextureBrowse;
 	IGUIComboBox* m_LevelParticles_ComboBox_Emiter;
+	IGUIComboBox* m_LevelParticles_ComboBox_Template;
 	IGUIEditBox* m_LevelParticles_EditBox_DirectionX;
 	IGUIEditBox* m_LevelParticles_EditBox_DirectionY;
 	IGUIEditBox* m_LevelParticles_EditBox_DirectionZ;

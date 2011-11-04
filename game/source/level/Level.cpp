@@ -1207,7 +1207,6 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 				 SColor(0,55,55,55), SColor(0,255,255,255), 300,900,30,dimension2df(5.f,5.f),dimension2df(15.f,15.f));
 
 			//not creating tpe for constant effects..
-
 			IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),500);
 			ps->addAffector(paf); // same goes for the affector
 			paf->drop();
