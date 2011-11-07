@@ -78,6 +78,7 @@ public:
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	void OnSaveMap();
 	CTreeSceneNode* createTree(PROCEDURAL_TREE_TYPE treeType);
+	void InsertLight();
 	void InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void InsertTree(PROCEDURAL_TREE_TYPE treeType);
 	void InsertTerrainGrass(int param);
@@ -86,7 +87,7 @@ public:
 	void addTerrainSelector();
 	void AddGameObjectToLevel(CGameObject* go);
 	void RemoveGameObjectFromMap(CGameObject* go);
-	vector3df GetIntersectionPoint();
+	vector3df GetIntersectionPoint(f32 height);
 	bool SetElementAtHand(CGameObject* go);
 	bool SendModelToPhotoSession(CGameObject* go);
 	bool SendModelToPickSession(CGameObject* go);
@@ -108,6 +109,7 @@ public:
 	void SetRotationSelectedElement(int axis, float value);
 	bool MapNameExists();
 	void OnRender();
+	void EnlightAllNodes();
 	/* ISceneUserDataSerializer functions: */
 	IAttributes* createUserData (irr::scene::ISceneNode *forSceneNode);
 	void OnReadUserData (irr::scene::ISceneNode *forSceneNode, irr::io::IAttributes *userData);

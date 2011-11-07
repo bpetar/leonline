@@ -72,6 +72,7 @@ void CreateMenu(CEditorManager* editorManager)
 	submenu->addItem(L"Flag Start Position", GUI_ID_MENU_INSERT_FLAG);
 	submenu->addItem(L"Level Music", GUI_ID_MENU_INSERT_MUSIC);
 	submenu->addItem(L"Particle System", GUI_ID_MENU_INSERT_PARTICLE);
+	submenu->addItem(L"Light", GUI_ID_MENU_INSERT_LIGHT);
 
 	editorManager->getGUIManager()->m_TreeSubmenu = submenu->getSubMenu(2);
 	editorManager->getGUIManager()->m_TreeSubmenu->addItem(L"Aspen Tree", GUI_ID_MENU_INSERT_TREE_ASPEN);
@@ -235,6 +236,14 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 		case GUI_ID_MENU_INSERT_PARTICLE:
 		{
 			edGui->m_wnd_ParticleSystem = MakeParticleWindow(editorManager);
+		}
+		break;
+		//Insert->Light
+		case GUI_ID_MENU_INSERT_LIGHT:
+		{
+			editorManager->getEdiLevel()->InsertLight();
+			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Light"); // ?? isnt m_ID increased before this call - is it valid?
+
 		}
 		break;
 		//Insert->Terrain Grass

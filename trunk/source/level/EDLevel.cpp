@@ -755,6 +755,49 @@ CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 	return tree;
 }
 
+void CEditorLevel::InsertLight()
+{
+	stringw name = L"Light GO";
+
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(0, vector3df(0,0,0), 
+		SColorf(1.0f, 0.6f, 0.7f, 1.0f), 300.0f);
+	
+	ISceneNodeAnimator* anim = 0;
+	anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
+	light->addAnimator(anim);
+	anim->drop();
+
+	// attach billboard to light
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(light, core::dimension2d<f32>(50, 50));
+	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
+	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
+
+	m_SelectedGameObject = light;
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = LIGHT_GAME_OBJECT;
+	gameObject->name = name;
+	
+	gameObject->id = m_EditorManager->m_ID;
+	
+	m_SelectedGameObject->setID(m_EditorManager->m_ID);//??
+	
+	gameObject->description = L"Light Node";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+
+	m_EditorManager->getGUIManager()->SetProperties(gameObject);
+
+	m_EditorManager->m_ID++;
+
+	EnlightAllNodes();
+
+	m_bMoveSelectedNode = true;
+}
+
 void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
 {
 	// create a particle system
@@ -1777,7 +1820,7 @@ void CEditorLevel::getPickedNodeBBB(ISceneNode* root, const core::line3df& ray, 
 } 
 
 
-vector3df CEditorLevel::GetIntersectionPoint()
+vector3df CEditorLevel::GetIntersectionPoint(f32 minHeight)
 {
 	vector3df instersection_point = vector3df(0,0,0);
 	triangle3df instersection_triangle;
@@ -1785,14 +1828,27 @@ vector3df CEditorLevel::GetIntersectionPoint()
 	const ISceneNode* hitNode;
 	if(m_EditorManager->getSceneMngr()->getSceneCollisionManager()->getCollisionPoint(picking_line,m_LevelMetaTriangleSelector,instersection_point,instersection_triangle,hitNode))
 	{
-		printf("awawdawd");
-		return instersection_point;
+		//if lie intersects with node at Y loser then minimum height, then raise it
+		if(instersection_point.Y < minHeight)
+		{
+			//intersect with invisible horizontal plane at Y=minHeight
+			plane3df horizontalPlane; // plane horizontal to the character
+			horizontalPlane.setPlane(vector3df(0.f,-1.f,0.f), minHeight);
+			if(horizontalPlane.getIntersectionWithLine(picking_line.start, picking_line.getVector(), instersection_point))
+			{
+				return instersection_point;
+			}
+		}
+		else
+		{
+			return instersection_point;
+		}
 	}
 	else
 	{
-		//intersect with invisible horizontal plane at Y=0
+		//intersect with invisible horizontal plane at Y=minHeight
 		plane3df horizontalPlane; // plane horizontal to the character
-		horizontalPlane.setPlane(vector3df(0.f, -1.f, 0.f), 0);
+		horizontalPlane.setPlane(vector3df(0.f,-1.f,0.f), minHeight);
 		if(horizontalPlane.getIntersectionWithLine(picking_line.start, picking_line.getVector(), instersection_point))
 		{
 			return instersection_point;
@@ -2274,7 +2330,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							{
 								m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
 							}
-							m_objectMoveOffset = m_SelectedGameObject->getPosition() - GetIntersectionPoint();
+							m_objectMoveOffset = m_SelectedGameObject->getPosition() - GetIntersectionPoint(0);
 
 							//tell gui to change properties to this selected item
 							m_EditorManager->getGUIManager()->SetProperties(gameObject);
@@ -2450,10 +2506,21 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 								m_EditorManager->getGUIManager()->SetPropertiesPosition(m_SelectedGameObject->getPosition().X, m_SelectedGameObject->getPosition().Y, m_SelectedGameObject->getPosition().Z);
 							}
 						}
+						else if(go->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
+						{
+							//TGameObjectProperty properties;
+							vector3df instersection_point = GetIntersectionPoint(20);
+							if(m_bCtrlPressed)
+								m_SelectedGameObject->setPosition(instersection_point + m_objectMoveOffset);
+							else
+								m_SelectedGameObject->setPosition(instersection_point);
+							//set properties to reflect position coord change while moving object
+							m_EditorManager->getGUIManager()->SetPropertiesPosition(m_SelectedGameObject->getPosition().X, m_SelectedGameObject->getPosition().Y, m_SelectedGameObject->getPosition().Z);
+						}
 						else
 						{
 							//TGameObjectProperty properties;
-							vector3df instersection_point = GetIntersectionPoint();
+							vector3df instersection_point = GetIntersectionPoint(0);
 							if(m_bCtrlPressed)
 								m_SelectedGameObject->setPosition(instersection_point + m_objectMoveOffset);
 							else
@@ -2802,5 +2869,17 @@ void CEditorLevel::SetSelectedObjectParameter_isMonster(bool isMonster)
 	{
 		CGameObject* obj = _getGameObjectFromID(m_SelectedGameObject->getID());
 		obj->isMonster = isMonster;
+	}
+}
+
+
+void CEditorLevel::EnlightAllNodes()
+{
+	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
+	
+	for (; it != m_ListOfGameObjects.end(); ++it)
+	{
+		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
+		node->setMaterialFlag(EMF_LIGHTING, true);
 	}
 }
