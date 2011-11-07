@@ -978,7 +978,7 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 
 			//insert particles
 			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle, outline);
-			edGui->AddNodeToSceneTree(editorManager->m_ID,name);
+			edGui->AddNodeToSceneTree(editorManager->m_ID,name); // ?? isnt m_ID increased before this call - is it valid?
 			edGui->m_wnd_ParticleSystem->remove();
 			edGui->m_wnd_ParticleSystem = 0;
 			edGui->m_bGUIFocused = false;

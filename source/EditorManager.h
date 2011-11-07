@@ -48,6 +48,7 @@ using namespace gui;
 
 #define PROCEDURAL_TREE_MESH "procedural_tree_mesh"
 #define PARTICLE_GAME_OBJECT "particle_game_object_mesh"
+#define LIGHT_GAME_OBJECT "light_game_object_mesh"
 
 /**
  * \brief CEditorManager class is the boss. The manager. It creates 3D device (irrlicht of course),
