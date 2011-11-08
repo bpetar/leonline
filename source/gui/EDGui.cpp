@@ -1056,7 +1056,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 						//fill gui elements with template values!
 						if(m_LevelParticles_ComboBox_Template->getSelected() == 2)
 						{
-							//fire template
+							//2 = fire template
 							m_LevelParticles_ComboBox_Emiter->setSelected(2); //sphere
 							m_LevelParticles_EditBox_TextureFile->setText(L"media/fire.bmp");
 							m_LevelParticles_EditBox_Name->setText(L"Fire");

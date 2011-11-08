@@ -44,6 +44,13 @@ typedef enum EEmiterType
 } TEEmiterType;
 
 
+enum PARTICLE_SYSTEM_TYPE
+{
+	LE_PS_FIRE,
+	LE_PS_BLAST,
+	LE_PS_TELEPORT,
+	LE_PS_DUST
+};
 
 class CEditorManager;
 
@@ -110,6 +117,9 @@ public:
 	bool MapNameExists();
 	void OnRender();
 	void EnlightAllNodes();
+	void DelightAllNodes();
+	IParticleSystemSceneNode* CreateParticles(PARTICLE_SYSTEM_TYPE type);
+	IParticleSystemSceneNode* InsertParticlesNode(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	/* ISceneUserDataSerializer functions: */
 	IAttributes* createUserData (irr::scene::ISceneNode *forSceneNode);
 	void OnReadUserData (irr::scene::ISceneNode *forSceneNode, irr::io::IAttributes *userData);

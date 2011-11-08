@@ -409,6 +409,9 @@ bool CEditorLevel::SetElementAtHand(CGameObject* go)
 		m_bElementAtHand = false;
 	}
 
+	//turn off lights (and make scene bright!)
+	DelightAllNodes();
+
 	IAnimatedMesh* m = m_EditorManager->getSceneMngr()->getMesh(stringc(go->path + go->mesh).c_str());
 	if (m)
 	{
@@ -705,6 +708,17 @@ PROCEDURAL_TREE_TYPE getProceduralTreeTypeFromName(stringc name)
 	return LE_PT_WILLOW;
 }
 
+PARTICLE_SYSTEM_TYPE getParticleTypeFromName(stringc name)
+{
+	if(name.equals_ignore_case("Fire")) return LE_PS_FIRE;
+	if(name.equals_ignore_case("Teleport")) return LE_PS_TELEPORT;
+	if(name.equals_ignore_case("Particles")) return LE_PS_TELEPORT; //temporary
+	if(name.equals_ignore_case("Blast")) return LE_PS_BLAST;
+	if(name.equals_ignore_case("Dust")) return LE_PS_DUST;
+	
+	return LE_PS_FIRE;
+}
+
 CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 {
 	CTreeSceneNode* tree = new CTreeSceneNode( m_EditorManager->getSceneMngr()->getRootSceneNode(), m_EditorManager->getSceneMngr(), m_EditorManager->m_ID);
@@ -796,6 +810,130 @@ void CEditorLevel::InsertLight()
 	EnlightAllNodes();
 
 	m_bMoveSelectedNode = true;
+}
+
+IParticleSystemSceneNode* CEditorLevel::CreateParticles(PARTICLE_SYSTEM_TYPE type)
+{
+	IParticleSystemSceneNode* ps = NULL;
+
+	switch(type)
+	{
+	case LE_PS_FIRE:
+		{
+			aabbox3df emiterSize = aabbox3d<f32>(-1,1,-1,1,-1,1);
+			ps = InsertParticlesNode(E_EMITERTYPE_SPHERE,emiterSize,vector3df(0,0.1,0),L"media/fire.bmp","Fire",280,430,20,false);
+		}
+		break;
+	case LE_PS_TELEPORT:
+		{
+		}
+		break;
+	case LE_PS_BLAST:
+		{
+		}
+		break;
+	default:
+		{
+		}
+		break;
+	}
+
+	return ps;
+}
+
+IParticleSystemSceneNode* CEditorLevel::InsertParticlesNode(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
+{
+	// create a particle system
+	IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
+	IParticleEmitter* em = 0;
+
+	switch(emiterType)
+	{
+	case E_EMITERTYPE_BOX:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_RING:
+		{
+			em = ps->createRingEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, emiterSize.getExtent().Y, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_SPHERE:
+		{
+			em = ps->createSphereEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					100,300,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_CYLINDER:
+		{
+			vector3df normal = vector3df(10.f,10.f,10.f);
+			em = ps->createCylinderEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, normal, emiterSize.getExtent().Y, outlineOnly, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_POINT:
+		{
+			em = ps->createPointEmitter(direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	default:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+	}
+
+	if(em == 0)
+	{
+		printf("Fatal Error creating emiter!\n");
+		return NULL; 
+	}
+
+	ps->setEmitter(em); // this grabs the emitter
+	em->drop(); // so we can drop it here without deleting it
+
+	//scene::IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
+	//ps->addAffector(paf); // same goes for the affector
+	//paf->drop();
+
+	//ps->setPosition(core::vector3df(0,-60,0));
+	//ps->setScale(core::vector3df(2,2,2));
+	ps->setMaterialFlag(video::EMF_LIGHTING, false);
+	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
+	ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture(texture));
+	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
+	//ps->setID(m_EditorManager->m_ID);
+	ps->setName(name);
+
+	return ps;
 }
 
 void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
@@ -1350,8 +1488,10 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 					else if(meshPath == stringc(PARTICLE_GAME_OBJECT))
 					{
 						//recreate particle system here
+						node = CreateParticles(getParticleTypeFromName(attr->getAttributeAsString("Name")));
+
 						// create a particle system
-						scene::IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
+						/*scene::IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
 
 						scene::IParticleEmitter* em = ps->createBoxEmitter(
 							core::aabbox3d<f32>(-20,-2,-20,20,20,20), // emitter size
@@ -1376,9 +1516,11 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						ps->setMaterialFlag(video::EMF_LIGHTING, false);
 						ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
 						ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
-						ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
-
-						node = ps;
+						ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);*/
+					}
+					else if(meshPath == stringc(LIGHT_GAME_OBJECT))
+					{
+						//Insert light
 					}
 					else
 					{
@@ -2335,6 +2477,18 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							//tell gui to change properties to this selected item
 							m_EditorManager->getGUIManager()->SetProperties(gameObject);
 							m_EditorManager->getGUIManager()->SetSelectedElementInTheTreeofSceneNodes(m_SelectedGameObject->getID());
+
+							//set lights
+							if(gameObject->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
+							{
+								//enlight scene
+								EnlightAllNodes();
+							}
+							else
+							{
+								//turn off lights (and make scene bright!)
+								DelightAllNodes();
+							}
 						}
 						else 
 						{
@@ -2881,5 +3035,16 @@ void CEditorLevel::EnlightAllNodes()
 	{
 		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
 		node->setMaterialFlag(EMF_LIGHTING, true);
+	}
+}
+
+void CEditorLevel::DelightAllNodes()
+{
+	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
+	
+	for (; it != m_ListOfGameObjects.end(); ++it)
+	{
+		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
+		node->setMaterialFlag(EMF_LIGHTING, false);
 	}
 }
