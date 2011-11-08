@@ -911,7 +911,7 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	edGui->m_LevelParticles_ComboBox_Template->setSelected(0);
 
 	env->addStaticText(L"Name:", rect<s32>(leftMarginX,topMarginY,leftMarginX+widthX,topMarginY+itemHeight), false, false, wnd_Particles, -1, false);
-	edGui->m_LevelParticles_EditBox_Name = env->addEditBox(L"Particles", rect<s32>(leftMarginX+widthX+spaceX,topMarginY,leftMarginX+3*widthX+spaceX,topMarginY+itemHeight), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_NAME);
+	edGui->m_LevelParticles_EditBox_Name = env->addEditBox(L"Teleport", rect<s32>(leftMarginX+widthX+spaceX,topMarginY,leftMarginX+3*widthX+spaceX,topMarginY+itemHeight), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_NAME);
 	
 	env->addStaticText(L"Texture:", rect<s32>(leftMarginX,topMarginY+itemHeight+spaceY,leftMarginX+widthX,topMarginY+2*itemHeight+spaceY), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_EditBox_TextureFile = env->addEditBox(L"media/particle1.bmp", rect<s32>(leftMarginX+widthX+spaceX,topMarginY+itemHeight+spaceY,leftMarginX+3*widthX+spaceX,topMarginY+2*itemHeight+spaceY), true, wnd_Particles, GUI_ID_EDITBOX_LEVELPARTICLES_TEXTURE_FILE);
