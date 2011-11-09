@@ -713,7 +713,7 @@ PARTICLE_SYSTEM_TYPE getParticleTypeFromName(stringc name)
 	if(name.equals_ignore_case("Fire")) return LE_PS_FIRE;
 	if(name.equals_ignore_case("Teleport")) return LE_PS_TELEPORT;
 	if(name.equals_ignore_case("Particles")) return LE_PS_TELEPORT; //temporary
-	if(name.equals_ignore_case("Blast")) return LE_PS_BLAST;
+	if(name.equals_ignore_case("Smoke")) return LE_PS_SMOKE;
 	if(name.equals_ignore_case("Dust")) return LE_PS_DUST;
 	
 	return LE_PS_FIRE;
@@ -776,6 +776,47 @@ void CEditorLevel::InsertLight()
 	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(0, vector3df(0,0,0), 
 		SColorf(1.0f, 0.6f, 0.7f, 1.0f), 300.0f);
 	
+	//ISceneNodeAnimator* anim = 0;
+	//anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
+	//light->addAnimator(anim);
+	//anim->drop();
+
+	// attach billboard to light
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(light, core::dimension2d<f32>(50, 50));
+	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
+	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
+
+	m_SelectedGameObject = light;
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = LIGHT_GAME_OBJECT;
+	gameObject->name = name;
+	
+	gameObject->id = m_EditorManager->m_ID;
+	
+	m_SelectedGameObject->setID(m_EditorManager->m_ID);//??
+	
+	gameObject->description = L"Light Node";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->getGUIManager()->SetProperties(gameObject);
+
+	EnlightAllNodes();
+
+	m_bMoveSelectedNode = true;
+}
+
+void CEditorLevel::InsertDancingLight()
+{
+	stringw name = L"Dancing Light GO";
+
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(0, vector3df(0,0,0), 
+		SColorf(1.0f, 0.6f, 0.7f, 1.0f), 300.0f);
+	
+	//Vibrating light for fire dancing
 	ISceneNodeAnimator* anim = 0;
 	anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
 	light->addAnimator(anim);
@@ -802,10 +843,7 @@ void CEditorLevel::InsertLight()
 	gameObject->script = L"";
 	m_ListOfGameObjects.push_back(gameObject);
 
-
 	m_EditorManager->getGUIManager()->SetProperties(gameObject);
-
-	m_EditorManager->m_ID++;
 
 	EnlightAllNodes();
 
@@ -821,14 +859,22 @@ IParticleSystemSceneNode* CEditorLevel::CreateParticles(PARTICLE_SYSTEM_TYPE typ
 	case LE_PS_FIRE:
 		{
 			aabbox3df emiterSize = aabbox3d<f32>(-1,1,-1,1,-1,1);
-			ps = InsertParticlesNode(E_EMITERTYPE_SPHERE,emiterSize,vector3df(0,0.1,0),L"media/fire.bmp","Fire",280,430,20,false);
+			ps = InsertParticlesNode(E_EMITERTYPE_SPHERE,emiterSize,vector3df(0.0f,0.1f,0.0f),L"media/fire.bmp","Fire",280,430,20,false);
+			IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
+			ps->addAffector(paf);
+			paf->drop();
 		}
 		break;
 	case LE_PS_TELEPORT:
 		{
+			aabbox3df emiterSize = aabbox3d<f32>(-20,-2,-20,20,20,20);
+			ps = InsertParticlesNode(E_EMITERTYPE_BOX,emiterSize,vector3df(0.0f,0.01f,0.0f),L"media/particle1.bmp","Teleport",80,100,0,false);
+			IParticleAffector* paf = ps->createFadeOutParticleAffector();
+			ps->addAffector(paf);
+			paf->drop();
 		}
 		break;
-	case LE_PS_BLAST:
+	case LE_PS_SMOKE:
 		{
 		}
 		break;
@@ -920,113 +966,47 @@ IParticleSystemSceneNode* CEditorLevel::InsertParticlesNode(TEEmiterType emiterT
 	ps->setEmitter(em); // this grabs the emitter
 	em->drop(); // so we can drop it here without deleting it
 
-	//scene::IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
-	//ps->addAffector(paf); // same goes for the affector
-	//paf->drop();
-
-	//ps->setPosition(core::vector3df(0,-60,0));
-	//ps->setScale(core::vector3df(2,2,2));
 	ps->setMaterialFlag(video::EMF_LIGHTING, false);
 	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
 	ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture(texture));
 	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
-	//ps->setID(m_EditorManager->m_ID);
 	ps->setName(name);
 
 	return ps;
 }
 
-void CEditorLevel::InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
+void CEditorLevel::InsertParticles(PARTICLE_SYSTEM_TYPE type, TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
 {
 	// create a particle system
-	IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
-	IParticleEmitter* em = 0;
+	IParticleSystemSceneNode* ps = 0;
 
-	switch(emiterType)
+	ps = InsertParticlesNode(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle, outlineOnly);
+
+	switch(type)
 	{
-	case E_EMITERTYPE_BOX:
+	case LE_PS_FIRE:
 		{
-			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
-					SColor(0,55,55,55),       // darkest color
-					SColor(0,255,255,255),    // brightest color
-					3000,12000,angle,           // min and max age, angle
-					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
+			scene::IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
+			ps->addAffector(paf); // same goes for the affector
+			paf->drop();
 		}
 		break;
-	case E_EMITERTYPE_RING:
+	case LE_PS_TELEPORT:
 		{
-			em = ps->createRingEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, emiterSize.getExtent().Y, direction, emitRateMin, emitRateMax,
-					SColor(0,55,55,55),       // darkest color
-					SColor(0,255,255,255),    // brightest color
-					3000,12000,angle,           // min and max age, angle
-					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
-		}
-		break;
-	case E_EMITERTYPE_SPHERE:
-		{
-			em = ps->createSphereEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, direction, emitRateMin, emitRateMax, 
-					SColor(0,55,55,55),       // darkest color
-					SColor(0,255,255,255),    // brightest color
-					100,300,angle,           // min and max age, angle
-					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
-		}
-		break;
-	case E_EMITERTYPE_CYLINDER:
-		{
-			vector3df normal = vector3df(10.f,10.f,10.f);
-			em = ps->createCylinderEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, normal, emiterSize.getExtent().Y, outlineOnly, direction, emitRateMin, emitRateMax, 
-					SColor(0,55,55,55),       // darkest color
-					SColor(0,255,255,255),    // brightest color
-					3000,12000,angle,           // min and max age, angle
-					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
-		}
-		break;
-	case E_EMITERTYPE_POINT:
-		{
-			em = ps->createPointEmitter(direction, emitRateMin, emitRateMax,
-					SColor(0,55,55,55),       // darkest color
-					SColor(0,255,255,255),    // brightest color
-					3000,12000,angle,           // min and max age, angle
-					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
+			IParticleAffector* paf = ps->createFadeOutParticleAffector();
+			ps->addAffector(paf);
+			paf->drop();
 		}
 		break;
 	default:
 		{
-			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
-					SColor(0,55,55,55),       // darkest color
-					SColor(0,255,255,255),    // brightest color
-					3000,12000,angle,           // min and max age, angle
-					dimension2df(5.f,5.f),    // min size
-					dimension2df(15.f,15.f)); // max size
 		}
 	}
 
-	if(em == 0)
-	{
-		//Abort! 
-	}
-
-	ps->setEmitter(em); // this grabs the emitter
-	em->drop(); // so we can drop it here without deleting it
-
-	scene::IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
-
-	ps->addAffector(paf); // same goes for the affector
-	paf->drop();
 
 	ps->setPosition(core::vector3df(0,-60,0));
 	ps->setScale(core::vector3df(2,2,2));
-	ps->setMaterialFlag(video::EMF_LIGHTING, false);
-	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
-	ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture(texture));
-	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
 	ps->setID(m_EditorManager->m_ID);
-	ps->setName(name);
 
 	m_SelectedGameObject = ps;
 	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
@@ -2667,7 +2647,17 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							if(m_bCtrlPressed)
 								m_SelectedGameObject->setPosition(instersection_point + m_objectMoveOffset);
 							else
+							{
 								m_SelectedGameObject->setPosition(instersection_point);
+								if(go->name.equals_ignore_case("Dancing Light GO"))
+								{
+									m_SelectedGameObject->removeAnimators();
+									ISceneNodeAnimator* anim = 0;
+									anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(instersection_point,1.0f,0.04f,vector3df(1,0,0));
+									m_SelectedGameObject->addAnimator(anim);
+									anim->drop();
+								}
+							}
 							//set properties to reflect position coord change while moving object
 							m_EditorManager->getGUIManager()->SetPropertiesPosition(m_SelectedGameObject->getPosition().X, m_SelectedGameObject->getPosition().Y, m_SelectedGameObject->getPosition().Z);
 						}

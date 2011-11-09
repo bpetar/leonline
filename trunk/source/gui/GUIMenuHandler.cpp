@@ -73,6 +73,7 @@ void CreateMenu(CEditorManager* editorManager)
 	submenu->addItem(L"Level Music", GUI_ID_MENU_INSERT_MUSIC);
 	submenu->addItem(L"Particle System", GUI_ID_MENU_INSERT_PARTICLE);
 	submenu->addItem(L"Light", GUI_ID_MENU_INSERT_LIGHT);
+	submenu->addItem(L"Dancing Light", GUI_ID_MENU_INSERT_DANCING_LIGHT);
 
 	editorManager->getGUIManager()->m_TreeSubmenu = submenu->getSubMenu(2);
 	editorManager->getGUIManager()->m_TreeSubmenu->addItem(L"Aspen Tree", GUI_ID_MENU_INSERT_TREE_ASPEN);
@@ -243,7 +244,15 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 		{
 			editorManager->getEdiLevel()->InsertLight();
 			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Light"); // ?? isnt m_ID increased before this call - is it valid?
-
+			editorManager->m_ID++;
+		}
+		break;
+		//Insert->Dancing Light
+		case GUI_ID_MENU_INSERT_DANCING_LIGHT:
+		{
+			editorManager->getEdiLevel()->InsertDancingLight();
+			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Dancing Light"); // ?? isnt m_ID increased before this call - is it valid?
+			editorManager->m_ID++;
 		}
 		break;
 		//Insert->Terrain Grass
