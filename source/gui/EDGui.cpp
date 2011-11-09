@@ -1054,19 +1054,19 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 					if(m_wnd_ParticleSystem && (m_LevelParticles_ComboBox_Template->getID() == event.GUIEvent.Caller->getID()))
 					{
 						//fill gui elements with template values!
-						if(m_LevelParticles_ComboBox_Template->getSelected() == 2)
+						if(m_LevelParticles_ComboBox_Template->getSelected() == LE_PS_FIRE)
 						{
-							//2 = fire template
+							//fire template
 							m_LevelParticles_ComboBox_Emiter->setSelected(2); //sphere
 							m_LevelParticles_EditBox_TextureFile->setText(L"media/fire.bmp");
 							m_LevelParticles_EditBox_Name->setText(L"Fire");
 
 							m_LevelParticles_EditBox_EmiterSizeXMin->setText(L"-1");
 							m_LevelParticles_EditBox_EmiterSizeXMax->setText(L"1");
-							m_LevelParticles_EditBox_EmiterSizeYMin->setText(L"-2");
-							m_LevelParticles_EditBox_EmiterSizeYMax->setText(L"2");
-							m_LevelParticles_EditBox_EmiterSizeZMin->setText(L"-2");
-							m_LevelParticles_EditBox_EmiterSizeZMax->setText(L"2");
+							m_LevelParticles_EditBox_EmiterSizeYMin->setText(L"-1");
+							m_LevelParticles_EditBox_EmiterSizeYMax->setText(L"1");
+							m_LevelParticles_EditBox_EmiterSizeZMin->setText(L"-1");
+							m_LevelParticles_EditBox_EmiterSizeZMax->setText(L"1");
 
 							m_LevelParticles_EditBox_DirectionX->setText(L"0.0");
 							m_LevelParticles_EditBox_DirectionY->setText(L"0.1");
@@ -1075,6 +1075,33 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 							m_LevelParticles_EditBox_EmitRateMin->setText(L"280");
 							m_LevelParticles_EditBox_EmitRateMax->setText(L"430");
 							m_LevelParticles_EditBox_Angle->setText(L"20");
+
+						}
+					}
+					if(m_wnd_ParticleSystem && (m_LevelParticles_ComboBox_Template->getID() == event.GUIEvent.Caller->getID()))
+					{
+						//fill gui elements with template values!
+						if(m_LevelParticles_ComboBox_Template->getSelected() == LE_PS_TELEPORT)
+						{
+							//teleport template
+							m_LevelParticles_ComboBox_Emiter->setSelected(0); //box
+							m_LevelParticles_EditBox_TextureFile->setText(L"media/particle1.bmp");
+							m_LevelParticles_EditBox_Name->setText(L"Teleport");
+
+							m_LevelParticles_EditBox_EmiterSizeXMin->setText(L"-20");
+							m_LevelParticles_EditBox_EmiterSizeXMax->setText(L"20");
+							m_LevelParticles_EditBox_EmiterSizeYMin->setText(L"-2");
+							m_LevelParticles_EditBox_EmiterSizeYMax->setText(L"20");
+							m_LevelParticles_EditBox_EmiterSizeZMin->setText(L"-20");
+							m_LevelParticles_EditBox_EmiterSizeZMax->setText(L"20");
+
+							m_LevelParticles_EditBox_DirectionX->setText(L"0.0");
+							m_LevelParticles_EditBox_DirectionY->setText(L"0.01");
+							m_LevelParticles_EditBox_DirectionZ->setText(L"0.0");
+
+							m_LevelParticles_EditBox_EmitRateMin->setText(L"80");
+							m_LevelParticles_EditBox_EmitRateMax->setText(L"100");
+							m_LevelParticles_EditBox_Angle->setText(L"0");
 
 						}
 					}

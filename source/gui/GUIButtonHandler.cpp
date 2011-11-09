@@ -931,6 +931,8 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 			vector3df direction = vector3df(0.0f,0.01f,0.0f);
 			stringc texture = "media/particle1.bmp";
 			stringc name = "particles";
+			stringc type = "Teleport";
+
 			s32 emitRateMin = 80;
 			s32 emitRateMax = 100;
 			f32 emiterSizeXmin = -20;
@@ -976,8 +978,11 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 			//outline
 			bool outline = false;
 
+			//template
+			PARTICLE_SYSTEM_TYPE templateType = (PARTICLE_SYSTEM_TYPE)edGui->m_LevelParticles_ComboBox_Template->getSelected();
+
 			//insert particles
-			editorManager->getEdiLevel()->InsertParticles(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle, outline);
+			editorManager->getEdiLevel()->InsertParticles(templateType, emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle, outline);
 			edGui->AddNodeToSceneTree(editorManager->m_ID,name); // ?? isnt m_ID increased before this call - is it valid?
 			edGui->m_wnd_ParticleSystem->remove();
 			edGui->m_wnd_ParticleSystem = 0;

@@ -906,8 +906,10 @@ IGUIWindow* MakeParticleWindow(CEditorManager* editorManager)
 	env->addStaticText(L"Template:", rect<s32>(leftMarginX,topMarginY-40,leftMarginX+widthX,topMarginY-20), false, false, wnd_Particles, -1, false);
 	edGui->m_LevelParticles_ComboBox_Template = env->addComboBox(rect<s32>(leftMarginX+widthX+spaceX,topMarginY-40,leftMarginX+3*widthX+spaceX,topMarginY-20), wnd_Particles, GUI_ID_COMBOBOX_LEVELPARTICLES_TEMPLATE);
 	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Teleport");
-	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Whirl");
+	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Smoke");
 	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Fire");
+	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Whirl");
+	edGui->m_LevelParticles_ComboBox_Template->addItem(L"Dust");
 	edGui->m_LevelParticles_ComboBox_Template->setSelected(0);
 
 	env->addStaticText(L"Name:", rect<s32>(leftMarginX,topMarginY,leftMarginX+widthX,topMarginY+itemHeight), false, false, wnd_Particles, -1, false);

@@ -46,9 +46,10 @@ typedef enum EEmiterType
 
 enum PARTICLE_SYSTEM_TYPE
 {
-	LE_PS_FIRE,
-	LE_PS_BLAST,
 	LE_PS_TELEPORT,
+	LE_PS_SMOKE,
+	LE_PS_FIRE,
+	LE_PS_WHIRL,
 	LE_PS_DUST
 };
 
@@ -86,7 +87,8 @@ public:
 	void OnSaveMap();
 	CTreeSceneNode* createTree(PROCEDURAL_TREE_TYPE treeType);
 	void InsertLight();
-	void InsertParticles(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
+	void InsertDancingLight();
+	void InsertParticles(PARTICLE_SYSTEM_TYPE, TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void InsertTree(PROCEDURAL_TREE_TYPE treeType);
 	void InsertTerrainGrass(int param);
 	void InsertFlag();
