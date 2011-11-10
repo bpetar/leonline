@@ -774,13 +774,8 @@ void CEditorLevel::InsertLight()
 	stringw name = L"Light GO";
 
 	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(0, vector3df(0,0,0), 
-		SColorf(1.0f, 0.6f, 0.7f, 1.0f), 300.0f);
+		SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
 	
-	//ISceneNodeAnimator* anim = 0;
-	//anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
-	//light->addAnimator(anim);
-	//anim->drop();
-
 	// attach billboard to light
 	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(light, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -3021,10 +3016,15 @@ void CEditorLevel::EnlightAllNodes()
 {
 	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
 	
+	m_EditorManager->getSceneMngr()->setAmbientLight(SColorf(0.3f, 0.1f, 0.1f, 0.5f));
+
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{
 		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
-		node->setMaterialFlag(EMF_LIGHTING, true);
+		if(!((*it)->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||(*it)->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
+		{
+			node->setMaterialFlag(EMF_LIGHTING, true);
+		}
 	}
 }
 
@@ -3032,6 +3032,8 @@ void CEditorLevel::DelightAllNodes()
 {
 	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
 	
+	m_EditorManager->getSceneMngr()->setAmbientLight(SColorf(1.0f, 1.0f, 1.0f, 1.0f)); //not really needed?
+
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{
 		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
