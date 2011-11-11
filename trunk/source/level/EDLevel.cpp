@@ -769,25 +769,38 @@ CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 	return tree;
 }
 
-void CEditorLevel::InsertLight()
+ISceneNode* CEditorLevel::CreateLight()
 {
-	stringw name = L"Light GO";
-
-	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(0, vector3df(0,0,0), 
-		SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
-	
-	// attach billboard to light
-	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(light, core::dimension2d<f32>(50, 50));
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
 	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
 	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
 
-	m_SelectedGameObject = light;
+	// attach light to bilboard
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+
+	return bilboard;
+}
+
+void CEditorLevel::InsertLight()
+{
+	stringw name = L"Light GO";
+
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
+	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
+	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
+
+	// attach light to bilboard
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+
+	m_SelectedGameObject = bilboard;
 	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
 
 	CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = LIGHT_GAME_OBJECT;
 	gameObject->name = name;
+	m_SelectedGameObject->setName(name);
 	
 	gameObject->id = m_EditorManager->m_ID;
 	
@@ -808,33 +821,33 @@ void CEditorLevel::InsertDancingLight()
 {
 	stringw name = L"Dancing Light GO";
 
-	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(0, vector3df(0,0,0), 
-		SColorf(1.0f, 0.6f, 0.7f, 1.0f), 300.0f);
-	
-	//Vibrating light for fire dancing
-	ISceneNodeAnimator* anim = 0;
-	anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
-	light->addAnimator(anim);
-	anim->drop();
-
-	// attach billboard to light
-	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(light, core::dimension2d<f32>(50, 50));
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
 	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
 	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
 
-	m_SelectedGameObject = light;
+	// attach light to bilboard
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+
+	//Vibrating light for fire dancing
+	ISceneNodeAnimator* anim = 0;
+	anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
+	bilboard->addAnimator(anim);
+	anim->drop();
+
+	m_SelectedGameObject = bilboard;
 	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
 
 	CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = LIGHT_GAME_OBJECT;
 	gameObject->name = name;
+	m_SelectedGameObject->setName(name);
 	
 	gameObject->id = m_EditorManager->m_ID;
 	
 	m_SelectedGameObject->setID(m_EditorManager->m_ID);//??
 	
-	gameObject->description = L"Light Node";
+	gameObject->description = L"Animated Light Node";
 	gameObject->script = L"";
 	m_ListOfGameObjects.push_back(gameObject);
 
@@ -1464,38 +1477,19 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 					{
 						//recreate particle system here
 						node = CreateParticles(getParticleTypeFromName(attr->getAttributeAsString("Name")));
-
-						// create a particle system
-						/*scene::IParticleSystemSceneNode* ps = m_EditorManager->getSceneMngr()->addParticleSystemSceneNode(false);
-
-						scene::IParticleEmitter* em = ps->createBoxEmitter(
-							core::aabbox3d<f32>(-20,-2,-20,20,20,20), // emitter size
-							core::vector3df(0.0f,0.01f,0.0f),   // initial direction
-							80,100,                             // emit rate
-							video::SColor(0,55,55,55),       // darkest color
-							video::SColor(0,255,255,255),       // brightest color
-							3000,12000,0,                         // min and max age, angle
-							core::dimension2df(5.f,5.f),         // min size
-							core::dimension2df(15.f,15.f));        // max size
-
-						ps->setEmitter(em); // this grabs the emitter
-						em->drop(); // so we can drop it here without deleting it
-
-						scene::IParticleAffector* paf = ps->createFadeOutParticleAffector();
-
-						ps->addAffector(paf); // same goes for the affector
-						paf->drop();
-
-						gameObject = new CGameObject();
-
-						ps->setMaterialFlag(video::EMF_LIGHTING, false);
-						ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
-						ps->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
-						ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);*/
 					}
 					else if(meshPath == stringc(LIGHT_GAME_OBJECT))
 					{
 						//Insert light
+						node = CreateLight();
+						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
+						{
+							//Vibrating light for fire dancing
+							ISceneNodeAnimator* anim = 0;
+							anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(attr->getAttributeAsVector3d("Position"),1.0f,0.04f,vector3df(1,0,0));
+							node->addAnimator(anim);
+							anim->drop();
+						}
 					}
 					else
 					{
@@ -2535,6 +2529,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 					m_bRotateXSelectedNode = false;
 					m_bRotateZSelectedNode = false;
 					m_bElementAtHand = false;
+					m_objectMoveOffset = vector3df(0,0,0);
 
 					if (seedingAnother)
 					{
