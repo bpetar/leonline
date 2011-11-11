@@ -93,6 +93,7 @@ public:
 	void InsertTerrainGrass(int param);
 	void InsertFlag();
 	void CreateCamera(vector3df position);
+	ISceneNode* CreateLight();
 	void addTerrainSelector();
 	void AddGameObjectToLevel(CGameObject* go);
 	void RemoveGameObjectFromMap(CGameObject* go);
