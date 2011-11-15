@@ -18,20 +18,28 @@ using namespace core;
 enum PARTICLES_EFFECT_TYPE
 {
 	//!Particles circling in cylinder like a whirlwind
-	PARTICLES_EFFECT_WHIRL = 0,
+	PARTICLES_EFFECT_TELEPORT = 0,
+
+	//!Smoke looking effect
+	PARTICLES_EFFECT_SMOKE,
+
+	//!Fire looking effect
+	PARTICLES_EFFECT_FIRE,
+
+	//!Particles circling in cylinder like a whirlwind
+	PARTICLES_EFFECT_WHIRL,
+
+	//!Particles blasting from one point in all directions
+	PARTICLES_EFFECT_DUST,
 
 	//!Particles blasting from one point in all directions
 	PARTICLES_EFFECT_BLAST,
 
 	//!Particles slowly rising in magic field area
-	PARTICLES_EFFECT_FIELD,
+	PARTICLES_EFFECT_FIELD
 
-	//!Fire looking effect
-	PARTICLES_EFFECT_FIRE,
-
-	//!Smoke looking effect
-	PARTICLES_EFFECT_SMOKE
 };
+
 
 //! Particle effect color.
 /** Particle effect color can be red, green, blue, etc... */
