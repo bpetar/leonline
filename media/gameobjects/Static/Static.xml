@@ -49,6 +49,7 @@
 	<Static filename="tractor"/>
 	<Static filename="paddock"/>
 	<Static filename="tele"/>
+	<Static filename="sack"/>
 	<Static filename="crate"/>
 	<Static filename="circle"/>
 	<Static filename="barrel"/>
