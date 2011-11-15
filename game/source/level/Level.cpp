@@ -15,11 +15,13 @@
 
 #define PROCEDURAL_TREE_MESH "procedural_tree_mesh"
 #define PARTICLE_GAME_OBJECT "particle_game_object_mesh"
+#define LIGHT_GAME_OBJECT "light_game_object_mesh"
 
 CLevel::CLevel()
 {
 	m_ID = 0;
 	dNode = 0;
+	m_SceneEnlighted = false;
 	m_startPos = vector3df(0,0,0);
 	m_MapMusicTheme = "";
 	m_MapAmbientSound = "";
@@ -103,6 +105,379 @@ void CLevel::Save(stringc map)
 	WriteSceneNode(writer, m_SMGR->getRootSceneNode());
 	writer->drop();
 }
+
+
+/*PROCEDURAL_TREE_TYPE getProceduralTreeTypeFromName(stringc name)
+{
+	if(name == stringc("Aspen Tree")) return LE_PT_ASPEN;
+	if(name == stringc("Oak Tree")) return LE_PT_OAK;
+	if(name == stringc("Pine Tree")) return LE_PT_PINE;
+	
+	return LE_PT_WILLOW;
+}*/
+
+PARTICLES_EFFECT_TYPE getParticleTypeFromName(stringc name)
+{
+	if(name.equals_ignore_case("Fire")) return PARTICLES_EFFECT_FIRE;
+	if(name.equals_ignore_case("Teleport")) return PARTICLES_EFFECT_TELEPORT;
+	if(name.equals_ignore_case("Particles")) return PARTICLES_EFFECT_TELEPORT; //temporary
+	if(name.equals_ignore_case("Smoke")) return PARTICLES_EFFECT_SMOKE;
+	if(name.equals_ignore_case("Dust")) return PARTICLES_EFFECT_DUST;
+	
+	return PARTICLES_EFFECT_FIRE;
+}
+
+/*CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
+{
+	CTreeSceneNode* tree = new CTreeSceneNode( m_EditorManager->getSceneMngr()->getRootSceneNode(), m_EditorManager->getSceneMngr(), m_EditorManager->m_ID);
+    tree->setMaterialFlag( EMF_LIGHTING, false );
+
+	switch (treeType)
+	{
+		case LE_PT_ASPEN:
+		{
+			tree->setup( m_AspenTreeGenerator, rand(), 0 );
+			tree->getLeafNode()->setMaterialTexture( 0, m_AspenLeafTexture );
+			tree->getLeafNode()->setMaterialType( EMT_TRANSPARENT_ALPHA_CHANNEL );
+			tree->setMaterialTexture( 0, m_AspenTreeTexture );
+			tree->setName("Aspen Tree");
+		}
+		break;
+		case LE_PT_OAK:
+		{
+			tree->setup( m_OakTreeGenerator, rand(), 0 );
+			tree->getLeafNode()->setMaterialTexture( 0, m_OakLeafTexture );
+			tree->getLeafNode()->setMaterialType( EMT_TRANSPARENT_ALPHA_CHANNEL );
+			tree->setMaterialTexture( 0, m_OakTreeTexture );
+			tree->setName("Oak Tree");
+		}
+		break;
+		case LE_PT_PINE:
+		{
+			tree->setup( m_PineTreeGenerator, rand(), 0 );
+			tree->getLeafNode()->setMaterialTexture( 0, m_PineLeafTexture );
+			tree->getLeafNode()->setMaterialType( EMT_TRANSPARENT_ALPHA_CHANNEL );
+			tree->setMaterialTexture( 0, m_PineTreeTexture );
+			tree->setName("Pine Tree");
+		}
+		break;
+		case LE_PT_WILLOW:
+		{
+			tree->setup( m_WillowTreeGenerator, rand(), 0 );
+			tree->getLeafNode()->setMaterialTexture( 0, m_WillowLeafTexture );
+			tree->getLeafNode()->setMaterialType( EMT_TRANSPARENT_ALPHA_CHANNEL );
+			tree->setMaterialTexture( 0, m_WillowTreeTexture );
+			tree->setName("Willow Tree");
+		}
+		break;
+	}
+
+    tree->drop();
+
+	return tree;
+}*/
+
+ISceneNode* CLevel::CreateLight()
+{
+	/*ISceneNode* bilboard = m_SMGR->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
+	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
+	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+	bilboard->setVisible(false);
+	bilboard->setMaterialTexture(0,	m_pDriver->getTexture("media/particle1.bmp"));*/
+
+	// attach light to bilboard
+	ISceneNode* light = m_SMGR->addLightSceneNode(0, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+
+	return light;
+}
+
+/*void CLevel::InsertLight()
+{
+	stringw name = L"Light GO";
+
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
+	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
+	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
+
+	// attach light to bilboard
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+
+	m_SelectedGameObject = bilboard;
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = LIGHT_GAME_OBJECT;
+	gameObject->name = name;
+	m_SelectedGameObject->setName(name);
+	
+	gameObject->id = m_EditorManager->m_ID;
+	
+	m_SelectedGameObject->setID(m_EditorManager->m_ID);//??
+	
+	gameObject->description = L"Light Node";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->getGUIManager()->SetProperties(gameObject);
+
+	EnlightAllNodes();
+
+	m_bMoveSelectedNode = true;
+}*/
+
+/*void CEditorLevel::InsertDancingLight()
+{
+	stringw name = L"Dancing Light GO";
+
+	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
+	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
+	bilboard->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
+
+	// attach light to bilboard
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+
+	//Vibrating light for fire dancing
+	ISceneNodeAnimator* anim = 0;
+	anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(vector3df(0,0,0),1.0f,0.04f,vector3df(1,0,0));
+	bilboard->addAnimator(anim);
+	anim->drop();
+
+	m_SelectedGameObject = bilboard;
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = LIGHT_GAME_OBJECT;
+	gameObject->name = name;
+	m_SelectedGameObject->setName(name);
+	
+	gameObject->id = m_EditorManager->m_ID;
+	
+	m_SelectedGameObject->setID(m_EditorManager->m_ID);//??
+	
+	gameObject->description = L"Animated Light Node";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->getGUIManager()->SetProperties(gameObject);
+
+	EnlightAllNodes();
+
+	m_bMoveSelectedNode = true;
+}*/
+
+IParticleSystemSceneNode* CLevel::CreateParticles(PARTICLES_EFFECT_TYPE type)
+{
+	IParticleSystemSceneNode* ps = NULL;
+
+	switch(type)
+	{
+	case PARTICLES_EFFECT_FIRE:
+		{
+			aabbox3df emiterSize = aabbox3d<f32>(-1,1,-1,1,-1,1);
+			ps = InsertParticlesNode(E_EMITERTYPE_SPHERE,emiterSize,vector3df(0.0f,0.1f,0.0f),L"media/fire.bmp","Fire",280,430,20,false);
+			IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
+			ps->addAffector(paf);
+			paf->drop();
+		}
+		break;
+	case PARTICLES_EFFECT_TELEPORT:
+		{
+			aabbox3df emiterSize = aabbox3d<f32>(-20,-2,-20,20,20,20);
+			ps = InsertParticlesNode(E_EMITERTYPE_BOX,emiterSize,vector3df(0.0f,0.01f,0.0f),L"media/particle1.bmp","Teleport",80,100,0,false);
+			IParticleAffector* paf = ps->createFadeOutParticleAffector();
+			ps->addAffector(paf);
+			paf->drop();
+		}
+		break;
+	case PARTICLES_EFFECT_SMOKE:
+		{
+		}
+		break;
+	default:
+		{
+		}
+		break;
+	}
+
+	return ps;
+}
+
+IParticleSystemSceneNode* CLevel::InsertParticlesNode(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
+{
+	// create a particle system
+	IParticleSystemSceneNode* ps = m_SMGR->addParticleSystemSceneNode(false);
+	IParticleEmitter* em = 0;
+
+	switch(emiterType)
+	{
+	case E_EMITERTYPE_BOX:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_RING:
+		{
+			em = ps->createRingEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, emiterSize.getExtent().Y, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_SPHERE:
+		{
+			em = ps->createSphereEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					100,300,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_CYLINDER:
+		{
+			vector3df normal = vector3df(10.f,10.f,10.f);
+			em = ps->createCylinderEmitter(emiterSize.getCenter(), emiterSize.getExtent().X, normal, emiterSize.getExtent().Y, outlineOnly, direction, emitRateMin, emitRateMax, 
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	case E_EMITERTYPE_POINT:
+		{
+			em = ps->createPointEmitter(direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+		break;
+	default:
+		{
+			em = ps->createBoxEmitter(emiterSize, direction, emitRateMin, emitRateMax,
+					SColor(0,55,55,55),       // darkest color
+					SColor(0,255,255,255),    // brightest color
+					3000,12000,angle,           // min and max age, angle
+					dimension2df(5.f,5.f),    // min size
+					dimension2df(15.f,15.f)); // max size
+		}
+	}
+
+	if(em == 0)
+	{
+		printf("Fatal Error creating emiter!\n");
+		return NULL; 
+	}
+
+	ps->setEmitter(em); // this grabs the emitter
+	em->drop(); // so we can drop it here without deleting it
+
+	ps->setMaterialFlag(video::EMF_LIGHTING, false);
+	ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
+	ps->setMaterialTexture(0, m_pDriver->getTexture(texture));
+	ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
+	ps->setName(name);
+
+	return ps;
+}
+
+/*void CEditorLevel::InsertParticles(PARTICLE_SYSTEM_TYPE type, TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly)
+{
+	// create a particle system
+	IParticleSystemSceneNode* ps = 0;
+
+	ps = InsertParticlesNode(emiterType, emiterSize, direction, texture, name, emitRateMin, emitRateMax, angle, outlineOnly);
+
+	switch(type)
+	{
+	case LE_PS_FIRE:
+		{
+			scene::IParticleAffector* paf = ps->createFadeOutParticleAffector(SColor(0,0,0,0),300);
+			ps->addAffector(paf); // same goes for the affector
+			paf->drop();
+		}
+		break;
+	case LE_PS_TELEPORT:
+		{
+			IParticleAffector* paf = ps->createFadeOutParticleAffector();
+			ps->addAffector(paf);
+			paf->drop();
+		}
+		break;
+	default:
+		{
+		}
+	}
+
+
+	ps->setPosition(core::vector3df(0,-60,0));
+	ps->setScale(core::vector3df(2,2,2));
+	ps->setID(m_EditorManager->m_ID);
+
+	m_SelectedGameObject = ps;
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = PARTICLE_GAME_OBJECT;
+	gameObject->name = name;
+	
+	gameObject->isArea = true; //area can detect players presence - used for teleports
+	gameObject->id = m_EditorManager->m_ID;
+	gameObject->description = L"Particle System";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->getGUIManager()->SetProperties(gameObject);
+
+	m_EditorManager->m_ID++;
+
+	m_bMoveSelectedNode = true;
+}*/
+
+/**
+ * \brief Insert procedural tree
+ * \author Petar Bajic 
+ * \date July, 21 2008.
+ */
+/*void CEditorLevel::InsertTree(PROCEDURAL_TREE_TYPE treeType)
+{
+	m_SelectedGameObject = m_Tree = createTree(treeType);
+
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+	//m_SelectedGameObject->setName(treeName.c_str());
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = PROCEDURAL_TREE_MESH;
+	gameObject->name = m_SelectedGameObject->getName();
+	/*gameObject->isContainer = false;
+	gameObject->isPickable = false;
+	gameObject->isTrigger = false;
+	gameObject->isNPC = false;
+	gameObject->isMonster = false;
+	gameObject->isAnchored = false;
+	gameObject->isTerrain = false;
+	gameObject->isStatic = false; //true should involve triangle selector thingy
+	gameObject->id = m_EditorManager->m_ID;
+	gameObject->description = L"Procedural tree";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->m_ID++;
+
+	m_bMoveSelectedNode = true;
+}*/
+
 
 /**
  * \brief Writes a scene node attributes to xml file.
@@ -315,38 +690,25 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 					else if(meshPath == stringc(PARTICLE_GAME_OBJECT))
 					{
 						//recreate particle system here
-						// create a particle system
-						scene::IParticleSystemSceneNode* ps = m_SMGR->addParticleSystemSceneNode(false);
-
-						scene::IParticleEmitter* em = ps->createBoxEmitter(
-							core::aabbox3d<f32>(-20,-2,-20,20,20,20), // emitter size
-							core::vector3df(0.0f,0.01f,0.0f),   // initial direction
-							80,100,                             // emit rate
-							video::SColor(0,55,55,55),       // darkest color
-							video::SColor(0,255,255,255),       // brightest color
-							3000,12000,0,                         // min and max age, angle
-							core::dimension2df(5.f,5.f),         // min size
-							core::dimension2df(15.f,15.f));        // max size
-
-						ps->setEmitter(em); // this grabs the emitter
-						em->drop(); // so we can drop it here without deleting it
-
-						scene::IParticleAffector* paf = ps->createFadeOutParticleAffector();
-
-						ps->addAffector(paf); // same goes for the affector
-						paf->drop();
-
-						gameObject = new CGameObject();
-
-						ps->setMaterialFlag(video::EMF_LIGHTING, false);
-						ps->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
-						ps->setMaterialTexture(0, m_pDriver->getTexture("media/particle1.bmp"));
-						ps->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA);
-
-						node = ps;
+						node = CreateParticles(getParticleTypeFromName(attr->getAttributeAsString("Name")));
+					}
+					else if(meshPath == stringc(LIGHT_GAME_OBJECT))
+					{
+						//Insert light
+						node = CreateLight();
+						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
+						{
+							//Vibrating light for fire dancing
+							ISceneNodeAnimator* anim = 0;
+							anim = m_SMGR->createFlyCircleAnimator(attr->getAttributeAsVector3d("Position"),1.0f,0.04f,vector3df(1,0,0));
+							node->addAnimator(anim);
+							anim->drop();
+						}
+						m_SceneEnlighted = true;
 					}
 					else
 					{
+						//load mesh from file
 						IAnimatedMesh* m = m_SMGR->getMesh(meshPath.c_str());
 						if (m)
 						{
@@ -370,160 +732,167 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 						}
 					}
 
-					node->setName(attr->getAttributeAsString("Name"));
-					node->setID(attr->getAttributeAsInt("ID"));
-					node->setPosition(attr->getAttributeAsVector3d("Position"));
-					node->setRotation(attr->getAttributeAsVector3d("Rotation"));
-					node->setScale(attr->getAttributeAsVector3d("Scale"));
-					node->setVisible(!attr->getAttributeAsBool("isInvisible"));
+					if(node)
+					{
+						node->setName(attr->getAttributeAsString("Name"));
+						node->setID(attr->getAttributeAsInt("ID"));
+						node->setPosition(attr->getAttributeAsVector3d("Position"));
+						node->setRotation(attr->getAttributeAsVector3d("Rotation"));
+						node->setScale(attr->getAttributeAsVector3d("Scale"));
+						node->setVisible(!attr->getAttributeAsBool("isInvisible"));
 						
-					gameObject->name = node->getName();
-					gameObject->id = node->getID();
-					gameObject->mesh = meshPath;
-					gameObject->pos = node->getPosition();
-					gameObject->rot = node->getRotation();
-					gameObject->scale = node->getScale();
-					gameObject->script = attr->getAttributeAsStringW("Script");
-					gameObject->state = attr->getAttributeAsStringW("State");
+						gameObject->name = node->getName();
+						gameObject->id = node->getID();
+						gameObject->mesh = meshPath;
+						gameObject->pos = node->getPosition();
+						gameObject->rot = node->getRotation();
+						gameObject->scale = node->getScale();
+						gameObject->script = attr->getAttributeAsStringW("Script");
+						gameObject->state = attr->getAttributeAsStringW("State");
 
-					if(stringc(node->getName()) == "Start Flag")
-					{
-						//record start flag position
-						m_startPos = node->getPosition();
-						m_startPos.Y += 10; //Above the ground, so that it falls down easily like a feather...
-					}
-
-					gameObject->isContainer = attr->getAttributeAsBool("isContainer");
-					gameObject->isAnchored = attr->getAttributeAsBool("isAnchored");
-					gameObject->isNPC = attr->getAttributeAsBool("isNPC");
-					gameObject->isMonster = attr->getAttributeAsBool("isMonster");
-					gameObject->isPickable = attr->getAttributeAsBool("isPickable");
-					gameObject->isTrigger = attr->getAttributeAsBool("isTrigger");
-					gameObject->isStatic = attr->getAttributeAsBool("isStatic");
-					gameObject->isTerrain = attr->getAttributeAsBool("isTerrain");
-					gameObject->isInvisible = attr->getAttributeAsBool("isInvisible");
-					gameObject->isIllusion = attr->getAttributeAsBool("isIllusion");
-					gameObject->isArea = attr->getAttributeAsBool("isArea");
-
-					if(attr->existsAttribute("Mood"))
-						gameObject->m_Mood = (eMood) attr->getAttributeAsInt("Mood");
-					if(attr->existsAttribute("Radius"))
-						gameObject->m_Radius = attr->getAttributeAsFloat("Radius");
-	
-					/*if(gameObject->isTerrain)
-					{
-						node->setMaterialTexture(0,m_pDriver->getTexture("media/terrain/stones.jpg"));
-						node->setMaterialType(EMT_SOLID);
-						//node->setMaterialFlag(EMF_WIREFRAME, true);
-					}*/
-
-					if(!gameObject->isInvisible)
-					{
-						m_LevelMetaTriangleSelector->addTriangleSelector(node->getTriangleSelector());
-						if(!gameObject->isPickable && !gameObject->isMonster && !gameObject->isNPC && !gameObject->isInvisible  && !gameObject->isIllusion)
+						if(stringc(node->getName()) == "Start Flag")
 						{
-							m_ObstacleMetaTriangleSelector->addTriangleSelector(node->getTriangleSelector());
-							//add obstacles to children of the root obstacle node (used in collision optimization)
-							/*if(firstObstacle)
+							//record start flag position
+							m_startPos = node->getPosition();
+							m_startPos.Y += 10; //Above the ground, so that it falls down easily like a feather...
+						}
+
+						gameObject->isContainer = attr->getAttributeAsBool("isContainer");
+						gameObject->isAnchored = attr->getAttributeAsBool("isAnchored");
+						gameObject->isNPC = attr->getAttributeAsBool("isNPC");
+						gameObject->isMonster = attr->getAttributeAsBool("isMonster");
+						gameObject->isPickable = attr->getAttributeAsBool("isPickable");
+						gameObject->isTrigger = attr->getAttributeAsBool("isTrigger");
+						gameObject->isStatic = attr->getAttributeAsBool("isStatic");
+						gameObject->isTerrain = attr->getAttributeAsBool("isTerrain");
+						gameObject->isInvisible = attr->getAttributeAsBool("isInvisible");
+						gameObject->isIllusion = attr->getAttributeAsBool("isIllusion");
+						gameObject->isArea = attr->getAttributeAsBool("isArea");
+
+						if(attr->existsAttribute("Mood"))
+							gameObject->m_Mood = (eMood) attr->getAttributeAsInt("Mood");
+						if(attr->existsAttribute("Radius"))
+							gameObject->m_Radius = attr->getAttributeAsFloat("Radius");
+	
+						/*if(gameObject->isTerrain)
+						{
+							node->setMaterialTexture(0,m_pDriver->getTexture("media/terrain/stones.jpg"));
+							node->setMaterialType(EMT_SOLID);
+							//node->setMaterialFlag(EMF_WIREFRAME, true);
+						}*/
+
+						if(!gameObject->isInvisible)
+						{
+							m_LevelMetaTriangleSelector->addTriangleSelector(node->getTriangleSelector());
+							if(!gameObject->isPickable && !gameObject->isMonster && !gameObject->isNPC && !gameObject->isInvisible  && !gameObject->isIllusion)
 							{
-								rootObstacleNode = node;
-								firstObstacle = false;
+								m_ObstacleMetaTriangleSelector->addTriangleSelector(node->getTriangleSelector());
+								//add obstacles to children of the root obstacle node (used in collision optimization)
+								/*if(firstObstacle)
+								{
+									rootObstacleNode = node;
+									firstObstacle = false;
+								}
+								else if(rootObstacleNode != 0)
+								{
+									rootObstacleNode->addChild(node);
+									//pos and scale gets fucked up
+									//node->setPosition(node->getPosition()-rootObstacleNode->getPosition());
+									//node->setScale(node->getScale()*vector3df(1/rootObstacleNode->getScale().X,1/rootObstacleNode->getScale().Y,1/rootObstacleNode->getScale().Z));
+								}
+								else
+								{
+									debugPrint("Bad situation in obstacle node linking. First obstacle false, but root obstacle node still null?\n");
+								}*/
 							}
-							else if(rootObstacleNode != 0)
+						}
+
+						if(gameObject->isMonster)
+						{
+							//Try getting HP from saved Map
+							/*if(attr->existsAttribute("Health"))
 							{
-								rootObstacleNode->addChild(node);
-								//pos and scale gets fucked up
-								//node->setPosition(node->getPosition()-rootObstacleNode->getPosition());
-								//node->setScale(node->getScale()*vector3df(1/rootObstacleNode->getScale().X,1/rootObstacleNode->getScale().Y,1/rootObstacleNode->getScale().Z));
+								gameObject->hp = attr->getAttributeAsInt("Health");
 							}
 							else
 							{
-								debugPrint("Bad situation in obstacle node linking. First obstacle false, but root obstacle node still null?\n");
+								//If there is no Health attribute stored in the map, take value from xml ability
+								gameObject->hp = gameObject->getAbilityValue("Health");
 							}*/
+							CMonster* monster = new CMonster();
+							//Init Monster
+							monster->Init(m_SMGR,(IAnimatedMeshSceneNode*)node, gameObject, m_GameManager);
+							m_ListOfMonsters.push_back(monster);
 						}
-					}
 
-					if(gameObject->isMonster)
-					{
-						//Try getting HP from saved Map
-						/*if(attr->existsAttribute("Health"))
+						if((gameObject->isTrigger)&&(gameObject->state.size() == 0))
 						{
-							gameObject->hp = attr->getAttributeAsInt("Health");
+							//load default state if state is not loaded from map file
+							stringc temp = m_pDevice->getFileSystem()->getWorkingDirectory();
+							m_pDevice->getFileSystem()->changeWorkingDirectoryTo("media/Scripts/Static");
+							io::IXMLReader* xml = m_pDevice->getFileSystem()->createXMLReader(gameObject->script.c_str());
+							while(xml && xml->read())
+							{
+								switch(xml->getNodeType())
+								{
+								case io::EXN_ELEMENT:
+									{
+										if (stringw("State") == xml->getNodeName())
+										{
+											gameObject->state = xml->getAttributeValue(L"value");
+										}
+									}
+									break;
+								}
+							}
+							if (xml)
+								xml->drop(); // don't forget to delete the xml reader
+							m_pDevice->getFileSystem()->changeWorkingDirectoryTo(temp.c_str());
+						}
+
+						if(gameObject->isPickable)
+						{
+							rootName = GetRootFromPath(meshPath);
+							stringw icon = rootName + ".png";
+							gameObject->m_IconTexture = m_pDriver->getTexture(stringw(L"media/icons/") + icon);
+						}
+
+						if(gameObject->isAnimated)
+						{
+							//set model to idle animation
+							((IAnimatedMeshSceneNode*)node)->setFrameLoop(gameObject->getAnimStart("Idle"),gameObject->getAnimEnd("Idle"));
 						}
 						else
 						{
-							//If there is no Health attribute stored in the map, take value from xml ability
-							gameObject->hp = gameObject->getAbilityValue("Health");
-						}*/
-						CMonster* monster = new CMonster();
-						//Init Monster
-						monster->Init(m_SMGR,(IAnimatedMeshSceneNode*)node, gameObject, m_GameManager);
-						m_ListOfMonsters.push_back(monster);
-					}
-
-					if((gameObject->isTrigger)&&(gameObject->state.size() == 0))
-					{
-						//load default state if state is not loaded from map file
-						stringc temp = m_pDevice->getFileSystem()->getWorkingDirectory();
-						m_pDevice->getFileSystem()->changeWorkingDirectoryTo("media/Scripts/Static");
-						io::IXMLReader* xml = m_pDevice->getFileSystem()->createXMLReader(gameObject->script.c_str());
-						while(xml && xml->read())
-						{
-							switch(xml->getNodeType())
+							//Some special cases are not IAnimatedMeshSceneNode, like particles...
+							if(!((meshPath.equals_ignore_case(PARTICLE_GAME_OBJECT))||(meshPath.equals_ignore_case(LIGHT_GAME_OBJECT))))
 							{
-							case io::EXN_ELEMENT:
-								{
-									if (stringw("State") == xml->getNodeName())
-									{
-										gameObject->state = xml->getAttributeValue(L"value");
-									}
-								}
-								break;
+								((IAnimatedMeshSceneNode*)node)->setFrameLoop(0,0);
+								((IAnimatedMeshSceneNode*)node)->setLoopMode(false);
 							}
 						}
-						if (xml)
-							xml->drop(); // don't forget to delete the xml reader
-						m_pDevice->getFileSystem()->changeWorkingDirectoryTo(temp.c_str());
-					}
 
-					if(gameObject->isPickable)
-					{
-						rootName = GetRootFromPath(meshPath);
-						stringw icon = rootName + ".png";
-						gameObject->m_IconTexture = m_pDriver->getTexture(stringw(L"media/icons/") + icon);
-					}
+						if((gameObject->isNPC || gameObject->isContainer || gameObject->isPickable || gameObject->isTrigger)&&(!gameObject->isMonster))
+						{
+							m_ListOfActuators.push_back(node);
+							gameObject->isActuator = true;
+						}
 
-					if(gameObject->isAnimated)
-					{
-						//set model to idle animation
-						((IAnimatedMeshSceneNode*)node)->setFrameLoop(gameObject->getAnimStart("Idle"),gameObject->getAnimEnd("Idle"));
+						if(gameObject->isArea)
+						{
+							TArea* area = new TArea;
+							area->entered = false;
+							area->node = node;
+							area->radius = 30;
+							m_ListOfAreas.push_back(area);
+						}
+
+						m_ListOfGameObjects.push_back(gameObject);
 					}
 					else
 					{
-						//Some special cases are not IAnimatedMeshSceneNode, like particles...
-						if(!meshPath.equals_ignore_case(PARTICLE_GAME_OBJECT))
-						{
-							((IAnimatedMeshSceneNode*)node)->setFrameLoop(0,0);
-							((IAnimatedMeshSceneNode*)node)->setLoopMode(false);
-						}
+						printf("could not load node!");
 					}
-
-					if((gameObject->isNPC || gameObject->isContainer || gameObject->isPickable || gameObject->isTrigger)&&(!gameObject->isMonster))
-					{
-						m_ListOfActuators.push_back(node);
-						gameObject->isActuator = true;
-					}
-
-					if(gameObject->isArea)
-					{
-						TArea* area = new TArea;
-						area->entered = false;
-						area->node = node;
-						area->radius = 30;
-						m_ListOfAreas.push_back(area);
-					}
-
-					m_ListOfGameObjects.push_back(gameObject);
 					
 				}
 
@@ -578,6 +947,11 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 			}
 			break;
 		}
+	}
+
+	if(m_SceneEnlighted)
+	{
+		EnlightAllNodes();
 	}
 }
 
@@ -1336,3 +1710,34 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 	m_ListOfGameObjects.push_back(gameObject);*/
 
 }
+
+
+void CLevel::EnlightAllNodes()
+{
+	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
+	
+	m_SMGR->setAmbientLight(SColorf(0.3f, 0.1f, 0.1f, 0.5f));
+
+	for (; it != m_ListOfGameObjects.end(); ++it)
+	{
+		ISceneNode* node = m_SMGR->getSceneNodeFromId((*it)->id);
+		if(!((*it)->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||(*it)->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
+		{
+			node->setMaterialFlag(EMF_LIGHTING, true);
+		}
+	}
+}
+
+void CLevel::DelightAllNodes()
+{
+	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
+	
+	m_SMGR->setAmbientLight(SColorf(1.0f, 1.0f, 1.0f, 1.0f)); //not really needed?
+
+	for (; it != m_ListOfGameObjects.end(); ++it)
+	{
+		ISceneNode* node = m_SMGR->getSceneNodeFromId((*it)->id);
+		node->setMaterialFlag(EMF_LIGHTING, false);
+	}
+}
+

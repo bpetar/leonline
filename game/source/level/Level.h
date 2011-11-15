@@ -40,6 +40,16 @@ typedef struct
 	IParticleSystemSceneNode* ps;
 } TemporaryParticleEffect;
 
+typedef enum EEmiterType
+{
+	E_EMITERTYPE_BOX,
+	E_EMITERTYPE_RING,
+	E_EMITERTYPE_SPHERE,
+	E_EMITERTYPE_CYLINDER,
+	E_EMITERTYPE_POINT
+
+} TEEmiterType;
+
 typedef struct
 {
 	ISceneNode* node;
@@ -69,10 +79,15 @@ public:
 	void UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font, ICameraSceneNode* cam);
 	void UpdateTranslateGameObject(f32 elapsed_time);
 	void UpdateParticles(f32 elapsed_time);
+	ISceneNode* CreateLight();
+	IParticleSystemSceneNode* CreateParticles(PARTICLES_EFFECT_TYPE type);
+	IParticleSystemSceneNode* InsertParticlesNode(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void AddTranslateGameObject(ISceneNode* node, vector3df translationVectorEndPosition, u32 translationTime);
 	void ReadSceneNode(IXMLReader* reader);
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	CGameObject* createPickableGameObject(stringw rootName, s32 id);
+	void EnlightAllNodes();
+	void DelightAllNodes();
 	void RemoveContainerContent(int containerID);
 	void RemoveContainerContent(s32 containerID, s32 itemID);
 	bool EraseElement(int id);
@@ -122,6 +137,8 @@ public:
 	array <TranslateGameObject*> m_TranslateGameObject;
 	bool firstObstacle;
 	ISceneNode* rootObstacleNode;
+
+	bool m_SceneEnlighted; //if there are dynamic lights in the scene
 
 	//debug
 	core::aabbox3df dWorldBox;
