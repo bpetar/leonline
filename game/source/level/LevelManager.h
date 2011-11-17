@@ -74,6 +74,7 @@ public:
 	bool isNudgedMonsterColliding(s32 nudgerId, float nudgerRadius, s32 id, vector3df pos, vector3df targetPos);
 	bool isMonsterColliding(s32 id, float nudgerRadius, vector3df pos, vector3df targetPos, vector3df* obstaclePos);
 	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player);
+	void CreateLightNode(bool dancing, s32 radius, s32 target);
 	stringc GetLevelAmbientSound();
 	stringc GetLevelMusicTheme();
 	stringc GetLevelNarationFile();

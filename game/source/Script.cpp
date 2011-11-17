@@ -784,6 +784,38 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		printf("create particle..\n");
 		m_GameManager->CreateParticleEffect(particles_type, particles_color, action->target, follow_player);
 	}
+	else if(action->name == stringw("AddLight"))
+	{
+		bool dancing = false;
+		s32 radius = 300;
+
+		//parse light type from attribute field
+		if(action->attribute.equals_ignore_case("dancing"))
+			dancing = true;
+
+		//parse light radius from value field
+		swscanf_s(action->value.c_str(), L"%d", &radius);
+
+		s32 targetID = 0;
+
+		if(action->target.equals_ignore_case("player"))
+		{
+			targetID = -13;
+		}
+		else if (action->target.equals_ignore_case("self"))
+		{
+			//particle target is "self" which id is "id"
+			targetID = id;
+		}
+		else //target is id
+		{
+			//parse id here
+			swscanf_s(action->target.c_str(), L"%d", &targetID);
+		}
+
+		printf("create light..\n");
+		m_GameManager->CreateLightNode(dancing, radius, targetID);
+	}
 	else
 	{
 		m_GameManager->getGameGUI()->AddConsoleText(L"Unrecognized script action...");
