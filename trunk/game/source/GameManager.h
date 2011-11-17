@@ -96,6 +96,7 @@ public:
 	stringc getRootNameFromPathName(stringc meshName);
 	virtual bool OnEvent(const SEvent& event);
 	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player);
+	void CreateLightNode(bool dancing, s32 radius, s32 target);
 	bool LoadPC(stringc playerFile);
 	void resetArrows();
 	void PCMoveEnd();

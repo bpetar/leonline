@@ -79,7 +79,7 @@ public:
 	void UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font, ICameraSceneNode* cam);
 	void UpdateTranslateGameObject(f32 elapsed_time);
 	void UpdateParticles(f32 elapsed_time);
-	ISceneNode* CreateLight();
+	ISceneNode* CreateLight(f32 radius);
 	IParticleSystemSceneNode* CreateParticles(PARTICLES_EFFECT_TYPE type);
 	IParticleSystemSceneNode* InsertParticlesNode(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void AddTranslateGameObject(ISceneNode* node, vector3df translationVectorEndPosition, u32 translationTime);
@@ -99,6 +99,7 @@ public:
 	CGameObject* getClickedGameObject(position2d<s32> mousePos);
 	vector3df getMonsterHealthBarPos(s32 id);
 	void CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_COLOR color, stringw target, bool follow_player);
+	void CreateLightNode(bool dancing, s32 radius, s32 target);
 	bool isActuator(ISceneNode* node);
 	bool isObjectContainer(int id);
 	bool isObjectPickable(int id);

@@ -177,7 +177,7 @@ PARTICLES_EFFECT_TYPE getParticleTypeFromName(stringc name)
 	return tree;
 }*/
 
-ISceneNode* CLevel::CreateLight()
+ISceneNode* CLevel::CreateLight(float radius)
 {
 	/*ISceneNode* bilboard = m_SMGR->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -186,7 +186,7 @@ ISceneNode* CLevel::CreateLight()
 	bilboard->setMaterialTexture(0,	m_pDriver->getTexture("media/particle1.bmp"));*/
 
 	// attach light to bilboard
-	ISceneNode* light = m_SMGR->addLightSceneNode(0, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+	ISceneNode* light = m_SMGR->addLightSceneNode(0, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), radius);
 
 	return light;
 }
@@ -695,7 +695,7 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 					else if(meshPath == stringc(LIGHT_GAME_OBJECT))
 					{
 						//Insert light
-						node = CreateLight();
+						node = CreateLight(300.0f);
 						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
 						{
 							//Vibrating light for fire dancing
@@ -1488,6 +1488,11 @@ stringw CLevel::GetObjectState(int id)
 
 vector3df CLevel::GetObjectPosition(int id)
 {
+	if(id == -13)
+	{
+		return m_GameManager->getPC()->getPosition();
+	}
+
 	CGameObject* go = getGameObjectFromID(id);
 	if(go)
 	{
@@ -1711,6 +1716,26 @@ void CLevel::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EFFECT_C
 
 }
 
+void CLevel::CreateLightNode(bool dancing, s32 radius, s32 target)
+{
+	ISceneNode* node = CreateLight((f32)radius);
+	
+	vector3df pos = GetObjectPosition(target);
+	pos+=vector3df(0,5,0);
+
+	node->setPosition(pos);
+
+	if(dancing)
+	{
+		// add dancing light node animator: Vibrating light for fire dancing
+		ISceneNodeAnimator* anim = 0;
+		anim = m_SMGR->createFlyCircleAnimator(pos,1.0f,0.04f,vector3df(1,0,0));
+		node->addAnimator(anim);
+		anim->drop();
+	}
+
+	EnlightAllNodes();
+}
 
 void CLevel::EnlightAllNodes()
 {

@@ -1145,3 +1145,8 @@ void CGameManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_EF
 {
 	m_pLevelManager->CreateParticleEffect(type, color, target, follow_player);
 }
+
+void CGameManager::CreateLightNode(bool dancing, s32 radius, s32 target)
+{
+	m_pLevelManager->CreateLightNode(dancing, radius, target);
+}

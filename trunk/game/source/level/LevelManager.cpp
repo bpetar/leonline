@@ -892,3 +892,8 @@ void CLevelManager::CreateParticleEffect(PARTICLES_EFFECT_TYPE type, PARTICLES_E
 {
 	m_pLevels[m_LevelIndex]->CreateParticleEffect(type,color,target,follow_player);
 }
+
+void CLevelManager::CreateLightNode(bool dancing, s32 radius, s32 target)
+{
+	m_pLevels[m_LevelIndex]->CreateLightNode(dancing, radius, target);
+}
