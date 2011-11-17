@@ -51,6 +51,7 @@
 	<Static filename="tele"/>
 	<Static filename="sack"/>
 	<Static filename="crate"/>
+	<Static filename="sack"/>
 	<Static filename="circle"/>
 	<Static filename="barrel"/>
 	<Static filename="cubegreen"/>
