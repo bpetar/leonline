@@ -47,11 +47,6 @@ enum SCRIPT_EVENT_TYPE
 	SCRIPT_EVENT_AREA_ONLEAVE
 };
 
-typedef struct S_Condition
-{
-	stringw name;
-	stringw value;
-}TCondition;
 
 typedef struct S_Action 
 {
@@ -59,8 +54,14 @@ typedef struct S_Action
    stringw target;
    stringw attribute;
    stringw value;
-   array<TCondition> conditions;
 }TAction;
+
+typedef struct S_Condition
+{
+	stringw name;
+	stringw value;
+	array<TAction*> actions; //actions that are executed under this condition
+}TCondition;
 
 typedef struct S_Event 
 {
@@ -72,7 +73,8 @@ typedef struct S_Event
 typedef struct S_ScriptAction
 {
     TEvent event;
-    array<TAction*> actions; //more actions are available on single event
+    array<TAction*> actions; //unconditional actions
+	array<TCondition> conditions; //contitions with their actions
 } TScriptAction;
 
 class CGameManager;

@@ -87,7 +87,7 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 {
 	bool startLoadingScriptAction = false;
 	bool loadingAction = false;
-	bool loadingConditions = false;
+	bool loadingConditionedActions = false;
 	while(xml && xml->read())
 	{
 		switch(xml->getNodeType())
@@ -108,6 +108,7 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 							scriptAction->event.name = name;
 							scriptAction->event.target = target;
 							scriptAction->actions.clear();
+							scriptAction->conditions.clear();
 							loadingAction = true;
 						}
 					}
@@ -116,6 +117,7 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 						scriptAction->event.name = name;
 						scriptAction->event.target = target;
 						scriptAction->actions.clear();
+						scriptAction->conditions.clear();
 						loadingAction = true;
 					}
 				}
@@ -123,34 +125,45 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 				{
 					if (stringw("Condition").equals_ignore_case(xml->getNodeName()))
 					{
-						loadingConditions = true;
+						//loading condition
+						loadingConditionedActions = true;
 						TCondition condition;
 						condition.name = xml->getAttributeValue(L"attribute");
 						condition.value = xml->getAttributeValue(L"value");
-						scriptAction->actions.getLast()->conditions.push_back(condition);
+						condition.actions.clear();
+						scriptAction->conditions.push_back(condition);
 					}
 					else
 					{
+						//loading action
 						TAction* action = new TAction;
 						action->name = xml->getNodeName();
 						action->target = xml->getAttributeValue(L"target");
 						action->attribute = xml->getAttributeValue(L"attribute");
 						action->value = xml->getAttributeValue(L"value");
-						action->conditions.clear();
-						scriptAction->actions.push_back(action);
+						if(loadingConditionedActions)
+						{
+							//conditioned action
+							scriptAction->conditions.getLast().actions.push_back(action);
+						}
+						else
+						{
+							//unconditioned action
+							scriptAction->actions.push_back(action);
+						}
 					}
 				}
 			}
 			break;
 		case io::EXN_ELEMENT_END:
 			{
-				if (scriptAction->event.name == xml->getNodeName())
+				if (scriptAction->event.name.equals_ignore_case(xml->getNodeName()))
 				{
 					loadingAction = false;
 				}
-				if ((scriptAction->actions.size() != 0) && (scriptAction->actions.getLast()->name.equals_ignore_case(xml->getNodeName())))
+				if (stringw("Condition").equals_ignore_case(xml->getNodeName()))
 				{
-					loadingConditions = false;
+					loadingConditionedActions = false;
 				}
 			}
 			break;
@@ -429,8 +442,8 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				TScriptAction scriptAction;
 				io::IXMLReader* xml = m_GameManager->getFS()->createXMLReader(xml_filename.c_str());
 
-				//ParseScriptForActions(xml,&scriptAction,"OnClick");
-				while(xml && xml->read())
+				ParseScriptForActions(xml,&scriptAction,"OnClick",id);
+				/*while(xml && xml->read())
 				{
 					switch(xml->getNodeType())
 					{
@@ -487,10 +500,10 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 						}
 						break;
 					}
-				}
+				}*/
 				if (xml)
 					xml->drop(); // don't forget to delete the xml reader
-
+				
 				//back to working dir
 				m_GameManager->backToWorkingDirectory();
 
@@ -538,7 +551,7 @@ bool CScript::CheckCondition(stringw condition, stringw value)
  */
 void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 {
-	//If this action has conditions that needs to be met, we check them first.
+	/*//If this action has conditions that needs to be met, we check them first.
 	if(action->conditions.size()>0)
 	{
 		for(u32 i=0; i<action->conditions.size(); i++)
@@ -550,7 +563,7 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 				return;
 			}
 		}
-	}
+	}*/
 
 	//Now this is giant action switch:
 	if(action->name == stringw(L"InfluenceAbility"))
