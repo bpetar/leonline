@@ -207,6 +207,20 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				if (xml)
 					xml->drop(); // don't forget to delete the xml reader
 				
+				//If this action has conditions that needs to be met, we check them first.
+				for(u32 i=0; i<scriptAction.conditions.size(); i++)
+				{
+					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					{
+						//Action condition fullfiled, we perform action.
+						debugPrint("Action conditions are met.");
+						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						{
+							ExecuteScriptAction(scriptAction.conditions[i].actions[i], false, id);
+						}
+					}
+				}
+
 				//If script exists, execute it:
 				for(u32 i=0; i<scriptAction.actions.size(); i++)
 				{
@@ -233,7 +247,20 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				if (xml)
 					xml->drop(); // don't forget to delete the xml reader
 				
-				//If script exists, execute it:
+				//If this action has conditions that needs to be met, we check them first.
+				for(u32 i=0; i<scriptAction.conditions.size(); i++)
+				{
+					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					{
+						//Action condition fullfiled, we perform action.
+						debugPrint("Action conditions are met.");
+						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						{
+							ExecuteScriptAction(scriptAction.conditions[i].actions[i], false, id);
+						}
+					}
+				}
+				//Execute unconditional actions
 				for(u32 i=0; i<scriptAction.actions.size(); i++)
 				{
 					ExecuteScriptAction(scriptAction.actions[i], false, id);
@@ -275,7 +302,20 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 
 				//script squad chronicles
 
-				//If script exists, execute it:
+				//If this action has conditions that needs to be met, we check them first.
+				for(u32 i=0; i<scriptAction.conditions.size(); i++)
+				{
+					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					{
+						//Action condition fullfiled, we perform action.
+						debugPrint("Action conditions are met.");
+						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						{
+							ExecuteScriptAction(scriptAction.conditions[i].actions[i], false, id);
+						}
+					}
+				}
+				//Execute unconditional actions
 				for(u32 i=0; i<scriptAction.actions.size(); i++)
 				{
 					ExecuteScriptAction(scriptAction.actions[i], false, id);
@@ -346,8 +386,22 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				m_GameManager->backToWorkingDirectory();
 
 				//If script exists, execute it:
-				if((s32)(scriptAction.actions.size()) > 0)
+				if((scriptAction.actions.size() > 0)||(scriptAction.conditions.size()>0))
 				{
+					//If this action has conditions that needs to be met, we check them first.
+					for(u32 i=0; i<scriptAction.conditions.size(); i++)
+					{
+						if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+						{
+							//Action condition fullfiled, we perform action.
+							debugPrint("Action conditions are met.");
+							for(u32 j=0; j<scriptAction.conditions[i].actions.size(); j++)
+							{
+								ExecuteScriptAction(scriptAction.conditions[i].actions[j], true, id);
+							}
+						}
+					}
+					//Execute unconditional actions
 					for(u32 i=0; i<scriptAction.actions.size(); i++)
 					{
 						ExecuteScriptAction(scriptAction.actions[i], true, id);
@@ -415,7 +469,20 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 			//if clicked on the specified object
 			if(scriptAction.event.target == stringw(id))
 			{
-				//If script exists, execute it:
+				//If this action has conditions that needs to be met, we check them first.
+				for(u32 i=0; i<scriptAction.conditions.size(); i++)
+				{
+					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					{
+						//Action condition fullfiled, we perform action.
+						debugPrint("Action conditions are met.");
+						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						{
+							ExecuteScriptAction(scriptAction.conditions[i].actions[i], true, id);
+						}
+					}
+				}
+				//Execute unconditional actions
 				for(u32 i=0; i<scriptAction.actions.size(); i++)
 				{
 					ExecuteScriptAction(scriptAction.actions[i], true, id);
@@ -507,10 +574,23 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//back to working dir
 				m_GameManager->backToWorkingDirectory();
 
-				//If script exists, execute it:
+				//If this action has conditions that needs to be met, we check them first.
+				for(u32 i=0; i<scriptAction.conditions.size(); i++)
+				{
+					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					{
+						//Action condition fullfiled, we perform action.
+						debugPrint("Action conditions are met.");
+						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						{
+							ExecuteScriptAction(scriptAction.conditions[i].actions[i], true, id);
+						}
+					}
+				}
+				//Execute unconditional actions
 				for(u32 i=0; i<scriptAction.actions.size(); i++)
 				{
-					ExecuteScriptAction(scriptAction.actions[i], false, id);
+					ExecuteScriptAction(scriptAction.actions[i], true, id);
 				}
 			}
 		}
@@ -551,19 +631,6 @@ bool CScript::CheckCondition(stringw condition, stringw value)
  */
 void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 {
-	/*//If this action has conditions that needs to be met, we check them first.
-	if(action->conditions.size()>0)
-	{
-		for(u32 i=0; i<action->conditions.size(); i++)
-		{
-			if(!CheckCondition(action->conditions[i].name, action->conditions[i].value))
-			{
-				//Action condition not fullfiled, we skip performing action.
-				debugPrint("Action is not executed because conditions are not met.");
-				return;
-			}
-		}
-	}*/
 
 	//Now this is giant action switch:
 	if(action->name == stringw(L"InfluenceAbility"))
