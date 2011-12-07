@@ -74,7 +74,7 @@ typedef struct S_ScriptAction
 {
     TEvent event;
     array<TAction*> actions; //unconditional actions
-	array<TCondition> conditions; //contitions with their actions
+	array<TCondition*> conditions; //contitions with their actions
 } TScriptAction;
 
 class CGameManager;

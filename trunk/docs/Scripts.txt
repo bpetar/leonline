@@ -1,0 +1,17 @@
+Best is to open some other scrips and see how they look like.
+Here is piece of script used when player tries to play flute:
+
+<Script>
+	<OnUse> 
+    <Condition attribute="PLAYER_KNOWS_HOW_TO_PLAY_FLUTE" value="0">
+      <InfoGUI value="You don't know how to play flute" />
+    </Condition>
+	</OnUse>
+</Script>
+
+This simple example shows ECA (Event Condition Action) nesting.
+Event is OnUse. It is called when player right clicks on Flute in his inventory. Hes trying to play it.
+Condition PLAYER_KNOWS_HOW_TO_PLAY_FLUTE is initially defined as false (0).
+Action InfoGui just displays message on the screen.
+
+You don't want to write scripts by hand. Just open gui in level editor.
