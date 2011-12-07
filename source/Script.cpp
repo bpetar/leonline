@@ -83,6 +83,16 @@ stringw CScript::GetActionLine(TAction action)
 	return script;
 }
 
+stringw CScript::GetConditionLine(TCondition condition)
+{
+	stringw script = "<Condition name=\"";
+	script += condition.name;
+	script += "\" value=\"";
+	script += condition.value;
+	script += "\" />\n";
+	return script;
+}
+
 
 /**
  * \brief Add trigger script action to m_SelectedListOfScriptActions
@@ -181,6 +191,7 @@ void CScript::LoadPickScriptFromXML(IXMLReader* xml)
 	TScriptAction scriptAction;
 	bool startLoadingScriptAction = false;
 	bool loadingAction = false;
+	bool loadingConditionedActions = false;
 
 	while(xml && xml->read())
 	{
@@ -213,34 +224,62 @@ void CScript::LoadPickScriptFromXML(IXMLReader* xml)
 				{
 					if (!loadingAction)
 					{
+						//initialize action loading
 						scriptAction.event.name = xml->getNodeName();
 						scriptAction.event.target = xml->getAttributeValue(L"target");
 						scriptAction.actions.clear();
+						scriptAction.conditions.clear();
 						loadingAction = true;
 					}
-					else
+					else //loadingAction == true
 					{
-						TAction action;
-						action.name = xml->getNodeName();
-						action.target = xml->getAttributeValue(L"target");
-						action.attribute = xml->getAttributeValue(L"attribute");
-						action.value = xml->getAttributeValue(L"value");
-						scriptAction.actions.push_back(action);
+						if (stringw("Condition").equals_ignore_case(xml->getNodeName()))
+						{
+							//loading condition
+							loadingConditionedActions = true;
+							TCondition condition;
+							condition.name = xml->getAttributeValue(L"name");
+							condition.value = xml->getAttributeValue(L"value");
+							condition.actions.clear();
+							scriptAction.conditions.push_back(condition);
+						}
+						else
+						{
+							TAction action;
+							action.name = xml->getNodeName();
+							action.target = xml->getAttributeValue(L"target");
+							action.attribute = xml->getAttributeValue(L"attribute");
+							action.value = xml->getAttributeValue(L"value");
+							if(loadingConditionedActions)
+							{
+								//conditioned action
+								scriptAction.conditions.getLast().actions.push_back(action);
+							}
+							else
+							{
+								//unconditioned action
+								scriptAction.actions.push_back(action);
+							}
+						}
 					}
 				}
 			}
 			break;
 		case io::EXN_ELEMENT_END:
 			{
-				if (stringw("Script") == xml->getNodeName())
+				if (stringw("Script").equals_ignore_case(xml->getNodeName()))
 				{
 					startLoadingScriptAction = false;
 				}
-				else if (scriptAction.event.name == xml->getNodeName())
+				else if (scriptAction.event.name.equals_ignore_case(xml->getNodeName()))
 				{
 					//one event finished, add it to the list
 					m_SelectedListOfScriptActions.push_back(scriptAction);
 					loadingAction = false;
+				}
+				else if (stringw("Condition").equals_ignore_case(xml->getNodeName()))
+				{
+					loadingConditionedActions = false;
 				}
 			}
 			break;
@@ -252,7 +291,7 @@ void CScript::LoadPickScriptFromXML(IXMLReader* xml)
 /**
  * \brief Writes script action to string suitable for edit box that is displaying script
  *
- * Takes int index parameter to select action from the list of actions.
+ * Takes int index parameter to select event from the list.
  *
  * \author Petar Bajic 
  * \date July, 21 2008.
@@ -270,6 +309,22 @@ stringw CScript::PickScriptActionToString_Index(s32 index)
 			script += " target=\"";
 			script += m_SelectedListOfScriptActions[index].event.target.c_str();
 			script += "\" >\n";
+
+			//write conditioned actions
+			for(u32 c = 0; c < m_SelectedListOfScriptActions[index].conditions.size(); c++)
+			{
+				script +="\t\t";
+				script += GetConditionLine(m_SelectedListOfScriptActions[index].conditions[c]);
+				for(u32 a = 0; a < m_SelectedListOfScriptActions[index].conditions[c].actions.size(); a++)
+				{
+					script +="\t\t\t";
+					script += GetActionLine(m_SelectedListOfScriptActions[index].conditions[c].actions[a]);
+				}
+				script +="\t\t";
+				script += "</Condition>\n";
+			}
+
+			//write unconditioned actions
 			for(u32 a = 0; a < m_SelectedListOfScriptActions[index].actions.size(); a++)
 			{
 				script +="\t\t";
@@ -366,6 +421,26 @@ void CScript::WritePickScriptToXML(IXMLWriter* xml, bool equipable, bool usable)
 		xml->writeElement(m_SelectedListOfScriptActions[index].event.name.c_str(),false,
 			L"target", m_SelectedListOfScriptActions[index].event.target.c_str());
 		xml->writeLineBreak();
+		
+		//write actions that are under condition
+		for ( u32 c = 0; c < m_SelectedListOfScriptActions[index].conditions.size(); c++)
+		{
+			//Open condition tag
+			xml->writeElement(L"Condition", false, L"name", m_SelectedListOfScriptActions[index].conditions[c].name.c_str(), L"value", m_SelectedListOfScriptActions[index].conditions[c].value.c_str());
+			xml->writeLineBreak();
+			for ( u32 a = 0; a < m_SelectedListOfScriptActions[index].conditions[c].actions.size(); a++)
+			{
+				xml->writeElement(m_SelectedListOfScriptActions[index].conditions[c].actions[a].name.c_str(),true,
+					L"target",m_SelectedListOfScriptActions[index].conditions[c].actions[a].target.c_str(),
+					L"attribute",m_SelectedListOfScriptActions[index].conditions[c].actions[a].attribute.c_str(),
+					L"value", m_SelectedListOfScriptActions[index].conditions[c].actions[a].value.c_str());
+				xml->writeLineBreak();
+			}
+			xml->writeClosingTag(L"Condition"); 
+			xml->writeLineBreak();
+		}
+
+		//write conditionless actions
 		for ( u32 a = 0; a < m_SelectedListOfScriptActions[index].actions.size(); a++)
 		{
 			xml->writeElement(m_SelectedListOfScriptActions[index].actions[a].name.c_str(),true,

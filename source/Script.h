@@ -22,6 +22,13 @@ typedef struct S_Action
    stringw value;
 }TAction;
 
+typedef struct S_Condition
+{
+   stringw name;
+   stringw value;
+   array<TAction> actions; //actions that are executed under this condition
+}TCondition;
+
 typedef struct S_Event 
 {
    stringw name;
@@ -32,6 +39,7 @@ typedef struct S_Event
 typedef struct S_ScriptAction
 {
     TEvent event;
+	array<TCondition> conditions; //more actions are available on single event
     array<TAction> actions; //more actions are available on single event
     //TCondition cond;
 } TScriptAction;
@@ -45,6 +53,7 @@ public:
 	bool Init(IrrlichtDevice* device, stringc filename);
 	void Clear();
 	stringw GetActionLine(TAction action);
+	stringw GetConditionLine(TCondition condition);
 	stringw PickScriptActionToString_Index(s32 index);
 	stringw TriggerScriptActionToString_Index(s32 index);
 	void WriteTriggerScriptToXML(IXMLWriter* xml, stringw state);

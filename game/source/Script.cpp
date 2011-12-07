@@ -85,7 +85,6 @@ stringw CScript::GetActionLine(TAction action)
  */
 void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAction, stringw eventName, s32 id)
 {
-	bool startLoadingScriptAction = false;
 	bool loadingAction = false;
 	bool loadingConditionedActions = false;
 	while(xml && xml->read())
@@ -127,10 +126,10 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 					{
 						//loading condition
 						loadingConditionedActions = true;
-						TCondition condition;
-						condition.name = xml->getAttributeValue(L"attribute");
-						condition.value = xml->getAttributeValue(L"value");
-						condition.actions.clear();
+						TCondition* condition = new TCondition;
+						condition->name = xml->getAttributeValue(L"name");
+						condition->value = xml->getAttributeValue(L"value");
+						condition->actions.clear();
 						scriptAction->conditions.push_back(condition);
 					}
 					else
@@ -144,7 +143,7 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 						if(loadingConditionedActions)
 						{
 							//conditioned action
-							scriptAction->conditions.getLast().actions.push_back(action);
+							scriptAction->conditions.getLast()->actions.push_back(action);
 						}
 						else
 						{
@@ -210,13 +209,13 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//If this action has conditions that needs to be met, we check them first.
 				for(u32 i=0; i<scriptAction.conditions.size(); i++)
 				{
-					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					if(CheckCondition(scriptAction.conditions[i]->name, scriptAction.conditions[i]->value))
 					{
 						//Action condition fullfiled, we perform action.
 						debugPrint("Action conditions are met.");
-						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						for(u32 i=0; i<scriptAction.conditions[i]->actions.size(); i++)
 						{
-							ExecuteScriptAction(scriptAction.conditions[i].actions[i], false, id);
+							ExecuteScriptAction(scriptAction.conditions[i]->actions[i], false, id);
 						}
 					}
 				}
@@ -250,13 +249,13 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//If this action has conditions that needs to be met, we check them first.
 				for(u32 i=0; i<scriptAction.conditions.size(); i++)
 				{
-					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					if(CheckCondition(scriptAction.conditions[i]->name, scriptAction.conditions[i]->value))
 					{
 						//Action condition fullfiled, we perform action.
 						debugPrint("Action conditions are met.");
-						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						for(u32 i=0; i<scriptAction.conditions[i]->actions.size(); i++)
 						{
-							ExecuteScriptAction(scriptAction.conditions[i].actions[i], false, id);
+							ExecuteScriptAction(scriptAction.conditions[i]->actions[i], false, id);
 						}
 					}
 				}
@@ -305,13 +304,13 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//If this action has conditions that needs to be met, we check them first.
 				for(u32 i=0; i<scriptAction.conditions.size(); i++)
 				{
-					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					if(CheckCondition(scriptAction.conditions[i]->name, scriptAction.conditions[i]->value))
 					{
 						//Action condition fullfiled, we perform action.
 						debugPrint("Action conditions are met.");
-						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						for(u32 i=0; i<scriptAction.conditions[i]->actions.size(); i++)
 						{
-							ExecuteScriptAction(scriptAction.conditions[i].actions[i], false, id);
+							ExecuteScriptAction(scriptAction.conditions[i]->actions[i], false, id);
 						}
 					}
 				}
@@ -339,7 +338,6 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//parse XML file for script?
 				m_GameManager->getFS()->changeWorkingDirectoryTo("media/Scripts/Pickables");
 				stringc xml_filename = script_name.c_str();
-				bool startLoadingScriptAction = false;
 				bool loadingAction = false;
 				TScriptAction scriptAction;
 				io::IXMLReader* xml = m_GameManager->getFS()->createXMLReader(xml_filename.c_str());
@@ -391,13 +389,13 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 					//If this action has conditions that needs to be met, we check them first.
 					for(u32 i=0; i<scriptAction.conditions.size(); i++)
 					{
-						if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+						if(CheckCondition(scriptAction.conditions[i]->name, scriptAction.conditions[i]->value))
 						{
 							//Action condition fullfiled, we perform action.
 							debugPrint("Action conditions are met.");
-							for(u32 j=0; j<scriptAction.conditions[i].actions.size(); j++)
+							for(u32 j=0; j<scriptAction.conditions[i]->actions.size(); j++)
 							{
-								ExecuteScriptAction(scriptAction.conditions[i].actions[j], true, id);
+								ExecuteScriptAction(scriptAction.conditions[i]->actions[j], true, id);
 							}
 						}
 					}
@@ -420,7 +418,6 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 			//parse XML file for script?
 			m_GameManager->getFS()->changeWorkingDirectoryTo("media/Scripts/Pickables");
 			stringc xml_filename = script_name.c_str();
-			bool startLoadingScriptAction = false;
 			bool loadingAction = false;
 			TScriptAction scriptAction;
 			io::IXMLReader* xml = m_GameManager->getFS()->createXMLReader(xml_filename.c_str());
@@ -472,13 +469,13 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//If this action has conditions that needs to be met, we check them first.
 				for(u32 i=0; i<scriptAction.conditions.size(); i++)
 				{
-					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					if(CheckCondition(scriptAction.conditions[i]->name, scriptAction.conditions[i]->value))
 					{
 						//Action condition fullfiled, we perform action.
 						debugPrint("Action conditions are met.");
-						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						for(u32 i=0; i<scriptAction.conditions[i]->actions.size(); i++)
 						{
-							ExecuteScriptAction(scriptAction.conditions[i].actions[i], true, id);
+							ExecuteScriptAction(scriptAction.conditions[i]->actions[i], true, id);
 						}
 					}
 				}
@@ -577,13 +574,13 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				//If this action has conditions that needs to be met, we check them first.
 				for(u32 i=0; i<scriptAction.conditions.size(); i++)
 				{
-					if(CheckCondition(scriptAction.conditions[i].name, scriptAction.conditions[i].value))
+					if(CheckCondition(scriptAction.conditions[i]->name, scriptAction.conditions[i]->value))
 					{
 						//Action condition fullfiled, we perform action.
 						debugPrint("Action conditions are met.");
-						for(u32 i=0; i<scriptAction.conditions[i].actions.size(); i++)
+						for(u32 i=0; i<scriptAction.conditions[i]->actions.size(); i++)
 						{
-							ExecuteScriptAction(scriptAction.conditions[i].actions[i], true, id);
+							ExecuteScriptAction(scriptAction.conditions[i]->actions[i], true, id);
 						}
 					}
 				}
