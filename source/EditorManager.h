@@ -43,6 +43,7 @@ using namespace gui;
 #define STATIC_SCRIPTS_DIR "media/scripts/static/"
 
 #define ACTIONS_SCRIPT_FILE "media/scripts/actions.script"
+#define CONDITIONS_SCRIPT_FILE "media/scripts/conditions.script"
 #define FONT_FILE "media/Garamond14.xml"
 #define IRRLOGO_FILE "media/irrlichtlogo2.png"
 

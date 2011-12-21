@@ -34,10 +34,10 @@ CScript::~CScript()
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-bool CScript::Init(IrrlichtDevice* device, stringc filename)
+bool CScript::Init(IrrlichtDevice* device, stringc actions_filename, stringc contitions_filename)
 {
 	IFileSystem* fs = device->getFileSystem();
-	IXMLReader* xml = fs->createXMLReader(filename.c_str());
+	IXMLReader* xml = fs->createXMLReader(actions_filename.c_str());
 	while(xml && xml->read())
 	{
 		switch(xml->getNodeType())
@@ -52,6 +52,27 @@ bool CScript::Init(IrrlichtDevice* device, stringc filename)
 			}
 		}
 	}
+
+
+	xml = fs->createXMLReader(contitions_filename.c_str());
+	while(xml && xml->read())
+	{
+		switch(xml->getNodeType())
+		{
+		case EXN_ELEMENT:
+			{
+				if (stringw("ScriptConditions") != xml->getNodeName())
+				{
+					TCondition* condition = new TCondition;
+					condition->name = xml->getNodeName();
+					condition->value = xml->getAttributeValue(L"default");
+					m_ListOfScriptConditions.push_back(condition);
+				}
+			}
+		}
+	}
+
+
 	return true;
 }
 

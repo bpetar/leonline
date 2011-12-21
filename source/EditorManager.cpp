@@ -51,7 +51,7 @@ void CEditorManager::Init()
 	m_pEdiLevel->Init(this);
 	m_ScriptEngine = new CScript();
 	m_UndoActionsManager = new CUndoActions(this);
-	m_ScriptEngine->Init(m_pDevice,ACTIONS_SCRIPT_FILE);
+	m_ScriptEngine->Init(m_pDevice, ACTIONS_SCRIPT_FILE, CONDITIONS_SCRIPT_FILE);
 }
 
 /**
