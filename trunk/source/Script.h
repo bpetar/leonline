@@ -50,7 +50,8 @@ public:
 
 	CScript();
 	~CScript();
-	bool Init(IrrlichtDevice* device, stringc filename);
+	//bool Init(IrrlichtDevice* device, stringc filename);
+	bool Init(IrrlichtDevice* device, stringc actions_filename, stringc contitions_filename);
 	void Clear();
 	stringw GetActionLine(TAction action);
 	stringw GetConditionLine(TCondition condition);
@@ -81,6 +82,8 @@ public:
 	stringw script;
 	//list of available actions
 	array <stringw> m_ListOfScriptActions;
+	//list of available conditions
+	array<TCondition*> m_ListOfScriptConditions;
 	//list of available events
 	array <stringw> m_ListOfScriptEvents;
 	//list of script actions for selected object
