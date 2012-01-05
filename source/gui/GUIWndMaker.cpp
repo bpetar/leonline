@@ -409,6 +409,8 @@ IGUIWindow* MakeContainerContentWindow(CEditorManager* editorManager, s32 id)
 
 
 //creates window for defining pick script action
+//layout of GUI elements (buttons, editboxes, comboboxes,..) is hardcoded here, 
+//it is problematic when something needs to be changed.
 IGUIWindow* MakePickScriptWindow(CEditorManager* editorManager, stringw script)
 {
 	IGUIEnvironment* env = editorManager->getGUIEnvironment();
@@ -433,8 +435,9 @@ IGUIWindow* MakePickScriptWindow(CEditorManager* editorManager, stringw script)
 	edGui->m_PickEditBox_Script->setWordWrap(true);
 	env->addStaticText(L"Add event:", rect<s32>(20,227,170,250), false, false, wnd_pickScript, -1, false);
 	env->addStaticText(L"Event target:", rect<s32>(20,277,170,300), false, false, wnd_pickScript, -1, false);
-	env->addStaticText(L"Add new action:", rect<s32>(200,227,400,250), false, false, wnd_pickScript, -1, false);
+	env->addStaticText(L"Choose action:", rect<s32>(200,227,400,250), false, false, wnd_pickScript, -1, false);
 	env->addStaticText(L"Under condition:", rect<s32>(420,227,600,250), false, false, wnd_pickScript, -1, false);
+	env->addStaticText(L"Condition value:", rect<s32>(650,227,790,250), false, false, wnd_pickScript, -1, false);
 	env->addStaticText(L"Action target:", rect<s32>(200,277,350,300), false, false, wnd_pickScript, -1, false);
 	env->addStaticText(L"Action attribute:", rect<s32>(500,277,650,300), false, false, wnd_pickScript, -1, false);
 	env->addStaticText(L"Action value:", rect<s32>(650,277,800,300), false, false, wnd_pickScript, -1, false);
@@ -445,13 +448,14 @@ IGUIWindow* MakePickScriptWindow(CEditorManager* editorManager, stringw script)
 	edGui->m_PickComboBox_Conditions = env->addComboBox(rect<s32>(420,250,640,270), wnd_pickScript, GUI_ID_COMBOBOX_PICK_CONDITIONS_LIST);
 	edGui->m_PickComboBox_EventTarget = env->addComboBox(rect<s32>(20,300,170,320), wnd_pickScript, GUI_ID_COMBOBOX_PICK_EVENT_TARGET);
 	edGui->m_PickComboBox_ActionTarget = env->addComboBox(rect<s32>(200,300,340,320), wnd_pickScript, GUI_ID_COMBOBOX_PICK_ACTION_TARGET);
+	edGui->m_PickEditBox_ConditionValue = env->addEditBox(L"", rect<s32>(650,250,790,270), true, wnd_pickScript, GUI_ID_EDITBOX_PICK_CONDITION_VALUE);
 	edGui->m_PickEditBox_ActionAttribute = env->addEditBox(L"", rect<s32>(500,300,640,320), true, wnd_pickScript, GUI_ID_EDITBOX_PICK_ACTION_ATTR);
 	edGui->m_PickEditBox_ActionValue = env->addEditBox(L"", rect<s32>(650,300,790,320), true, wnd_pickScript, GUI_ID_EDITBOX_PICK_ACTION_VALUE);
 	edGui->m_PickEditBox_ActionTargetID = env->addEditBox(L"", rect<s32>(350,300,490,320), true, wnd_pickScript, GUI_ID_EDITBOX_PICK_ACTION_TARGET_ID);
 	edGui->m_PickEditBox_EventTargetID = env->addEditBox(L"", rect<s32>(20,350,170,370), true, wnd_pickScript, GUI_ID_EDITBOX_PICK_EVENT_TARGET_ID);
 	edGui->m_PickButton_AddEvent = env->addButton(rect<s32>(20,380,170,400), wnd_pickScript, GUI_ID_BUTTON_PICK_ADD_EVENT, L"Add Event");
 	edGui->m_PickButton_RemoveEvent = env->addButton(rect<s32>(20,410,170,430), wnd_pickScript, GUI_ID_BUTTON_PICK_REMOVE_EVENT, L"Remove Event");
-	edGui->m_PickButton_AddAction = env->addButton(rect<s32>(650,250,790,270), wnd_pickScript, GUI_ID_BUTTON_PICK_ADD_ACTION, L"Add Action");
+	edGui->m_PickButton_AddAction = env->addButton(rect<s32>(650,340,790,360), wnd_pickScript, GUI_ID_BUTTON_PICK_ADD_ACTION, L"Add Action");
 	edGui->m_PickButton_Save = env->addButton(rect<s32>(300,400,400,430), wnd_pickScript, GUI_ID_BUTTON_PICK_SAVE, L"Save");
 	edGui->m_PickButton_Cancel = env->addButton(rect<s32>(500,400,600,430), wnd_pickScript, GUI_ID_BUTTON_PICK_CANCEL, L"Cancel");
 	edGui->m_PickComboBox_Actions->addItem(L"none");
