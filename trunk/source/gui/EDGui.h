@@ -189,6 +189,7 @@ GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE,
 	GUI_ID_COMBOBOX_PICK_EVENTS,
 	GUI_ID_COMBOBOX_PICK_ACTIONS,
 	GUI_ID_COMBOBOX_PICK_CONDITIONS_LIST,
+	GUI_ID_EDITBOX_PICK_CONDITION_VALUE,
 	GUI_ID_COMBOBOX_PICK_EVENT_TARGET,
 	GUI_ID_COMBOBOX_PICK_ACTION_TARGET,
 	GUI_ID_COMBOBOX_NPC_ACTION_TARGET,
@@ -358,6 +359,7 @@ public:
 	IGUIComboBox* m_PickComboBox_Events;
 	IGUIComboBox* m_PickComboBox_EventTarget;
 	IGUIComboBox* m_PickComboBox_ActionTarget;
+	IGUIEditBox* m_PickEditBox_ConditionValue;
 	IGUIEditBox* m_PickEditBox_ActionTargetID;
 	IGUIEditBox* m_PickEditBox_EventTargetID;
 	IGUIEditBox* m_PickEditBox_ActionAttribute;

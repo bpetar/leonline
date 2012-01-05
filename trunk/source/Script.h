@@ -36,12 +36,12 @@ typedef struct S_Event
    stringw target;
 }TEvent;
 
+//this struct contains one event and several actions that are executed on this event
 typedef struct S_ScriptAction
 {
     TEvent event;
-	array<TCondition> conditions; //more actions are available on single event
-    array<TAction> actions; //more actions are available on single event
-    //TCondition cond;
+	array<TCondition> conditions; //conditions hold more actions
+    array<TAction> actions; //unconditioned actions
 } TScriptAction;
 
 class CScript
