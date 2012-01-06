@@ -155,6 +155,7 @@ GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE,
 	GUI_ID_EDITBOX_NPC_ACTION_VALUE,
 	GUI_ID_EDITBOX_TRIGGER_SCRIPT,
 	GUI_ID_EDITBOX_TRIGGER_STATE,
+	GUI_ID_EDITBOX_TRIGGER_CONDITION_VALUE,
 	GUI_ID_EDITBOX_TRIGGER_ACTION_ATTRIBUTE,
 	GUI_ID_EDITBOX_TRIGGER_ACTION_VALUE,
 	GUI_ID_EDITBOX_TRIGGER_ACTION_TARGET_ID,
@@ -196,6 +197,7 @@ GUI_ID_EDITBOX_LEVELPARTICLES_ANGLE,
 	GUI_ID_COMBOBOX_NPC_ACTIONS,
 	GUI_ID_COMBOBOX_NPC_CONDITIONS,
 	GUI_ID_COMBOBOX_TRIGGER_ACTIONS,
+	GUI_ID_COMBOBOX_TRIGGER_CONDITIONS,
 	GUI_ID_COMBOBOX_TRIGGER_ACTION_TARGET,
 	GUI_ID_WINDOW_PROPERTIES,
 	GUI_ID_WINDOW_GAME_OBJECTS,
@@ -373,11 +375,18 @@ public:
 
 	//Trigger script window
 	IGUIComboBox* m_TriggerComboBox_Actions;
+	IGUIComboBox* m_TriggerComboBox_Conditions;
 	IGUIComboBox* m_TriggerComboBox_ActionTarget;
 	IGUIListBox* m_TriggerListBox_States;
+	IGUIEditBox* m_TriggerEditBox_ConditionValue;
 	IGUIEditBox* m_TriggerEditBox_State;
+	IGUIEditBox* m_TriggerEditBox_ActionTargetID;
+	IGUIEditBox* m_TriggerEditBox_ActionAttribute;
+	IGUIEditBox* m_TriggerEditBox_ActionValue;
 	IGUIEditBox* m_TriggerEditBox_Script;
 	IGUIButton* m_TriggerButton_AddState;
+	IGUIButton* m_TriggerButton_Save;
+	IGUIButton* m_TriggerButton_Cancel;
 	IGUIButton* m_TriggerButton_RemoveState;
 	IGUIButton* m_TriggerButton_SetState;
 	IGUIButton* m_TriggerButton_AddAction;
