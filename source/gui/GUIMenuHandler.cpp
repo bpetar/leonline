@@ -152,7 +152,7 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 		//Save all to irr scene...
 		case GUI_ID_MENU_SAVE_IRR: 
 		{
-			//open file chose dialog
+			//open file choose dialog
 			edGui->m_bIrrFileSaveDialog = true;
 			device->getFileSystem()->changeWorkingDirectoryTo("maps");
 			CGUIFileSaveDialog* dialog = new CGUIFileSaveDialog(L"Save Map As", gui, gui->getRootGUIElement(),-1, L"irr");
@@ -162,7 +162,7 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 		//Load from irr scene...
 		case GUI_ID_MENU_LOAD_IRR: 
 		{
-			//open file chose dialog
+			//open file choose dialog
 			edGui->m_bIrrFileOpenDialog = true;
 			editorManager->getDevice()->getFileSystem()->changeWorkingDirectoryTo("maps");
 			editorManager->getGUIEnvironment()->addFileOpenDialog(L"Please select map to open");

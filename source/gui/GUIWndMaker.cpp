@@ -551,7 +551,7 @@ IGUIWindow* MakeTriggerScriptWindow(CEditorManager* editorManager, s32 id, strin
 	s32 centerX = device->getVideoDriver()->getScreenSize().Width/2;
 	s32 centerY = device->getVideoDriver()->getScreenSize().Height/2;
 	s32 windowWidth = 850;
-	s32 windowHeight = 440;
+	s32 windowHeight = 460;
 
 	//margins
 	s32 X_center_GUI = windowWidth/2;
@@ -563,11 +563,13 @@ IGUIWindow* MakeTriggerScriptWindow(CEditorManager* editorManager, s32 id, strin
 	s32 X_1 = 20;
 	s32 X_2 = 200;
 	s32 X_3 = 400;
+	s32 X_4 = 600;
+	s32 X_5 = 800;
 	s32 Y_1 = 30;
 	s32 Y_2 = 60;
 	s32 Y_3 = 180;
 	s32 Y_4 = Y_3+2*Y_marg+2*itemHeight;
-	s32 Y_5 = 380;
+	s32 Y_5 = 400;
 
 
 	stringw objName = editorManager->GetObjectParameter_Name(id);
@@ -577,11 +579,13 @@ IGUIWindow* MakeTriggerScriptWindow(CEditorManager* editorManager, s32 id, strin
 	IGUIWindow* wnd_triggerScript = env->addWindow(rect<s32>(centerX - windowWidth/2, centerY - windowHeight/2, centerX + windowWidth/2, centerY + windowHeight/2), false, caption.c_str(), 0, GUI_ID_WINDOW_TRIGGER);
 
 	//Layout GUI elements around
-	env->addStaticText(L"Chose State:", rect<s32>(X_1, Y_1, X_2, Y_1+itemHeight), false, false, wnd_triggerScript, -1, false);
+	env->addStaticText(L"Choose State:", rect<s32>(X_1, Y_1, X_2, Y_1+itemHeight), false, false, wnd_triggerScript, -1, false);
 	env->addStaticText(L"Trigger Script Action:", rect<s32>(X_2, Y_1, windowWidth-margin, Y_1+itemHeight), false, false, wnd_triggerScript, -1, false);
 	env->addStaticText(L"Add new state:", rect<s32>(X_1,Y_3+2*Y_marg,X_2,Y_3+2*Y_marg+itemHeight), false, false, wnd_triggerScript, -1, false);
 	//env->addStaticText(L"Event target:", rect<s32>(20,275,90,295), false, false, wnd_triggerScript, -1, false);
-	env->addStaticText(L"Add new action:", rect<s32>(X_2,Y_4+2*Y_marg,X_3,Y_4+2*Y_marg+itemHeight), false, false, wnd_triggerScript, -1, false);
+	env->addStaticText(L"Choose action:", rect<s32>(X_2,Y_4+2*Y_marg,X_3,Y_4+2*Y_marg+itemHeight), false, false, wnd_triggerScript, -1, false);
+	env->addStaticText(L"Choose condition:", rect<s32>(X_3+X_marg,Y_4+2*Y_marg,X_4,Y_4+2*Y_marg+itemHeight), false, false, wnd_triggerScript, -1, false);
+	env->addStaticText(L"Condition value:", rect<s32>(X_4+X_marg,Y_4+2*Y_marg,X_5,Y_4+2*Y_marg+itemHeight), false, false, wnd_triggerScript, -1, false);
 
 	env->addStaticText(L"Action target:", rect<s32>(X_2,Y_4+4*Y_marg+2*itemHeight,X_2+X_marg+itemWidth,Y_4+4*Y_marg+3*itemHeight), false, false, wnd_triggerScript, -1, false);
 	env->addStaticText(L"Target ID:", rect<s32>(X_2+2*X_marg+itemWidth,Y_4+4*Y_marg+2*itemHeight,X_2+2*X_marg+2*itemWidth,Y_4+4*Y_marg+3*itemHeight), false, false, wnd_triggerScript, -1, false);
@@ -593,33 +597,42 @@ IGUIWindow* MakeTriggerScriptWindow(CEditorManager* editorManager, s32 id, strin
 	edGui->m_TriggerEditBox_Script->setMultiLine(true);
 	edGui->m_TriggerEditBox_Script->setWordWrap(true);
 	edGui->m_TriggerEditBox_State = env->addEditBox(L"", rect<s32>(X_1,Y_3+2*Y_marg+itemHeight,X_1+itemWidth,Y_3+2*Y_marg+2*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_STATE);
-	//edGui->m_PickComboBox_Events = env->addComboBox(rect<s32>(20,250,100,270), wnd_triggerScript, GUI_ID_COMBOBOX_TRIGGER_EVENTS);
 	edGui->m_TriggerComboBox_Actions = env->addComboBox(rect<s32>(X_2,Y_4+2*Y_marg+itemHeight,X_3,Y_4+2*Y_marg+2*itemHeight), wnd_triggerScript, GUI_ID_COMBOBOX_TRIGGER_ACTIONS);
-	//edGui->m_PickComboBox_EventTarget = env->addComboBox(rect<s32>(20,290,100,310), wnd_triggerScript, GUI_ID_COMBOBOX_TRIGGER_EVENT_TARGET);
+	edGui->m_TriggerComboBox_Conditions = env->addComboBox(rect<s32>(X_3+X_marg,Y_4+2*Y_marg+itemHeight,X_4,Y_4+2*Y_marg+2*itemHeight), wnd_triggerScript, GUI_ID_COMBOBOX_TRIGGER_CONDITIONS);
+	edGui->m_TriggerEditBox_ConditionValue = env->addEditBox(L"", rect<s32>(X_4+X_marg,Y_4+2*Y_marg+itemHeight,X_5,Y_4+2*Y_marg+2*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_CONDITION_VALUE);
 
 	edGui->m_TriggerComboBox_ActionTarget = env->addComboBox(rect<s32>(X_2,Y_4+4*Y_marg+3*itemHeight,X_2+X_marg+itemWidth,Y_4+4*Y_marg+4*itemHeight), wnd_triggerScript, GUI_ID_COMBOBOX_TRIGGER_ACTION_TARGET);
-	edGui->m_PickEditBox_ActionTargetID = env->addEditBox(L"", rect<s32>(X_2+2*X_marg+itemWidth,Y_4+4*Y_marg+3*itemHeight,X_2+2*X_marg+2*itemWidth,Y_4+4*Y_marg+4*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_ACTION_TARGET_ID);
-	edGui->m_PickEditBox_ActionAttribute = env->addEditBox(L"", rect<s32>(X_2+3*X_marg+2*itemWidth,Y_4+4*Y_marg+3*itemHeight,X_2+3*X_marg+3*itemWidth,Y_4+4*Y_marg+4*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_ACTION_ATTRIBUTE);
-	edGui->m_PickEditBox_ActionValue = env->addEditBox(L"", rect<s32>(X_2+4*X_marg+3*itemWidth,Y_4+4*Y_marg+3*itemHeight,X_2+4*X_marg+4*itemWidth,Y_4+4*Y_marg+4*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_ACTION_VALUE);
+	edGui->m_TriggerEditBox_ActionTargetID = env->addEditBox(L"", rect<s32>(X_2+2*X_marg+itemWidth,Y_4+4*Y_marg+3*itemHeight,X_2+2*X_marg+2*itemWidth,Y_4+4*Y_marg+4*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_ACTION_TARGET_ID);
+	edGui->m_TriggerEditBox_ActionAttribute = env->addEditBox(L"", rect<s32>(X_2+3*X_marg+2*itemWidth,Y_4+4*Y_marg+3*itemHeight,X_2+3*X_marg+3*itemWidth,Y_4+4*Y_marg+4*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_ACTION_ATTRIBUTE);
+	edGui->m_TriggerEditBox_ActionValue = env->addEditBox(L"", rect<s32>(X_2+4*X_marg+3*itemWidth,Y_4+4*Y_marg+3*itemHeight,X_2+4*X_marg+4*itemWidth,Y_4+4*Y_marg+4*itemHeight), true, wnd_triggerScript, GUI_ID_EDITBOX_TRIGGER_ACTION_VALUE);
 
 	edGui->m_TriggerButton_SetState = env->addButton(rect<s32>(X_1,Y_3+3*Y_marg+2*itemHeight,X_1+itemWidth,Y_3+3*Y_marg+3*itemHeight), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_SET_STATE, L"Set Default State");
 	edGui->m_TriggerButton_AddState = env->addButton(rect<s32>(X_1,Y_3+4*Y_marg+3*itemHeight,X_1+itemWidth,Y_3+4*Y_marg+4*itemHeight), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_ADD_STATE, L"Add State");
 	edGui->m_TriggerButton_RemoveState = env->addButton(rect<s32>(X_1,Y_3+5*Y_marg+4*itemHeight,X_1+itemWidth,Y_3+5*Y_marg+5*itemHeight), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_REMOVE_STATE, L"Remove State");
-	edGui->m_TriggerButton_AddAction = env->addButton(rect<s32>(X_3+X_marg,Y_4+2*Y_marg+itemHeight,X_3+X_marg+itemWidth,Y_4+2*Y_marg+2*itemHeight), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_ADD_ACTION, L"Add Action");
+	edGui->m_TriggerButton_AddAction = env->addButton(rect<s32>(X_2+4*X_marg+3*itemWidth,Y_4+6*Y_marg+4*itemHeight,X_5,Y_4+6*Y_marg+5*itemHeight), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_ADD_ACTION, L"Add Action");
 
-	edGui->m_PickButton_Save = env->addButton(rect<s32>((s32)(X_center_GUI-1.5*itemWidth),Y_5,(s32)(X_center_GUI-0.5*itemWidth),Y_5+30), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_SAVE, L"Save");
-	edGui->m_PickButton_Cancel = env->addButton(rect<s32>((s32)(X_center_GUI+0.5*itemWidth),Y_5,(s32)(X_center_GUI+1.5*itemWidth),Y_5+30), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_CANCEL, L"Cancel");
+	edGui->m_TriggerButton_Save = env->addButton(rect<s32>((s32)(X_center_GUI-1.5*itemWidth),Y_5,(s32)(X_center_GUI-0.5*itemWidth),Y_5+30), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_SAVE, L"Save");
+	edGui->m_TriggerButton_Cancel = env->addButton(rect<s32>((s32)(X_center_GUI+0.5*itemWidth),Y_5,(s32)(X_center_GUI+1.5*itemWidth),Y_5+30), wnd_triggerScript, GUI_ID_BUTTON_TRIGGER_CANCEL, L"Cancel");
 	edGui->m_TriggerComboBox_Actions->addItem(L"none");
 	edGui->m_TriggerComboBox_Actions->setSelected(0);
+	edGui->m_TriggerComboBox_Conditions->addItem(L"none");
+	edGui->m_TriggerComboBox_Conditions->setSelected(0);
 	edGui->m_TriggerComboBox_ActionTarget->addItem(L"none");
 	edGui->m_TriggerComboBox_ActionTarget->setSelected(0);
 	edGui->m_TriggerComboBox_ActionTarget->addItem(L"player");
 	edGui->m_TriggerComboBox_ActionTarget->addItem(L"self");
 	edGui->m_TriggerComboBox_ActionTarget->addItem(L"id");
 
+	//add actions
 	for(u32 i=  0; i < editorManager->getScriptEngine()->m_ListOfScriptActions.size(); i++)
 	{
 		edGui->m_TriggerComboBox_Actions->addItem(editorManager->getScriptEngine()->m_ListOfScriptActions[i].c_str());
+	}
+
+	//add conditions
+	for(u32 i=  0; i < editorManager->getScriptEngine()->m_ListOfScriptConditions.size(); i++)
+	{
+		edGui->m_TriggerComboBox_Conditions->addItem(editorManager->getScriptEngine()->m_ListOfScriptConditions[i]->name.c_str());
 	}
 
 	//Load existing script file if exists

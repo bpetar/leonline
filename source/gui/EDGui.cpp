@@ -112,7 +112,12 @@ CEditorGUI::CEditorGUI()
 	m_LevelParticles_EditBox_EmiterSizeZMin(0),
 	m_LevelParticles_EditBox_EmiterSizeZMax(0),
 	m_LevelParticles_EditBox_Angle(0),
-	m_Monsters_EditBox_Health(0)
+	m_Monsters_EditBox_Health(0),
+
+	m_TriggerEditBox_ActionTargetID(0),
+	m_TriggerEditBox_ActionAttribute(0),
+	m_TriggerEditBox_ActionValue(0),
+	m_TriggerEditBox_State(0)
 {
 }
 
@@ -200,7 +205,7 @@ void CEditorGUI::SavePickScript(const stringc &file)
 }
 
 /**
- * \brief Save script to given file
+ * \brief Save trigger script to given file
  * 
  * \author Petar Bajic 
  * \date July, 21 2008.

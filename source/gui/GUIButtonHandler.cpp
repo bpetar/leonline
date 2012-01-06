@@ -396,15 +396,57 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 				action.name = edGui->m_TriggerComboBox_Actions->getText();
 				if(action.name != stringw(L"none"))
 				{
-					action.attribute = edGui->m_PickEditBox_ActionAttribute->getText();
-					action.value = edGui->m_PickEditBox_ActionValue->getText();
+					action.attribute = edGui->m_TriggerEditBox_ActionAttribute->getText();
+					action.value = edGui->m_TriggerEditBox_ActionValue->getText();
 					action.target = edGui->m_TriggerComboBox_ActionTarget->getText();
 					if (action.target == stringw(L"id"))
 					{
-						if(stringw(edGui->m_PickEditBox_ActionTargetID->getText()) != stringw(L""))
+						if(stringw(edGui->m_TriggerEditBox_ActionTargetID->getText()) != stringw(L""))
 						{
-							action.target = edGui->m_PickEditBox_ActionTargetID->getText();
-							editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].actions.push_back(action);
+							action.target = edGui->m_TriggerEditBox_ActionTargetID->getText();
+
+							TCondition condition;
+							condition.name = edGui->m_TriggerComboBox_Conditions->getText();
+							if(condition.name.equals_ignore_case("none"))
+							{
+								//add unconditioned action
+								editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].actions.push_back(action);
+							}
+							else
+							{
+								//first looking if condition already exists in this event
+								bool found = false;
+								condition.value = edGui->m_TriggerEditBox_ConditionValue->getText();
+								if(!condition.value.equals_ignore_case(""))
+								{
+									for(int c=0; c<editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions.size(); c++)
+									{
+										if(editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions[c].name.equals_ignore_case(condition.name))
+										{
+											if(editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions[c].value.equals_ignore_case(condition.value))
+											{
+												//this condition already exists, so we just add action to it
+												found = true;
+												editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions[c].actions.push_back(action);
+											}
+										}
+									}
+								}
+								else
+								{
+									//todo add message "condition value"
+								}
+								
+								if(!found)
+								{
+									//create new condition
+									condition.actions.clear(); //clear actions list if this is first occurance of condition
+									condition.actions.push_back(action);
+									//add conditioned action
+									editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions.push_back(condition);
+								}
+							}
+
 							stringw scriptText = editorManager->getScriptEngine()->TriggerScriptActionToString_Index(index);
 							edGui->m_TriggerEditBox_Script->setText(scriptText.c_str());
 						}
@@ -415,7 +457,47 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 					}
 					else
 					{
-						editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].actions.push_back(action);
+						TCondition condition;
+						condition.name = edGui->m_TriggerComboBox_Conditions->getText();
+						if(condition.name.equals_ignore_case("none"))
+						{
+							//add unconditioned action
+							editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].actions.push_back(action);
+						}
+						else
+						{
+							//first looking if condition already exists in this event
+							bool found = false;
+							condition.value = edGui->m_TriggerEditBox_ConditionValue->getText();
+							if(!condition.value.equals_ignore_case(""))
+							{
+								for(int c=0; c<editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions.size(); c++)
+								{
+									if(editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions[c].name.equals_ignore_case(condition.name))
+									{
+										if(editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions[c].value.equals_ignore_case(condition.value))
+										{
+											//this condition already exists, so we just add action to it
+											found = true;
+											editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions[c].actions.push_back(action);
+										}
+									}
+								}
+							}
+							else
+							{
+								//todo add message "condition value"
+							}
+								
+							if(!found)
+							{
+								//create new condition
+								condition.actions.clear(); //clear actions list if this is first occurance of condition
+								condition.actions.push_back(action);
+								//add conditioned action
+								editorManager->getScriptEngine()->m_SelectedListOfScriptActions[index].conditions.push_back(condition);
+							}
+						}
 						stringw scriptText = editorManager->getScriptEngine()->TriggerScriptActionToString_Index(index);
 						edGui->m_TriggerEditBox_Script->setText(scriptText.c_str());
 					}
@@ -427,7 +509,7 @@ bool HandleButtonClick(CEditorManager* editorManager, s32 id)
 			}
 			else
 			{
-				//TODO message: select event first!
+				//TODO message: select state first!
 			}
 		}
 		break;

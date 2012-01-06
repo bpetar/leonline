@@ -4,7 +4,7 @@
  * Container represents content of chest or standard inventory, displaying empty slots and 
  * icons of items placed in container. This class has array of CGameObject(s). 
  * CGUIContainer can be added to GUI window like any other irrlicht 
- * GUI component, you only have to chose how many rows and columns, and texture for empty
+ * GUI component, you only have to choose how many rows and columns, and texture for empty
  * slot (if these values are not provided, default values will take place).
  *
  * This class needs some clean up and maybe aditional functionality before presented to the world
