@@ -1,0 +1,18 @@
+
+Adding Languages
+----------------
+
+If you want to add another language, take en_strings.xml and translate it.
+New language needs a name and two letter unique identification for example: 
+
+<Language name="French" value="fr" />
+
+File must be named using two letter identifier for example: fr_strings.xml.
+Language will automatically appear in game preferences, and if chosen, translated strings will appear in the game.
+
+If you don't translate all strings, default one will be used in case of missing strings.
+
+Petar Bajic
+MPE (C) All Rights Reserved 
+Homepage: www.mystic-peanut.com
+January, 21 2012.

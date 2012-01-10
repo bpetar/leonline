@@ -95,6 +95,7 @@
     <ClInclude Include="game\source\gui\CGUIContainer.h" />
     <ClInclude Include="game\source\gui\GameGUI.h" />
     <ClInclude Include="game\source\gui\IGUIContainer.h" />
+    <ClInclude Include="game\source\Languages.h" />
     <ClInclude Include="game\source\level\CGoToArrows.h" />
     <ClInclude Include="game\source\level\GameObject.h" />
     <ClInclude Include="game\source\level\Level.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="game\source\gui\CGUIBar.cpp" />
     <ClCompile Include="game\source\gui\CGUIContainer.cpp" />
     <ClCompile Include="game\source\gui\GameGUI.cpp" />
+    <ClCompile Include="game\source\Languages.cpp" />
     <ClCompile Include="game\source\level\CGoToArrows.cpp" />
     <ClCompile Include="game\source\level\GameObject.cpp" />
     <ClCompile Include="game\source\level\Level.cpp" />

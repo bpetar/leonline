@@ -22,6 +22,7 @@
 #include "Script.h"
 #include "level/CGoToArrows.h"
 #include "Particles.h"
+#include "Languages.h"
 
 
 #include <irrKlang.h>
@@ -66,6 +67,7 @@ enum EPCMove {
 	PC_MOVE_STOPS_MOVING,
 	PC_MOVE_NO_MOVING
 };
+
 
 /**
  * \brief CGameManager class is the boss. The manager. It creates 3D device (irrlicht of course),
@@ -137,7 +139,9 @@ public:
 	stringc m_Maps[MAX_NUMBER_OF_LEVELS];
 	u32 m_NumberOfMaps;
 	CScript* m_pScriptEngine;
-	
+	CLanguages* m_pLanguages;
+	stringc m_pLanguagePreference;
+
 	array<TCondition*> m_ListOfConditions; //All game conditions in one array.
 
 	CPlayerCharacter* m_pPC;
@@ -157,6 +161,7 @@ private:
 	int m_AttackTargetID;
 	bool m_bDoAction;
 	bool m_NewGame;
+
 
 	//CGameGUI* m_pGuiManager; //our homemade gui manager
 	CLevelManager* m_pLevelManager;
