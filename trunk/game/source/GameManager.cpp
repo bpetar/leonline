@@ -94,9 +94,10 @@ bool CGameManager::Init()
 		return false; // error starting up the engine
 
 	//load languages
+	m_pLanguages = new CLanguages();
 	m_pLanguages->Init(m_FS, "media/strings");
-	//bool ret = m_pLanguages->setLanguage(m_pLanguagePreference.c_str());
-	//if(!ret)
+	bool ret = m_pLanguages->setLanguage(m_pLanguagePreference.c_str());
+	if(!ret)
 	{
 		//TODO: display warning message that language is not found!
 	}
