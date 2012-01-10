@@ -36,65 +36,41 @@ bool CLanguages::Init(IFileSystem* fs, stringc filepath)
 		stringc file = fileList->getFileName(i);
 		IXMLReader* xml = fs->createXMLReader(file);
 
-		if (!xml)
+		if (xml)
 		{
-			//Display error message and exit
+			//get language name and value from file
+			while(xml->read())
+			{
+				switch(xml->getNodeType())
+				{
+				case io::EXN_ELEMENT:
+					{
+						if (stringw("Language").equals_ignore_case(xml->getNodeName()))
+						{
+							TLanguage* lang = new TLanguage();
+							lang->name = xml->getAttributeValue(L"name");
+							lang->value = xml->getAttributeValue(L"value");
+							m_ListOfAvailableLanguages.push_back(lang);
+						}
+					}
+				}
+			}
 
-			//return false;
+			xml->drop(); // don't forget to delete the xml reader
 		}
 
-		//get language name and value from file
+		
 	}
 	
 
-	/*while(xml->read())
-	{
-		switch(xml->getNodeType())
-		{
-		case io::EXN_ELEMENT:
-			{
-				stringw figo;
-				if (core::stringw("MapStart") == xml->getNodeName())
-				{
-					figo = xml->getAttributeValue(L"filename");
-					m_StartMap = figo.c_str();
-				}
-				else if (core::stringw("PlayerConfig") == xml->getNodeName())
-				{
-					figo = xml->getAttributeValue(L"filename");
-					m_PlayerConfigFile = figo.c_str();
-				}
-				else if (core::stringw("WorkingDir") == xml->getNodeName())
-				{
-					//New Folder, create node and step in.
-					figo = xml->getAttributeValue(L"filename");
-					m_WorkingDir = figo.c_str();
-				}
-				else if (core::stringw("WindowCaption") == xml->getNodeName())
-				{
-					//New Folder, create node and step in.
-					figo = xml->getAttributeValue(L"text");
-					m_WndCaption = figo.c_str();
-				}
-				else if (stringw("Level") == xml->getNodeName())
-				{
-					figo = xml->getAttributeValue(L"filename");
-					m_Maps[m_NumberOfMaps] = figo;
-					m_NumberOfMaps++;
-				}
-			}
-			break;
-		}
-	}
-
-	xml->drop(); // don't forget to delete the xml reader*/
+	
 
 	return true;
 }
 
 bool CLanguages::setLanguage(stringc lang)
 {
-	m_Language->name = "pera";
+	m_Language->value = lang;
 	bool found = false;
 
 	for (u32 i=0; i< m_ListOfAvailableLanguages.size(); i++)
