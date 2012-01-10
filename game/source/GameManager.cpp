@@ -39,6 +39,7 @@ CGameManager::CGameManager()
 	m_ePCMove = PC_MOVE_NO_MOVING;
 	m_fHittingInProgress = -1.0f;
 	m_ListOfConditions.clear();
+	m_pLanguagePreference = "en";
 }
 
 /**
@@ -91,6 +92,15 @@ bool CGameManager::Init()
 
 	if (!m_SoundEngine)
 		return false; // error starting up the engine
+
+	//load languages
+	m_pLanguages->Init(m_FS, "media/strings");
+	//bool ret = m_pLanguages->setLanguage(m_pLanguagePreference.c_str());
+	//if(!ret)
+	{
+		//TODO: display warning message that language is not found!
+	}
+	backToWorkingDirectory();
 
 	//create level manager
 	m_pLevelManager = new CLevelManager();
@@ -913,6 +923,12 @@ bool CGameManager::LoadDataFromXMLConfig(stringc filename)
 					//New Folder, create node and step in.
 					figo = xml->getAttributeValue(L"filename");
 					m_WorkingDir = figo.c_str();
+				}
+				else if (core::stringw("Language") == xml->getNodeName())
+				{
+					//Chosen Language.
+					figo = xml->getAttributeValue(L"value");
+					m_pLanguagePreference = figo.c_str();
 				}
 				else if (core::stringw("WindowCaption") == xml->getNodeName())
 				{
