@@ -68,6 +68,12 @@ enum EPCMove {
 	PC_MOVE_NO_MOVING
 };
 
+enum EGameState {
+	GAME_STATE_MAIN_MENU,
+	GAME_STATE_INTRO_MOVIE,
+	GAME_STATE_LEVEL
+};
+
 
 /**
  * \brief CGameManager class is the boss. The manager. It creates 3D device (irrlicht of course),
@@ -83,6 +89,9 @@ public:
 	~CGameManager();
 	void Update(f32 elapsed_time);
 	bool Init();
+	void LoadMainMenu();
+	void PlayIntroMovie();
+	void NewGame();
 	bool LoadDataFromXMLConfig(stringc filename);
 	IrrlichtDevice* getDevice();
 	IVideoDriver* getDriver();
@@ -162,6 +171,9 @@ private:
 	bool m_bDoAction;
 	bool m_NewGame;
 
+	IGUIFont* m_Font_Garamond14;
+
+	EGameState m_GameState;
 
 	//CGameGUI* m_pGuiManager; //our homemade gui manager
 	CLevelManager* m_pLevelManager;

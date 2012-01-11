@@ -243,7 +243,7 @@ bool CLevelManager::Init(CGameManager* gameMngr, CGameGUI* gameGUI)
 	m_GameManager->getDriver()->setTextureCreationFlag(video::ETCF_ALWAYS_32_BIT, true);
 
 	// add irrlicht logo
-	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture("media/irrlichtlogo2.png"), core::position2d<s32>(50,50));
+	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(IRRLOGO_FILE), core::position2d<s32>(50,50));
 
 	m_GameGUI = gameGUI;
 

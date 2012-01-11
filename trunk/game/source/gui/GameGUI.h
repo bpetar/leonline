@@ -47,6 +47,13 @@ struct SFloatingText
 	}
 };
 
+typedef struct
+{
+	stringw text;
+	IGUIFont* font;
+	recti rectangle;
+	SColor color;
+} TMenuItem;
 
 /**
  * \brief CGameGUI class creates windows and interface and buttons and sprites.
@@ -59,6 +66,8 @@ public:
 	CGameGUI();
 	~CGameGUI();
 	bool Init(CGameManager* gameMngr);
+	bool InitGameGUI();
+	bool InitMenu();
 	//void SetIconAtHand(stringw parent, stringw name);
 	bool OnEvent(const SEvent& event);
 	void DisplayContainerContent(s32 id, IVideoDriver* driver, IGUIEnvironment* env, CLevelManager* levelManager);
@@ -81,6 +90,7 @@ public:
 	void AddMsgBox(stringw title, stringw message);
 	void DrawFloatingText(vector3df pos, stringc text, u32 timeout, SColor color);
 	void renderFloatingTexts(IGUIFont* font, float elapsedTime);
+	void drawMenu(float elapsedTime);
 
 	CDialogWindow* getDialogManager() { return m_DialogWindow;}
 
@@ -136,6 +146,10 @@ private:
 
 	int m_OriginalMin[20];
 	int m_OriginalMax[20];
+
+	TMenuItem menuNew;
+	TMenuItem menuLoad;
+	TMenuItem menuExit;
 };
 
 #endif
