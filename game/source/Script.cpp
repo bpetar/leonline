@@ -95,25 +95,37 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
 			{
 				if (eventName.equals_ignore_case(xml->getNodeName()))
 				{
-					stringw name = xml->getNodeName();
 					stringw target = xml->getAttributeValue(L"target");
 					
-					if(name.equals_ignore_case("OnUseAgainst"))
+					if(eventName.equals_ignore_case("OnUseAgainst"))
 					{
 						//If event is "OnUseAgainst" additional condition must be met: target id must equal the id of clicked object.
 						//There can be multiple 'OnUseAgainst' events for different targets, so we check for target to return the right set of actions.
 						if(target.equals_ignore_case(stringw(id)))
 						{
-							scriptAction->event.name = name;
+							scriptAction->event.name = eventName;
 							scriptAction->event.target = target;
 							scriptAction->actions.clear();
 							scriptAction->conditions.clear();
 							loadingAction = true;
 						}
 					}
+					else if (eventName.equals_ignore_case("OnClick"))
+					{
+						//If event is "OnClick", object state is checked to see what actions to execute.
+						//loading only actions for current state of the game object
+						stringw state = xml->getAttributeValue(L"state");
+						if(m_GameManager->getLevelManager()->GetObjectState(id).equals_ignore_case(state))
+						{
+							scriptAction->event.name = eventName;
+							scriptAction->event.state = state;
+							scriptAction->actions.clear();
+							loadingAction = true;
+						}
+					}
 					else
 					{
-						scriptAction->event.name = name;
+						scriptAction->event.name = eventName;
 						scriptAction->event.target = target;
 						scriptAction->actions.clear();
 						scriptAction->conditions.clear();
@@ -175,7 +187,6 @@ void CScript::ParseScriptForActions(io::IXMLReader*xml, TScriptAction* scriptAct
  */
 void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 {
-	//CGameObject* go = m_GameManager->getLevelManager()->getGameObjectFromID(id);
 	CGameObject* go = m_GameManager->getLevelManager()->getGameObjectFromID(id);
 
 	switch(event)
