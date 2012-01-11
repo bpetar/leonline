@@ -988,6 +988,51 @@ void CGameGUI::ClearConsole()
 	m_Console->setText(L"");
 }
 
+bool positionInRectangle(position2di pos, recti rec)
+{
+	if((pos.X>rec.UpperLeftCorner.X)&&(pos.X<rec.LowerRightCorner.X)&&(pos.Y>rec.UpperLeftCorner.Y)&&(pos.Y<rec.LowerRightCorner.Y))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void CGameGUI::drawMenu(float elapsedTime)
+{
+	position2di markerPosition = position2di(0,0);
+	position2di mousePos = m_GameManager->getDevice()->getCursorControl()->getPosition();
+
+	if(!positionInRectangle(mousePos, menuNew.rectangle))
+	{
+		markerPosition.X = menuNew.rectangle.UpperLeftCorner.X-10;
+		markerPosition.Y = (menuNew.rectangle.LowerRightCorner.Y-menuNew.rectangle.UpperLeftCorner.Y)/2;
+		menuNew.font->draw(menuNew.text,menuNew.rectangle,menuNew.color);
+	}
+	else
+	{
+		menuNew.font->draw(menuNew.text,menuNew.rectangle,SColor(255,155,155,0));
+	}
+
+	if(!positionInRectangle(mousePos, menuLoad.rectangle))
+	{
+		menuLoad.font->draw(menuLoad.text,menuLoad.rectangle,menuLoad.color);
+	}
+	else
+	{
+		menuLoad.font->draw(menuLoad.text,menuLoad.rectangle,SColor(255,155,155,0));
+	}
+
+	if(!positionInRectangle(mousePos, menuExit.rectangle))
+	{
+		menuExit.font->draw(menuExit.text,menuExit.rectangle,menuExit.color);
+	}
+	else
+	{
+		menuExit.font->draw(menuExit.text,menuExit.rectangle,SColor(255,155,155,0));
+	}
+}
+
 /**
  * \brief Initializes all windows and gui elements...
  * 
@@ -997,13 +1042,51 @@ void CGameGUI::ClearConsole()
 bool CGameGUI::Init(CGameManager* gameMngr)
 {
 	m_GameManager = gameMngr;
+	return true;
+}
 
+bool CGameGUI::InitMenu()
+{
+	// add irrlicht logo
+	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(IRRLOGO_FILE), position2d<s32>(50,50));
+
+	//add menu options
+	menuNew.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_NEW);
+	menuNew.rectangle = recti(60,210,350,260);
+	menuNew.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	menuNew.color = SColor(255,255,255,255);
+
+	menuLoad.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LOAD);
+	menuLoad.rectangle = recti(60,260,350,310);
+	menuLoad.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	menuLoad.color = SColor(255,255,255,255);
+
+	menuExit.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_EXIT);
+	menuExit.rectangle = recti(60,310,350,360);
+	menuExit.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	menuExit.color = SColor(255,255,255,255);
+
+	//add preferences
+	m_GameManager->getGUIEnvironment()->addCheckBox(false,recti(60,430,240,450));
+	IGUIComboBox* langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,460,240,480));
+	for (u32 i=0; i<m_GameManager->m_pLanguages->m_ListOfAvailableLanguages.size(); i++)
+	{
+		langCombo->addItem(stringw(m_GameManager->m_pLanguages->m_ListOfAvailableLanguages[i]->name.c_str()).c_str());
+	}
+	langCombo->setSelected(m_GameManager->m_pLanguages->m_Language->index);
+
+	return true;
+}
+
+bool CGameGUI::InitGameGUI()
+{
 	//init bars
 	for (int i=0; i<10; i++)
 	{
 		cs_skill_bars[i] = 0;
 		cs_ability_bars[i] = 0;
 	}
+
 	//Setting GUI transparency (alpha)
 	for (s32 i=0; i<irr::gui::EGDC_COUNT ; ++i)
 	{

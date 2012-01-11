@@ -27,6 +27,9 @@ CLanguages::CLanguages()
  */
 bool CLanguages::Init(IFileSystem* fs, stringc filepath)
 {
+	u32 index = 0;
+	m_FS = fs;
+
 	fs->changeWorkingDirectoryTo(filepath);
 
 	IFileList* fileList = fs->createFileList();
@@ -50,7 +53,9 @@ bool CLanguages::Init(IFileSystem* fs, stringc filepath)
 							TLanguage* lang = new TLanguage();
 							lang->name = xml->getAttributeValue(L"name");
 							lang->value = xml->getAttributeValue(L"value");
+							lang->index = index;
 							m_ListOfAvailableLanguages.push_back(lang);
+							index++;
 						}
 					}
 				}
@@ -78,6 +83,7 @@ bool CLanguages::setLanguage(stringc lang)
 		if(m_ListOfAvailableLanguages[i]->value.equals_ignore_case(lang))
 		{
 			m_Language->name = m_ListOfAvailableLanguages[i]->name;
+			m_Language->index = m_ListOfAvailableLanguages[i]->index;
 			found = true;
 		}
 	}
@@ -87,7 +93,54 @@ bool CLanguages::setLanguage(stringc lang)
 		printf("Language '%s' not found! Setting english as default language.\n", lang.c_str());
 		m_Language->value = "en";
 		m_Language->name = "english";
+		m_Language->index = 0;
+	}
+
+	//parse language xml and load strings to table
+
+	//
+	stringc file = m_Language->value + stringc("_strings.xml"); 
+	IXMLReader* xml = m_FS->createXMLReader(file);
+
+	if (xml)
+	{
+		//get language name and value from file
+		while(xml->read())
+		{
+			switch(xml->getNodeType())
+			{
+			case io::EXN_ELEMENT:
+				{
+					if (stringw("string").equals_ignore_case(xml->getNodeName()))
+					{
+						TLanguageString lang;
+						lang.id = xml->getAttributeValueAsInt(L"id");
+						lang.value = xml->getAttributeValue(L"value");
+						m_LanguageStringTable.push_back(lang);
+					}
+				}
+			}
+		}
+
+		xml->drop(); // don't forget to delete the xml reader
 	}
 
 	return found;
+}
+
+stringw CLanguages::getString(u32 id)
+{
+	stringw text;
+
+	if(id < m_LanguageStringTable.size())
+	{
+		text = m_LanguageStringTable[id].value;
+	}
+	else
+	{
+		//index out of bounds
+
+		text = "string not found";
+	}
+	return text;
 }

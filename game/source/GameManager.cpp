@@ -103,10 +103,14 @@ bool CGameManager::Init()
 	}
 	backToWorkingDirectory();
 
+	stringw text = m_pLanguages->getString(3);
+
 	//create level manager
 	m_pLevelManager = new CLevelManager();
 
+	//create gui manager
 	m_GameGUI = new CGameGUI();
+
 	if (!m_GameGUI->Init(this))
 		return false;
 
@@ -118,26 +122,17 @@ bool CGameManager::Init()
 	m_pLevelManager->Init(this, m_GameGUI);
 
 	//Load First Map
-	if (!m_pLevelManager->OnLoadMap(m_StartMap))
-		return false;
-
-	m_WorkingDirectory = m_FS->getWorkingDirectory();
-	printf("%s",m_WorkingDirectory.c_str());
-
-	printf("\n\nPERA\n\n");
+	//if (!m_pLevelManager->OnLoadMap(m_StartMap))
+	//	return false;
 
 	//Load Player Character
-	m_pPC = new CPlayerCharacter(this);
-	stringc playerFile = stringc("game/") + m_PlayerConfigFile;
-	if (!m_pPC->Load(m_pDevice,m_pSceneManager,playerFile.c_str()))
-	{
-		return false;
-	}
-
-	m_WorkingDirectory = m_FS->getWorkingDirectory();
-	printf("%s",m_WorkingDirectory.c_str());
-
-	m_pPC->setPosition(m_pLevelManager->GetStartPosition());
+	//m_pPC = new CPlayerCharacter(this);
+	//stringc playerFile = stringc("game/") + m_PlayerConfigFile;
+	//if (!m_pPC->Load(m_pDevice,m_pSceneManager,playerFile.c_str()))
+	//{
+	//	return false;
+	//}
+	//m_pPC->setPosition(m_pLevelManager->GetStartPosition());
 
 	m_pScriptEngine = new CScript();
 	if(!m_pScriptEngine->Init(this, m_pDevice,"media/Scripts/actions.script"))
@@ -151,22 +146,27 @@ bool CGameManager::Init()
 	if((m_MousePointerTexture == 0)||(m_MousePointerActionTexture == 0)||(m_MousePointerPickableDraggingTexture == 0)||(m_MousePointerAttackTexture == 0))
 		return false;
 
-	m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
+	//m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
 
 	//colision response
-	m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
-	m_pLevelManager->SetMonstersCollisionAnimator();
+	//m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
+	//m_pLevelManager->SetMonstersCollisionAnimator();
 
 	InitNPCDialogs();
 
 	//load conditions from file
 	LoadConditions("media/Scripts/conditions.script");
+	
+	m_Font_Garamond14 = m_pGUIEnvironment->getFont("media/Garamond14.xml");//m_pGUIEnvironment->getBuiltInFont();
 
+	LoadMainMenu();
+	
+	m_GameState = GAME_STATE_MAIN_MENU;
 
 	m_bInitOk = true;
 
-	stringw message  = "Welcome to game example!\n\nThis game is simple example of what can be made with Level Editor. At the moment this is kind of simple 3rd person rpg adventure. \n\nClick around to move and interact with objects. Adjust camera with right mouse click (press hold and move). \n";
-	m_GameGUI->AddMsgBox(L"Welcome!", message.c_str());
+	//stringw message  = "Welcome to game example!\n\nThis game is simple example of what can be made with Level Editor. At the moment this is kind of simple 3rd person rpg adventure. \n\nClick around to move and interact with objects. Adjust camera with right mouse click (press hold and move). \n";
+	//m_GameGUI->AddMsgBox(L"Welcome!", message.c_str());
 
 	// -> moved to level manager
 	// play some sound stream, looped
@@ -175,6 +175,41 @@ bool CGameManager::Init()
 	//m_SoundEngine->play2D(m_pLevelManager->GetLevelNarationFile().c_str(), true);
 
 	return true;
+}
+
+void CGameManager::LoadMainMenu()
+{
+	m_GameGUI->InitMenu();
+}
+
+void CGameManager::PlayIntroMovie()
+{
+}
+
+void CGameManager::NewGame()
+{
+	//if (!m_GameGUI->InitGameGUI(this))
+	//	return false;
+
+	//Load First Map
+	//if (!m_pLevelManager->OnLoadMap(m_StartMap))
+	//	return false;
+
+	//Load Player Character
+	//m_pPC = new CPlayerCharacter(this);
+	//stringc playerFile = stringc("game/") + m_PlayerConfigFile;
+	//if (!m_pPC->Load(m_pDevice,m_pSceneManager,playerFile.c_str()))
+	//{
+	//	return false;
+	//}
+	//m_pPC->setPosition(m_pLevelManager->GetStartPosition());
+
+	//m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
+
+	//colision response
+	//m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
+	//m_pLevelManager->SetMonstersCollisionAnimator();
+
 }
 
 /*
@@ -682,64 +717,126 @@ void CGameManager::Update(f32 elapsed_time)
 		elapsed_time = 1;
 	}
 
-	if(m_bDoAction)
-	{
-		debugPrint("m_bDoAction: %d\n",m_ClickedNodeID);
-		m_pLevelManager->Action(m_ClickedNodeID);
-		m_bDoAction = false;
-		return;
-	}
-
-	if(m_fHittingInProgress > 0)
-	{
-		m_fHittingInProgress -= elapsed_time;
-	}
-
 	m_pDriver->beginScene(true, true, SColor(255,0,0,0));
-	if (m_pPC && m_pPC->isAlive())
-	{
-		m_pPC->update(elapsed_time);
-		if(m_ePCMove == PC_MOVE_STARTS_MOVING)
-		{
-			m_pLevelManager->MoveCamera(m_pPC->getPosition());
-			m_SoundEngine->setListenerPosition(m_pPC->getPosition() + vector3df(0,+10,0), vector3df(0,-1,0));
-			//check if player approached some activation area
-			m_pLevelManager->CheckAreaApproach(m_pPC->getPosition());
-		}
-		if(m_pPC->m_bTranslated)
-		{
-			m_pPC->idle();
-			m_pLevelManager->MoveCamera(m_pPC->getPosition());
-			m_SoundEngine->setListenerPosition(m_pPC->getPosition() + vector3df(0,+10,0), vector3df(0,-1,0));
-			//check if player approached some activation area
-			m_pLevelManager->CheckAreaApproach(m_pPC->getPosition());
-		}
 
-		if(m_pPC->getPosition().Y < -50)
-		{
-			//you fell off the world?
-			HandleDeath("You fell off the edge of the world?");
-		}
-	}
-
-	IGUIFont* font = m_pGUIEnvironment->getFont("media/Garamond14.xml");//m_pGUIEnvironment->getBuiltInFont();
 	m_pSceneManager->drawAll();
-
-	//update and move some objects 'manually'
-	m_pLevelManager->Update(m_pDriver, m_pDevice, elapsed_time, m_pPC, font);
-
-	m_GameGUI->healthBar->renderGUIBars(m_pDriver, font);
-	m_GameGUI->renderFloatingTexts(font, elapsed_time);
+	m_pGUIEnvironment->drawAll();
 
 	// display frames per second in window title
 	int fps = m_pDriver->getFPS();
 	stringw str = "FPS: ";
 	str += fps;
-	font->draw(str, recti(0,0,90,30),SColor(255,255,255,255));
+	m_Font_Garamond14->draw(str, recti(80,30,140,50),SColor(255,255,255,255));
 
-	m_pGUIEnvironment->drawAll();
+	if(m_GameState == GAME_STATE_LEVEL)
+	{
 
-	if(m_GameGUI->m_wnd_charSheet)
+		if(m_bDoAction)
+		{
+			debugPrint("m_bDoAction: %d\n",m_ClickedNodeID);
+			m_pLevelManager->Action(m_ClickedNodeID);
+			m_bDoAction = false;
+			return;
+		}
+
+		if(m_fHittingInProgress > 0)
+		{
+			m_fHittingInProgress -= elapsed_time;
+		}
+		
+		if (m_pPC && m_pPC->isAlive())
+		{
+			m_pPC->update(elapsed_time);
+			if(m_ePCMove == PC_MOVE_STARTS_MOVING)
+			{
+				m_pLevelManager->MoveCamera(m_pPC->getPosition());
+				m_SoundEngine->setListenerPosition(m_pPC->getPosition() + vector3df(0,+10,0), vector3df(0,-1,0));
+				//check if player approached some activation area
+				m_pLevelManager->CheckAreaApproach(m_pPC->getPosition());
+			}
+			if(m_pPC->m_bTranslated)
+			{
+				m_pPC->idle();
+				m_pLevelManager->MoveCamera(m_pPC->getPosition());
+				m_SoundEngine->setListenerPosition(m_pPC->getPosition() + vector3df(0,+10,0), vector3df(0,-1,0));
+				//check if player approached some activation area
+				m_pLevelManager->CheckAreaApproach(m_pPC->getPosition());
+			}
+
+			if(m_pPC->getPosition().Y < -50)
+			{
+				//you fell off the world?
+				HandleDeath("You fell off the edge of the world?");
+			}
+		}
+
+		//update and move some objects 'manually'
+		m_pLevelManager->Update(m_pDriver, m_pDevice, elapsed_time, m_pPC, m_Font_Garamond14);
+
+		m_GameGUI->healthBar->renderGUIBars(m_pDriver, m_Font_Garamond14);
+		m_GameGUI->renderFloatingTexts(m_Font_Garamond14, elapsed_time);
+
+		//draw cursor hand depending on situation
+		if(m_GameGUI->m_bDraggingPickableItem)
+		{
+			video::SColor color = video::SColor(125,255,255,255);
+			if(m_pLevelManager->m_pHoverOverActionNode)
+			{
+				color = video::SColor(255,255,255,255);
+			}
+			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerPickableDraggingTexture,
+				m_pDevice->getCursorControl()->getPosition()+position2di(-15, -15),
+					core::rect<s32>(0,0,82,78), 0, 
+					color, true);
+			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_GameGUI->m_pDraggedPickableItem->m_IconTexture,m_pDevice->getCursorControl()->getPosition()+position2di(-25, -25));
+		}
+		else if(m_pLevelManager->m_pHoverOverMonsterNode)
+		{
+			if(m_fHittingInProgress <= 0)
+			{
+				m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerAttackTexture,
+					m_pDevice->getCursorControl()->getPosition(),
+						core::rect<s32>(0,0,50,50), 0, 
+						video::SColor(255,255,255,255), true);
+			}
+			else
+			{
+				m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerAttackTexture,
+					m_pDevice->getCursorControl()->getPosition(),
+						core::rect<s32>(0,0,50,50), 0, 
+						video::SColor(115,255,255,255), true);
+			}
+		}
+		else if (m_pLevelManager->m_pHoverOverActionNode)
+		{
+			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerActionTexture,
+				m_pDevice->getCursorControl()->getPosition(),
+					core::rect<s32>(0,0,50,50), 0, 
+					video::SColor(255,255,255,255), true);
+		}
+		else
+		{
+			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerTexture,
+				m_pDevice->getCursorControl()->getPosition(),
+					core::rect<s32>(0,0,50,50), 0, 
+					video::SColor(255,255,255,255), true);
+		}
+	}
+	else if(m_GameState == GAME_STATE_MAIN_MENU)
+	{
+		//draw menu
+		m_GameGUI->drawMenu(elapsed_time);
+
+		//draw pointer
+		m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerTexture,
+				m_pDevice->getCursorControl()->getPosition(),
+					core::rect<s32>(0,0,50,50), 0, 
+					video::SColor(255,255,255,255), true);
+
+	}
+
+
+	/*if(m_GameGUI->m_wnd_charSheet)
 	{
 		//Im sorry for this code TODO: make guiBars gui elements!
 		int x = m_GameGUI->m_wnd_charSheet->getAbsolutePosition().UpperLeftCorner.X;
@@ -760,62 +857,17 @@ void CGameManager::Update(f32 elapsed_time)
 				m_GameGUI->cs_skill_bars[i]->renderGUIBars(m_pDriver, font);
 			}
 		}
-		/*m_GameGUI->cs_health->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_str->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_exp->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_dex->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_int->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_attack->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_defence->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_magic->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_gardenning->renderGUIBars(m_pDriver, font);
-		m_GameGUI->cs_level->renderGUIBars(m_pDriver, font);*/
-	}
-
-	if(m_GameGUI->m_bDraggingPickableItem)
-	{
-		video::SColor color = video::SColor(125,255,255,255);
-		if(m_pLevelManager->m_pHoverOverActionNode)
-		{
-			color = video::SColor(255,255,255,255);
-		}
-		m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerPickableDraggingTexture,
-			m_pDevice->getCursorControl()->getPosition()+position2di(-15, -15),
-				core::rect<s32>(0,0,82,78), 0, 
-				color, true);
-		m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_GameGUI->m_pDraggedPickableItem->m_IconTexture,m_pDevice->getCursorControl()->getPosition()+position2di(-25, -25));
-	}
-	else if(m_pLevelManager->m_pHoverOverMonsterNode)
-	{
-		if(m_fHittingInProgress <= 0)
-		{
-			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerAttackTexture,
-				m_pDevice->getCursorControl()->getPosition(),
-					core::rect<s32>(0,0,50,50), 0, 
-					video::SColor(255,255,255,255), true);
-		}
-		else
-		{
-			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerAttackTexture,
-				m_pDevice->getCursorControl()->getPosition(),
-					core::rect<s32>(0,0,50,50), 0, 
-					video::SColor(115,255,255,255), true);
-		}
-	}
-	else if (m_pLevelManager->m_pHoverOverActionNode)
-	{
-		m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerActionTexture,
-			m_pDevice->getCursorControl()->getPosition(),
-				core::rect<s32>(0,0,50,50), 0, 
-				video::SColor(255,255,255,255), true);
-	}
-	else
-	{
-		m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerTexture,
-			m_pDevice->getCursorControl()->getPosition(),
-				core::rect<s32>(0,0,50,50), 0, 
-				video::SColor(255,255,255,255), true);
-	}
+		//m_GameGUI->cs_health->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_str->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_exp->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_dex->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_int->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_attack->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_defence->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_magic->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_gardenning->renderGUIBars(m_pDriver, font);
+		//m_GameGUI->cs_level->renderGUIBars(m_pDriver, font);
+	}*/
 
 	m_pDriver->endScene();
 }
@@ -1024,125 +1076,114 @@ bool CGameManager::OnEvent(const SEvent& event)
 	if (!m_pDriver || !m_bInitOk)
 		return false;
 
-	//Gui Handles its own events here
-	if(m_GameGUI->OnEvent(event))
-		return false; //false will let irrlicht handle events too
-
-	//3D level environment handles events here
-	if (m_pLevelManager->OnEvent(event))
-		return false; //false will let irrlicht handle events too
-
-	if (event.EventType == EET_KEY_INPUT_EVENT)
+	if(m_GameState == GAME_STATE_LEVEL)
 	{
-		if(event.KeyInput.PressedDown){
-			if(event.KeyInput.Key==KEY_F2){
-				//if(console->isVisible())
-				return true;
-			}
-			else{
-				//m_bKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
-				// Pass input down to the specific game state keyboard handler
-			}
-		}
-	}
+		//Gui Handles its own events here
+		if(m_GameGUI->OnEvent(event))
+			return false; //false will let irrlicht handle events too
+		
+		//3D level environment handles events here
+		if (m_pLevelManager->OnEvent(event))
+			return false; //false will let irrlicht handle events too
 
-	if (event.EventType == EET_MOUSE_INPUT_EVENT)
-	{
-		// Pass input down to the specific game state mouse handler
-		switch(event.MouseInput.Event)
+		if (event.EventType == EET_MOUSE_INPUT_EVENT)
 		{
-			case EMIE_LMOUSE_PRESSED_DOWN:
-				{
-					//If player is moved by some force, ignore user input for the time being
-					if(m_pPC->m_bTranslated)
-						return false;
+			// Pass input down to the specific game state mouse handler
+			switch(event.MouseInput.Event)
+			{
+				case EMIE_LMOUSE_PRESSED_DOWN:
+					{
+						//If player is moved by some force, ignore user input for the time being
+						if(m_pPC->m_bTranslated)
+							return false;
 
-					//Player clicked on something, lets fined out what
-					m_AttackTargetID = 0;
-					m_ClickedNodeID = 0;
+						//Player clicked on something, lets fined out what
+						m_AttackTargetID = 0;
+						m_ClickedNodeID = 0;
 					
-					//If mouse pointer was above monster we don't have to calculate again... its monster he clicked on!
-					if(m_pLevelManager->m_pHoverOverMonsterNode)
-					{
-						if(_isNodeClose(m_pPC->node->getPosition(),m_pLevelManager->m_pHoverOverMonsterNode->getPosition()))
+						//If mouse pointer was above monster we don't have to calculate again... its monster he clicked on!
+						if(m_pLevelManager->m_pHoverOverMonsterNode)
 						{
-							//Click on the monster. Include animations and hit delays.
-							if(m_fHittingInProgress <= 0)
+							if(_isNodeClose(m_pPC->node->getPosition(),m_pLevelManager->m_pHoverOverMonsterNode->getPosition()))
 							{
-								m_fHittingInProgress = HIT_TIME_DELAY;
-								m_pPC->attackMonster(m_pLevelManager->m_pHoverOverMonsterNode);
-								m_SoundEngine->play3D(m_pPC->GetSound(EAttack).c_str(), m_pPC->getPosition(),false);
-							}
-							m_ClickedNodeID = m_AttackTargetID = m_pLevelManager->m_pHoverOverMonsterNode->getID();
-							debugPrint("click on monster %d\n",m_ClickedNodeID);						}
-						else
-						{
-							//move pc to approach hit node as action object
-							m_pPC->setTargetNode(m_pLevelManager->m_pHoverOverMonsterNode);
-							m_ePCMove = PC_MOVE_STARTS_MOVING;
-							if(m_fHittingInProgress <= 0)
-							{
+								//Click on the monster. Include animations and hit delays.
+								if(m_fHittingInProgress <= 0)
+								{
+									m_fHittingInProgress = HIT_TIME_DELAY;
+									m_pPC->attackMonster(m_pLevelManager->m_pHoverOverMonsterNode);
+									m_SoundEngine->play3D(m_pPC->GetSound(EAttack).c_str(), m_pPC->getPosition(),false);
+								}
 								m_ClickedNodeID = m_AttackTargetID = m_pLevelManager->m_pHoverOverMonsterNode->getID();
+								debugPrint("click on monster %d\n",m_ClickedNodeID);						}
+							else
+							{
+								//move pc to approach hit node as action object
+								m_pPC->setTargetNode(m_pLevelManager->m_pHoverOverMonsterNode);
+								m_ePCMove = PC_MOVE_STARTS_MOVING;
+								if(m_fHittingInProgress <= 0)
+								{
+									m_ClickedNodeID = m_AttackTargetID = m_pLevelManager->m_pHoverOverMonsterNode->getID();
+								}
 							}
 						}
-					}
-					//If mouse pointer was hovering above action item (pickable, NPC, trigger...)
-					else if (m_pLevelManager->m_pHoverOverActionNode)
-					{
-						if(_isNodeClose(m_pPC->node->getPosition(),m_pLevelManager->m_pHoverOverActionNode->getPosition()))
+						//If mouse pointer was hovering above action item (pickable, NPC, trigger...)
+						else if (m_pLevelManager->m_pHoverOverActionNode)
 						{
-								//skip moving, interact right away
+							if(_isNodeClose(m_pPC->node->getPosition(),m_pLevelManager->m_pHoverOverActionNode->getPosition()))
+							{
+									//skip moving, interact right away
+									m_ClickedNodeID = m_pLevelManager->m_pHoverOverActionNode->getID();
+									m_bDoAction = true;
+							}
+							else
+							{
+								//move pc to approach hit node as action object
 								m_ClickedNodeID = m_pLevelManager->m_pHoverOverActionNode->getID();
-								m_bDoAction = true;
+								m_pPC->setTargetNode(m_pLevelManager->m_pHoverOverActionNode);
+								m_ePCMove = PC_MOVE_STARTS_MOVING;
+							}
 						}
+						// User clicked on terrain or some silly object
 						else
 						{
-							//move pc to approach hit node as action object
-							m_ClickedNodeID = m_pLevelManager->m_pHoverOverActionNode->getID();
-							m_pPC->setTargetNode(m_pLevelManager->m_pHoverOverActionNode);
-							m_ePCMove = PC_MOVE_STARTS_MOVING;
-						}
-					}
-					// User clicked on terrain or some silly object
-					else
-					{
-						const ISceneNode* hitNode = 0;
-						vector3df instersection_point; //intersection of terrain and mouse click
-						triangle3df instersection_triangle; //not used, but needed as parameter for function call
-						line3d<f32> picking_line = getSceneMngr()->getSceneCollisionManager()->getRayFromScreenCoordinates(getDevice()->getCursorControl()->getPosition());
-						IMetaTriangleSelector* selector = m_pLevelManager->GetLevelMetaTriangleSelector();
-						getSceneMngr()->getSceneCollisionManager()->getCollisionPoint(picking_line,selector,instersection_point,instersection_triangle,hitNode);					
+							const ISceneNode* hitNode = 0;
+							vector3df instersection_point; //intersection of terrain and mouse click
+							triangle3df instersection_triangle; //not used, but needed as parameter for function call
+							line3d<f32> picking_line = getSceneMngr()->getSceneCollisionManager()->getRayFromScreenCoordinates(getDevice()->getCursorControl()->getPosition());
+							IMetaTriangleSelector* selector = m_pLevelManager->GetLevelMetaTriangleSelector();
+							getSceneMngr()->getSceneCollisionManager()->getCollisionPoint(picking_line,selector,instersection_point,instersection_triangle,hitNode);					
 
-						if ((hitNode != 0)&&(hitNode->getID() >= 0)) 
-						{
-							m_ClickedNodeID = hitNode->getID();
-							//User clicked on terrain?
-							if(m_pLevelManager->isNodeTerrain(hitNode))
+							if ((hitNode != 0)&&(hitNode->getID() >= 0)) 
 							{
-								if(m_GameGUI->m_bDraggingPickableItem)
+								m_ClickedNodeID = hitNode->getID();
+								//User clicked on terrain?
+								if(m_pLevelManager->isNodeTerrain(hitNode))
 								{
-									//drop pickable item on terrain
-									m_GameGUI->m_bDraggingPickableItem = false;
-									m_pLevelManager->DropPickableToMap(m_GameGUI->m_pDraggedPickableItem,instersection_point + vector3df(0,1,0));
-									m_GameGUI->m_pDraggedPickableItem = 0;
+									if(m_GameGUI->m_bDraggingPickableItem)
+									{
+										//drop pickable item on terrain
+										m_GameGUI->m_bDraggingPickableItem = false;
+										m_pLevelManager->DropPickableToMap(m_GameGUI->m_pDraggedPickableItem,instersection_point + vector3df(0,1,0));
+										m_GameGUI->m_pDraggedPickableItem = 0;
+									}
+									else
+									{
+										//move pc to point where clicked on the terrain.
+										m_pPC->setTargetPosition(instersection_point); 
+										m_Arrows->Play(instersection_point + vector3df(0,5,0));
+										m_ePCMove = PC_MOVE_STARTS_MOVING;
+									}
 								}
-								else
+								else 
 								{
-									//move pc to point where clicked on the terrain.
-									m_pPC->setTargetPosition(instersection_point); 
-									m_Arrows->Play(instersection_point + vector3df(0,5,0));
-									m_ePCMove = PC_MOVE_STARTS_MOVING;
+									//click on the non terrain non action item
+									m_GameGUI->AddConsoleText(L"Nothing to be had there...");
 								}
-							}
-							else 
-							{
-								//click on the non terrain non action item
-								m_GameGUI->AddConsoleText(L"Nothing to be had there...");
 							}
 						}
 					}
-				}
-				break;
+					break;
+			}
 		}
 	}
 
