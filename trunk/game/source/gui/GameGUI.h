@@ -68,8 +68,10 @@ public:
 	bool Init(CGameManager* gameMngr);
 	bool InitGameGUI();
 	bool InitMenu();
+	void ClearMenu();
 	//void SetIconAtHand(stringw parent, stringw name);
 	bool OnEvent(const SEvent& event);
+	bool OnMenuEvent(const SEvent& event);
 	void DisplayContainerContent(s32 id, IVideoDriver* driver, IGUIEnvironment* env, CLevelManager* levelManager);
 	void DisplayOptionsWindow(IGUIEnvironment* env);
 	void DisplayCharacterSheetWindow(IGUIEnvironment* env);
@@ -102,6 +104,7 @@ public:
 	CGUIBar* healthBar;
 	array <SFloatingText*> m_FloatingTexts;
 	u32 m_NumberOfSkills;
+	bool m_pHoverOverMenuItem;
 
 	CGUIBar* cs_ability_bars[10];
 	CGUIBar* cs_skill_bars[10];
@@ -147,9 +150,13 @@ private:
 	int m_OriginalMin[20];
 	int m_OriginalMax[20];
 
-	TMenuItem menuNew;
-	TMenuItem menuLoad;
-	TMenuItem menuExit;
+	TMenuItem m_GameName;
+	TMenuItem m_MenuNew;
+	TMenuItem m_MenuLoad;
+	TMenuItem m_MenuExit;
+	TMenuItem m_FullscreenText;
+	IGUIComboBox* m_langCombo;
+	IGUICheckBox* m_fullscreenCheck;
 };
 
 #endif
