@@ -18,6 +18,7 @@
 CGameGUI::CGameGUI()
 {
 	m_GameManager = NULL;
+	m_pHoverOverMenuItem = false;
 	m_hoveredSlot = -1;
 	m_wnd_containerContent = NULL;
 	m_wnd_options = 0;
@@ -694,6 +695,84 @@ bool CGameGUI::OnEvent(const SEvent& event)
 	return false;
 }
 
+/**
+ * \brief Event handler - handles user clicks (mouse and keyboard).
+ *
+ * \author Petar Bajic 
+ * \date July, 21 2008.
+ */
+bool CGameGUI::OnMenuEvent(const SEvent& event)
+{
+	if(!m_GameManager)
+		return false;
+
+	IGUIEnvironment* env = m_GameManager->getGUIEnvironment();
+
+	if(event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		core::position2d<s32> p(event.MouseInput.X, event.MouseInput.Y);
+
+		//This is code checks if menu item is clicked
+		if (event.MouseInput.Event == EMIE_LMOUSE_LEFT_UP)
+		{
+			if(m_MenuNew.rectangle.isPointInside(p))
+			{
+				//new game clicked
+				m_GameManager->ExitMainMenu();
+				m_GameManager->PlayIntroMovie();
+			}
+			else if(m_MenuLoad.rectangle.isPointInside(p))
+			{
+				//load game clicked
+				m_GameManager->LoadGame(false);
+			}
+			else if(m_MenuExit.rectangle.isPointInside(p))
+			{
+				//exit game clicked
+				m_GameManager->ExitGame();
+			}
+		}
+	}
+	else if (event.EventType == EET_GUI_EVENT)
+	{
+		s32 id = event.GUIEvent.Caller->getID();
+
+			switch(event.GUIEvent.EventType)
+			{
+			case EGET_CHECKBOX_CHANGED:
+				{
+					if(m_fullscreenCheck->getID()==id)
+					{
+						//reset device to change fullscreen
+						m_GameManager->ReCreateDevice(m_fullscreenCheck->isChecked());
+						InitMenu();
+					}
+				}
+				break;
+			case EGET_COMBO_BOX_CHANGED:
+				{
+					if(m_langCombo->getID()==id)
+					{
+						//change language
+						s32 sel = m_langCombo->getSelected();
+
+						m_GameManager->getFS()->changeWorkingDirectoryTo("media/strings");
+						m_GameManager->m_pLanguages->setLanguage(sel);
+						m_GameManager->backToWorkingDirectory();
+
+						m_GameName.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_GAME_NAME);
+						m_MenuNew.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_NEW);
+						m_MenuLoad.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LOAD);
+						m_MenuExit.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_EXIT);
+						m_FullscreenText.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_FULLSCREEN);
+					}
+				}
+			}
+	}
+
+	return false;
+}
+
 void CGameGUI::renderFloatingTexts(IGUIFont* font, float elapsedTime)
 {
 	for (u32 i=0; i< m_FloatingTexts.size(); i++)
@@ -988,49 +1067,52 @@ void CGameGUI::ClearConsole()
 	m_Console->setText(L"");
 }
 
-bool positionInRectangle(position2di pos, recti rec)
-{
-	if((pos.X>rec.UpperLeftCorner.X)&&(pos.X<rec.LowerRightCorner.X)&&(pos.Y>rec.UpperLeftCorner.Y)&&(pos.Y<rec.LowerRightCorner.Y))
-	{
-		return true;
-	}
-
-	return false;
-}
-
 void CGameGUI::drawMenu(float elapsedTime)
 {
 	position2di markerPosition = position2di(0,0);
 	position2di mousePos = m_GameManager->getDevice()->getCursorControl()->getPosition();
 
-	if(!positionInRectangle(mousePos, menuNew.rectangle))
+	m_GameName.font->draw(m_GameName.text,m_GameName.rectangle,m_GameName.color);
+
+	if(!m_MenuNew.rectangle.isPointInside(mousePos))
 	{
-		markerPosition.X = menuNew.rectangle.UpperLeftCorner.X-10;
-		markerPosition.Y = (menuNew.rectangle.LowerRightCorner.Y-menuNew.rectangle.UpperLeftCorner.Y)/2;
-		menuNew.font->draw(menuNew.text,menuNew.rectangle,menuNew.color);
+		markerPosition.X = m_MenuNew.rectangle.UpperLeftCorner.X-10;
+		markerPosition.Y = (m_MenuNew.rectangle.LowerRightCorner.Y-m_MenuNew.rectangle.UpperLeftCorner.Y)/2;
+		m_MenuNew.font->draw(m_MenuNew.text,m_MenuNew.rectangle,m_MenuNew.color);
 	}
 	else
 	{
-		menuNew.font->draw(menuNew.text,menuNew.rectangle,SColor(255,155,155,0));
+		m_MenuNew.font->draw(m_MenuNew.text,m_MenuNew.rectangle,SColor(255,155,155,0));
 	}
 
-	if(!positionInRectangle(mousePos, menuLoad.rectangle))
+	if(!m_MenuLoad.rectangle.isPointInside(mousePos))
 	{
-		menuLoad.font->draw(menuLoad.text,menuLoad.rectangle,menuLoad.color);
+		m_MenuLoad.font->draw(m_MenuLoad.text,m_MenuLoad.rectangle,m_MenuLoad.color);
 	}
 	else
 	{
-		menuLoad.font->draw(menuLoad.text,menuLoad.rectangle,SColor(255,155,155,0));
+		m_MenuLoad.font->draw(m_MenuLoad.text,m_MenuLoad.rectangle,SColor(255,155,155,0));
 	}
 
-	if(!positionInRectangle(mousePos, menuExit.rectangle))
+	if(!m_MenuExit.rectangle.isPointInside(mousePos))
 	{
-		menuExit.font->draw(menuExit.text,menuExit.rectangle,menuExit.color);
+		m_MenuExit.font->draw(m_MenuExit.text,m_MenuExit.rectangle,m_MenuExit.color);
 	}
 	else
 	{
-		menuExit.font->draw(menuExit.text,menuExit.rectangle,SColor(255,155,155,0));
+		m_MenuExit.font->draw(m_MenuExit.text,m_MenuExit.rectangle,SColor(255,155,155,0));
 	}
+
+	if(m_MenuNew.rectangle.isPointInside(mousePos)||m_MenuLoad.rectangle.isPointInside(mousePos)||m_MenuExit.rectangle.isPointInside(mousePos))
+	{
+		m_pHoverOverMenuItem = true;
+	}
+	else
+	{
+		m_pHoverOverMenuItem = false;
+	}
+
+	m_FullscreenText.font->draw(m_FullscreenText.text,m_FullscreenText.rectangle,m_FullscreenText.color);
 }
 
 /**
@@ -1045,35 +1127,58 @@ bool CGameGUI::Init(CGameManager* gameMngr)
 	return true;
 }
 
+void CGameGUI::ClearMenu()
+{
+	//remove
+	//m_langCombo->remove();
+	//m_fullscreenCheck->remove();
+
+	//set invisible
+	m_langCombo->setVisible(false);
+	m_fullscreenCheck->setVisible(false);
+}
+
 bool CGameGUI::InitMenu()
 {
 	// add irrlicht logo
 	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(IRRLOGO_FILE), position2d<s32>(50,50));
 
+	//add game name
+	m_GameName.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_GAME_NAME);
+	m_GameName.rectangle = recti(60,180,350,360);
+	m_GameName.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin56.xml");
+	m_GameName.color = SColor(255,255,255,255);
+
 	//add menu options
-	menuNew.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_NEW);
-	menuNew.rectangle = recti(60,210,350,260);
-	menuNew.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
-	menuNew.color = SColor(255,255,255,255);
+	m_MenuNew.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_NEW);
+	m_MenuNew.rectangle = recti(60,260,350,310);
+	m_MenuNew.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	m_MenuNew.color = SColor(255,255,255,255);
 
-	menuLoad.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LOAD);
-	menuLoad.rectangle = recti(60,260,350,310);
-	menuLoad.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
-	menuLoad.color = SColor(255,255,255,255);
+	m_MenuLoad.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LOAD);
+	m_MenuLoad.rectangle = recti(60,310,350,360);
+	m_MenuLoad.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	m_MenuLoad.color = SColor(255,255,255,255);
 
-	menuExit.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_EXIT);
-	menuExit.rectangle = recti(60,310,350,360);
-	menuExit.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
-	menuExit.color = SColor(255,255,255,255);
+	m_MenuExit.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_EXIT);
+	m_MenuExit.rectangle = recti(60,360,350,410);
+	m_MenuExit.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	m_MenuExit.color = SColor(255,255,255,255);
 
 	//add preferences
-	m_GameManager->getGUIEnvironment()->addCheckBox(false,recti(60,430,240,450));
-	IGUIComboBox* langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,460,240,480));
+	
+	m_fullscreenCheck = m_GameManager->getGUIEnvironment()->addCheckBox(false,recti(60,460,100,480));
+	m_FullscreenText.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_FULLSCREEN);
+	m_FullscreenText.rectangle = recti(100,455,350,475);
+	m_FullscreenText.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin20.xml");
+	m_FullscreenText.color = SColor(255,255,255,255);
+
+	m_langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,500,260,520));
 	for (u32 i=0; i<m_GameManager->m_pLanguages->m_ListOfAvailableLanguages.size(); i++)
 	{
-		langCombo->addItem(stringw(m_GameManager->m_pLanguages->m_ListOfAvailableLanguages[i]->name.c_str()).c_str());
+		m_langCombo->addItem(stringw(m_GameManager->m_pLanguages->m_ListOfAvailableLanguages[i]->name.c_str()).c_str());
 	}
-	langCombo->setSelected(m_GameManager->m_pLanguages->m_Language->index);
+	m_langCombo->setSelected(m_GameManager->m_pLanguages->m_Language->index);
 
 	return true;
 }

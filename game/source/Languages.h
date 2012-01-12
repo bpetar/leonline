@@ -50,10 +50,13 @@ class CLanguages
 {
 public:
 
-	CLanguages();
+	CLanguages(IFileSystem* fs);
 
-	bool Init(IFileSystem* fs, stringc filename);
+	bool Init();
+	void setFS(IFileSystem* fs);
 	bool setLanguage(stringc lang);
+	bool setLanguage(s32 index);
+	void LoadStringTable();
 	stringw getString(u32 id);
 
 	IFileSystem* m_FS;

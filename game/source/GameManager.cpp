@@ -29,6 +29,8 @@ CGameManager::CGameManager()
 	m_ID = 0;
 	m_Arrows = 0;
 	m_FS = NULL;
+	m_pDevice = 0;
+	m_pFullscreenPreference = false;
 	m_GameGUI = NULL;
 	m_pLevelManager = NULL;
 	m_pPC = NULL;
@@ -66,17 +68,14 @@ bool CGameManager::Init()
 	m_bInitOk = false;
 
 	//create irrlicht device
-	CreateDevice();
-	//create GUI
-//	m_pGuiManager = new CGameGUI();
-//	m_pGuiManager->Init(this);
+	CreateDevice(m_pFullscreenPreference);
 
-	//we gonna use filesystem everywhere so lets store the pointer
-	m_FS = m_pDevice->getFileSystem();
-	
 	//Load data from XML config file
 	if (!LoadDataFromXMLConfig("game/game_config.xml"))
 		return false;
+
+	//recreate device with fullscreen preference...
+	//CreateDevice(m_pFullscreenPreference);
 
 	//set window caption
 	m_pDevice->setWindowCaption(m_WndCaption.c_str());
@@ -84,8 +83,7 @@ bool CGameManager::Init()
 	//set working dir to whatever XML config tells you
 	m_FS->changeWorkingDirectoryTo(m_WorkingDir.c_str());
 	m_WorkingDirectory = m_FS->getWorkingDirectory();
-
-	printf("%s",m_WorkingDirectory.c_str());
+	//printf("%s",m_WorkingDirectory.c_str());
 
 	// start the sound engine with default parameters
 	m_SoundEngine = createIrrKlangDevice();
@@ -94,16 +92,15 @@ bool CGameManager::Init()
 		return false; // error starting up the engine
 
 	//load languages
-	m_pLanguages = new CLanguages();
-	m_pLanguages->Init(m_FS, "media/strings");
+	m_pLanguages = new CLanguages(m_FS);
+	m_FS->changeWorkingDirectoryTo("media/strings");
+	m_pLanguages->Init();
 	bool ret = m_pLanguages->setLanguage(m_pLanguagePreference.c_str());
 	if(!ret)
 	{
 		//TODO: display warning message that language is not found!
 	}
 	backToWorkingDirectory();
-
-	stringw text = m_pLanguages->getString(3);
 
 	//create level manager
 	m_pLevelManager = new CLevelManager();
@@ -177,13 +174,42 @@ bool CGameManager::Init()
 	return true;
 }
 
+void CGameManager::ReCreateDevice(bool fullscreen)
+{
+	CreateDevice(fullscreen);
+	
+	//set window caption
+	m_pDevice->setWindowCaption(m_WndCaption.c_str());
+
+	//set working dir to whatever XML config tells you
+	m_FS->changeWorkingDirectoryTo(m_WorkingDir.c_str());
+
+	m_pLanguages->setFS(m_FS);
+
+	//recreate resources
+
+	m_pDevice->getCursorControl()->setVisible(false);
+	m_MousePointerTexture = m_pDriver->getTexture("media/Icons/mouse_pointer.png");
+	m_MousePointerActionTexture = m_pDriver->getTexture("media/Icons/mouse_action.png");
+	m_MousePointerAttackTexture = m_pDriver->getTexture("media/Icons/mouse_attack.png");
+	m_MousePointerPickableDraggingTexture = m_pDriver->getTexture("media/Icons/mouse_pick.png");
+
+	m_Font_Garamond14 = m_pGUIEnvironment->getFont("media/Garamond14.xml");//m_pGUIEnvironment->getBuiltInFont();
+}
+
 void CGameManager::LoadMainMenu()
 {
 	m_GameGUI->InitMenu();
 }
 
+void CGameManager::ExitMainMenu()
+{
+	m_GameGUI->ClearMenu();
+}
+
 void CGameManager::PlayIntroMovie()
 {
+	m_GameState = GAME_STATE_INTRO_MOVIE;
 }
 
 void CGameManager::NewGame()
@@ -524,6 +550,11 @@ void CGameManager::resetArrows()
 	}
 }
 
+void CGameManager::ExitGame()
+{
+	getDevice()->closeDevice();
+}
+
 /**
  * \brief Inform user he failed miserably, and offer him to restart the game.
  * It is hard to handle death. But we try here anyway. 
@@ -828,10 +859,20 @@ void CGameManager::Update(f32 elapsed_time)
 		m_GameGUI->drawMenu(elapsed_time);
 
 		//draw pointer
-		m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerTexture,
+		if (m_GameGUI->m_pHoverOverMenuItem)
+		{
+			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerActionTexture,
 				m_pDevice->getCursorControl()->getPosition(),
 					core::rect<s32>(0,0,50,50), 0, 
 					video::SColor(255,255,255,255), true);
+		}
+		else
+		{
+			m_pGUIEnvironment->getVideoDriver()->draw2DImage(m_MousePointerTexture,
+				m_pDevice->getCursorControl()->getPosition(),
+					core::rect<s32>(0,0,50,50), 0, 
+					video::SColor(255,255,255,255), true);
+		}
 
 	}
 
@@ -923,12 +964,19 @@ stringc CGameManager::getRootNameFromPathName(stringc meshName)
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CGameManager::CreateDevice()
+void CGameManager::CreateDevice(bool fullscreen)
 {
+	if(m_pDevice)
+	{
+		m_pDevice->closeDevice();
+		m_pDevice->run(); // Very important to do this here!
+		m_pDevice->drop();
+	}
 	//create irrlicht device and send "this" as event receiver meaning this class should 
 	//implement OnEvent function and handle its own events...
 	m_pDevice = createDevice( video::EDT_DIRECT3D9, dimension2d<u32>(950, 650), 16, false, false, false, this);
 	//m_pDevice->setResizeAble(true);
+	m_pDevice->setResizable(true);
    	m_pDriver = m_pDevice->getVideoDriver();
     m_pSceneManager = m_pDevice->getSceneManager();
 	m_pGUIEnvironment = m_pDevice->getGUIEnvironment();
@@ -936,6 +984,8 @@ void CGameManager::CreateDevice()
 	IGUIFont* font = m_pGUIEnvironment->getFont("media/Garamond14.xml");
 	m_pGUIEnvironment->getSkin()->setFont(font);
 
+	//we gonna use filesystem everywhere so lets store the pointer
+	m_FS = m_pDevice->getFileSystem();
 }
 
 /**
@@ -982,6 +1032,19 @@ bool CGameManager::LoadDataFromXMLConfig(stringc filename)
 					//Chosen Language.
 					figo = xml->getAttributeValue(L"value");
 					m_pLanguagePreference = figo.c_str();
+				}
+				else if (core::stringw("Fullscreen") == xml->getNodeName())
+				{
+					//Chosen Language.
+					figo = xml->getAttributeValue(L"value");
+					if(figo.equals_ignore_case("yes"))
+					{
+						m_pFullscreenPreference = true;
+					}
+					else
+					{
+						m_pFullscreenPreference = false;
+					}
 				}
 				else if (core::stringw("WindowCaption") == xml->getNodeName())
 				{
@@ -1186,6 +1249,13 @@ bool CGameManager::OnEvent(const SEvent& event)
 			}
 		}
 	}
+	else if(m_GameState == GAME_STATE_MAIN_MENU)
+	{
+		//Gui Handles its own events here
+		if(m_GameGUI->OnMenuEvent(event))
+			return false; //false will let irrlicht handle events too
+	}
+
 
 	return false;
 }

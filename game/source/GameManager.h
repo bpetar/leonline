@@ -90,6 +90,7 @@ public:
 	void Update(f32 elapsed_time);
 	bool Init();
 	void LoadMainMenu();
+	void ExitMainMenu();
 	void PlayIntroMovie();
 	void NewGame();
 	bool LoadDataFromXMLConfig(stringc filename);
@@ -98,6 +99,7 @@ public:
 	ISceneManager* getSceneMngr();
 	IGUIEnvironment* getGUIEnvironment();
 	void DisplayError();
+	void ExitGame();
 	CGameGUI* getGameGUI() {return m_GameGUI;}
 	CLevelManager* getLevelManager() {return m_pLevelManager;}
 	CPlayerCharacter* getPC() {return m_pPC;}
@@ -156,9 +158,12 @@ public:
 	CPlayerCharacter* m_pPC;
 	EPCMove m_ePCMove; //move to bool?
 	ISoundEngine* m_SoundEngine;
+
+	void CreateDevice(bool fullscreen);
+	void ReCreateDevice(bool fullscreen);
+	bool m_pFullscreenPreference;
 	
 private:
-	void CreateDevice();
 	void HandleDeath(stringw message);
 	IrrlichtDevice* m_pDevice;  
 	IVideoDriver* m_pDriver;
