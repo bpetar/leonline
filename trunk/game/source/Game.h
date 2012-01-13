@@ -36,6 +36,7 @@ private:
 	u32 new_time;
 	u32 old_time;
 	f32 elapsed_time;
+	bool m_Exit;
 };
 #endif
 
