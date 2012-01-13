@@ -92,8 +92,10 @@ public:
 	void LoadMainMenu();
 	void ExitMainMenu();
 	void PlayIntroMovie();
+	void ExitIntroMovie();
 	void NewGame();
 	bool LoadDataFromXMLConfig(stringc filename);
+	bool StoreDataToXMLConfig(stringc filename);
 	IrrlichtDevice* getDevice();
 	IVideoDriver* getDriver();
 	ISceneManager* getSceneMngr();
@@ -159,9 +161,17 @@ public:
 	EPCMove m_ePCMove; //move to bool?
 	ISoundEngine* m_SoundEngine;
 
-	void CreateDevice(bool fullscreen);
-	void ReCreateDevice(bool fullscreen);
-	bool m_pFullscreenPreference;
+	void CreateDevice(bool fullscreen, dimension2d<u32> resolution, u32 depth);
+	void ReCreateDevice();
+	void RestartDevice();
+	bool m_bFullscreenPreference;
+	dimension2d<u32> m_Resolution; // chosen resolution
+	dimension2d<u32> m_DesktopResolution;
+	u32 m_Depth;
+	//IVideoModeList* m_pVideoList;
+	array <TResolution> m_listOfResolutions;
+
+	bool m_bRestartDevice;
 	
 private:
 	void HandleDeath(stringw message);

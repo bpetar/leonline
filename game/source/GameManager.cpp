@@ -30,10 +30,16 @@ CGameManager::CGameManager()
 	m_Arrows = 0;
 	m_FS = NULL;
 	m_pDevice = 0;
-	m_pFullscreenPreference = false;
+	m_bFullscreenPreference = false;
 	m_GameGUI = NULL;
 	m_pLevelManager = NULL;
 	m_pPC = NULL;
+	m_WndCaption = "Test";
+	m_Resolution.Width = 800;
+	m_Resolution.Height = 600;
+	m_DesktopResolution.Width = 1280;
+	m_DesktopResolution.Height = 1024;
+	m_Depth = 32;
 	m_WorkingDirectory = ".";
 	m_bDoAction = false;
 	m_NumberOfMaps = 0;
@@ -42,6 +48,7 @@ CGameManager::CGameManager()
 	m_fHittingInProgress = -1.0f;
 	m_ListOfConditions.clear();
 	m_pLanguagePreference = "en";
+	m_bRestartDevice = false;
 }
 
 /**
@@ -67,15 +74,41 @@ bool CGameManager::Init()
 {
 	m_bInitOk = false;
 
-	//create irrlicht device
-	CreateDevice(m_pFullscreenPreference);
+	IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
 
+	m_FS = nulldevice->getFileSystem();
 	//Load data from XML config file
 	if (!LoadDataFromXMLConfig("game/game_config.xml"))
 		return false;
+	
+	IVideoModeList* pVideoList = nulldevice->getVideoModeList() ;
+	m_DesktopResolution = pVideoList->getDesktopResolution();
+	for (int i = 0 ; i < pVideoList->getVideoModeCount() ; i++)
+	{
+		TResolution resolution;
+		resolution.width = pVideoList->getVideoModeResolution(i).Width;
+		resolution.height = pVideoList->getVideoModeResolution(i).Height;
+		resolution.depth = pVideoList->getVideoModeDepth(i);
+		if(resolution.width < 800) continue;
+		if(resolution.width < resolution.height) continue;
+		if(resolution.depth < 32) continue;
+		resolution.text = stringc(resolution.width) + stringc("x") + stringc(resolution.height) + stringc(", ") + stringc(resolution.depth) + stringc("bit");
+
+		//m_resolutionCombo->addItem(resolution.text.c_str());
+		m_listOfResolutions.push_back(resolution);
+	}
+
+	nulldevice->drop();
+
+	//create irrlicht device
+	CreateDevice(m_bFullscreenPreference, (m_bFullscreenPreference?m_DesktopResolution:m_Resolution), m_Depth);
+
+	//Load data from XML config file
+	//if (!LoadDataFromXMLConfig("game/game_config.xml"))
+	//	return false;
 
 	//recreate device with fullscreen preference...
-	//CreateDevice(m_pFullscreenPreference);
+	//CreateDevice(m_bFullscreenPreference);
 
 	//set window caption
 	m_pDevice->setWindowCaption(m_WndCaption.c_str());
@@ -174,9 +207,9 @@ bool CGameManager::Init()
 	return true;
 }
 
-void CGameManager::ReCreateDevice(bool fullscreen)
+void CGameManager::ReCreateDevice()
 {
-	CreateDevice(fullscreen);
+	CreateDevice(m_bFullscreenPreference, (m_bFullscreenPreference?m_DesktopResolution:m_Resolution), m_Depth);
 	
 	//set window caption
 	m_pDevice->setWindowCaption(m_WndCaption.c_str());
@@ -195,6 +228,18 @@ void CGameManager::ReCreateDevice(bool fullscreen)
 	m_MousePointerPickableDraggingTexture = m_pDriver->getTexture("media/Icons/mouse_pick.png");
 
 	m_Font_Garamond14 = m_pGUIEnvironment->getFont("media/Garamond14.xml");//m_pGUIEnvironment->getBuiltInFont();
+	
+	LoadMainMenu();
+}
+
+void CGameManager::RestartDevice()
+{
+	m_bRestartDevice = true;
+	//Clearing old device
+	m_pDevice->closeDevice();
+	//m_pDevice->run(); // Very important to do this here!
+	m_pDevice->drop();
+
 }
 
 void CGameManager::LoadMainMenu()
@@ -210,10 +255,20 @@ void CGameManager::ExitMainMenu()
 void CGameManager::PlayIntroMovie()
 {
 	m_GameState = GAME_STATE_INTRO_MOVIE;
+	
+	m_GameGUI->InitIntroMovie();
+
+}
+
+void CGameManager::ExitIntroMovie()
+{
+	m_GameGUI->ClearIntroMovie();
 }
 
 void CGameManager::NewGame()
 {
+	m_GameState = GAME_STATE_LEVEL;
+
 	//if (!m_GameGUI->InitGameGUI(this))
 	//	return false;
 
@@ -875,6 +930,11 @@ void CGameManager::Update(f32 elapsed_time)
 		}
 
 	}
+	else if (m_GameState == GAME_STATE_INTRO_MOVIE)
+	{
+		//draw movie
+		m_GameGUI->drawIntroMovie(elapsed_time);
+	}
 
 
 	/*if(m_GameGUI->m_wnd_charSheet)
@@ -964,19 +1024,12 @@ stringc CGameManager::getRootNameFromPathName(stringc meshName)
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-void CGameManager::CreateDevice(bool fullscreen)
+void CGameManager::CreateDevice(bool fullscreen, dimension2d<u32> resolution, u32 depth)
 {
-	if(m_pDevice)
-	{
-		m_pDevice->closeDevice();
-		m_pDevice->run(); // Very important to do this here!
-		m_pDevice->drop();
-	}
 	//create irrlicht device and send "this" as event receiver meaning this class should 
 	//implement OnEvent function and handle its own events...
-	m_pDevice = createDevice( video::EDT_DIRECT3D9, dimension2d<u32>(950, 650), 16, false, false, false, this);
-	//m_pDevice->setResizeAble(true);
-	m_pDevice->setResizable(true);
+	m_pDevice = createDevice( video::EDT_DIRECT3D9, resolution, depth, fullscreen, false, false, this);
+	//m_pDevice->setResizable(true);
    	m_pDriver = m_pDevice->getVideoDriver();
     m_pSceneManager = m_pDevice->getSceneManager();
 	m_pGUIEnvironment = m_pDevice->getGUIEnvironment();
@@ -986,6 +1039,68 @@ void CGameManager::CreateDevice(bool fullscreen)
 
 	//we gonna use filesystem everywhere so lets store the pointer
 	m_FS = m_pDevice->getFileSystem();
+}
+
+
+/**
+ * \brief Save config data to given XML file
+ * \author Petar Bajic 
+ * \date July, 21 2008.
+ */
+bool CGameManager::StoreDataToXMLConfig(stringc filename)
+{
+	io::IXMLWriter* xml = m_FS->createXMLWriter(filename.c_str());
+
+	if (!xml)
+	{
+		//Display error message and exit
+		return false;
+	}
+
+	xml->writeXMLHeader();
+
+	xml->writeElement(L"Config",false); 
+	xml->writeLineBreak();
+	
+	xml->writeElement(L"MapStart",true,L"filename",stringw(m_StartMap).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"PlayerConfig",true,L"filename",stringw(m_PlayerConfigFile).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"WorkingDir",true,L"filename",stringw(m_WorkingDir).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"WindowCaption",true,L"text",stringw(m_WndCaption).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Language",true,L"name",stringw(m_pLanguages->m_Language->name).c_str(),L"value",stringw(m_pLanguages->m_Language->value).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Fullscreen",true,L"value",(m_bFullscreenPreference?L"true":L"false")); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Resolution",true,L"width",stringw(m_Resolution.Width).c_str(),L"height",stringw(m_Resolution.Height).c_str(),L"depth",stringw(m_Depth).c_str()); 
+	xml->writeLineBreak();
+	
+	xml->writeElement(L"Maps",false); 
+	xml->writeLineBreak();
+	
+	for(u32 i=0; i< m_NumberOfMaps; i++)
+	{
+		xml->writeElement(L"Level",true,L"id",stringw(i).c_str(),L"filename",stringw(m_Maps[i]).c_str()); 
+		xml->writeLineBreak();
+	}
+
+	xml->writeClosingTag(L"Maps");
+	xml->writeLineBreak();
+
+	xml->writeClosingTag(L"Config");
+	xml->writeLineBreak();
+
+	xml->drop(); // don't forget to delete the xml writer
+
+	return true;
 }
 
 /**
@@ -1033,17 +1148,27 @@ bool CGameManager::LoadDataFromXMLConfig(stringc filename)
 					figo = xml->getAttributeValue(L"value");
 					m_pLanguagePreference = figo.c_str();
 				}
+				else if (core::stringw("Resolution") == xml->getNodeName())
+				{
+					//Chosen Resolution.
+					u32 height = xml->getAttributeValueAsInt(L"height");
+					u32 width = xml->getAttributeValueAsInt(L"width");
+					u32 depth = xml->getAttributeValueAsInt(L"depth");
+					m_Resolution.Width = width;
+					m_Resolution.Height = height;
+					m_Depth = depth;
+				}
 				else if (core::stringw("Fullscreen") == xml->getNodeName())
 				{
 					//Chosen Language.
 					figo = xml->getAttributeValue(L"value");
-					if(figo.equals_ignore_case("yes"))
+					if(figo.equals_ignore_case("true"))
 					{
-						m_pFullscreenPreference = true;
+						m_bFullscreenPreference = true;
 					}
 					else
 					{
-						m_pFullscreenPreference = false;
+						m_bFullscreenPreference = false;
 					}
 				}
 				else if (core::stringw("WindowCaption") == xml->getNodeName())

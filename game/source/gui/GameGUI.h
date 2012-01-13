@@ -30,6 +30,11 @@ using namespace gui;
 #define GAME_CONST_CONTAINER_ID 1357
 #define GAME_CONST_INVENTORY_ID 1358
 
+enum GUI_ID
+{
+	GUI_ID_MAIN_MENU_COMBOBOX_LANGUAGE = 100,
+	GUI_ID_MAIN_MENU_COMBOBOX_RESOLUTION
+};
 
 struct SFloatingText
 {
@@ -53,8 +58,15 @@ typedef struct
 	IGUIFont* font;
 	recti rectangle;
 	SColor color;
-} TMenuItem;
+} TTextItem;
 
+typedef struct
+{
+	stringw text;
+	u32 height;
+	u32 width;
+	u32 depth;
+} TResolution;
 /**
  * \brief CGameGUI class creates windows and interface and buttons and sprites.
  *
@@ -68,10 +80,13 @@ public:
 	bool Init(CGameManager* gameMngr);
 	bool InitGameGUI();
 	bool InitMenu();
+	bool InitIntroMovie();
+	void ClearIntroMovie();
 	void ClearMenu();
 	//void SetIconAtHand(stringw parent, stringw name);
 	bool OnEvent(const SEvent& event);
 	bool OnMenuEvent(const SEvent& event);
+	bool OnMovieEvent(const SEvent& event);
 	void DisplayContainerContent(s32 id, IVideoDriver* driver, IGUIEnvironment* env, CLevelManager* levelManager);
 	void DisplayOptionsWindow(IGUIEnvironment* env);
 	void DisplayCharacterSheetWindow(IGUIEnvironment* env);
@@ -93,6 +108,7 @@ public:
 	void DrawFloatingText(vector3df pos, stringc text, u32 timeout, SColor color);
 	void renderFloatingTexts(IGUIFont* font, float elapsedTime);
 	void drawMenu(float elapsedTime);
+	void drawIntroMovie(float elapsedTime);
 
 	CDialogWindow* getDialogManager() { return m_DialogWindow;}
 
@@ -150,13 +166,19 @@ private:
 	int m_OriginalMin[20];
 	int m_OriginalMax[20];
 
-	TMenuItem m_GameName;
-	TMenuItem m_MenuNew;
-	TMenuItem m_MenuLoad;
-	TMenuItem m_MenuExit;
-	TMenuItem m_FullscreenText;
+	TTextItem m_GameName;
+	TTextItem m_MenuNew;
+	TTextItem m_MenuLoad;
+	TTextItem m_MenuExit;
+	TTextItem m_FullscreenText;
 	IGUIComboBox* m_langCombo;
+	IGUIComboBox* m_resolutionCombo;
 	IGUICheckBox* m_fullscreenCheck;
+
+	TTextItem m_MovieText1;
+	TTextItem m_MovieText2;
+	float m_MovieTextSlidingY;
+	
 };
 
 #endif

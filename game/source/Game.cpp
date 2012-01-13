@@ -17,6 +17,7 @@
  */
 CGame::CGame()
 {
+	m_Exit = false;
 }
 
 /**
@@ -30,16 +31,29 @@ bool CGame::run()
 	{
 		//m_GameManager.getDevice()->setWindowCaption(L"Level Game");
 
-		// Keep running game loop if device exists
-		while(m_GameManager.getDevice()->run())
+		while(!m_Exit)
 		{
-			new_time = m_GameManager.getDevice()->getTimer()->getTime();
-			elapsed_time = ( new_time - old_time ) / 1000.0f;
-			old_time = m_GameManager.getDevice()->getTimer()->getTime(); 
-
-			if (m_GameManager.getDevice()->isWindowActive())
+			// Keep running game loop if device exists
+			while(m_GameManager.getDevice()->run())
 			{
-		  		m_GameManager.Update(elapsed_time);
+				new_time = m_GameManager.getDevice()->getTimer()->getTime();
+				elapsed_time = ( new_time - old_time ) / 1000.0f;
+				old_time = m_GameManager.getDevice()->getTimer()->getTime(); 
+
+				if (m_GameManager.getDevice()->isWindowActive())
+				{
+		  			m_GameManager.Update(elapsed_time);
+				}
+			}
+
+			if(m_GameManager.m_bRestartDevice)
+			{
+				m_GameManager.m_bRestartDevice = false;
+				m_GameManager.ReCreateDevice();
+			}
+			else
+			{
+				m_Exit = true;
 			}
 		}
 	}

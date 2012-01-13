@@ -695,8 +695,36 @@ bool CGameGUI::OnEvent(const SEvent& event)
 	return false;
 }
 
+
 /**
- * \brief Event handler - handles user clicks (mouse and keyboard).
+ * \brief Event handler - handles user clicks (mouse and keyboard) while in intro movie.
+ *
+ * \author Petar Bajic 
+ * \date July, 21 2008.
+ */
+bool CGameGUI::OnMovieEvent(const SEvent& event)
+{
+	if(!m_GameManager)
+		return false;
+
+	IGUIEnvironment* env = m_GameManager->getGUIEnvironment();
+
+	if(event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		if (event.MouseInput.Event == EMIE_LMOUSE_LEFT_UP)
+		{
+			//exit movie on mouse click
+			m_GameManager->ExitIntroMovie();
+			m_GameManager->NewGame();
+		}
+	}
+
+	return false;
+}
+
+
+/**
+ * \brief Event handler - handles user clicks (mouse and keyboard) in main menu state.
  *
  * \author Petar Bajic 
  * \date July, 21 2008.
@@ -744,8 +772,10 @@ bool CGameGUI::OnMenuEvent(const SEvent& event)
 					if(m_fullscreenCheck->getID()==id)
 					{
 						//reset device to change fullscreen
-						m_GameManager->ReCreateDevice(m_fullscreenCheck->isChecked());
-						InitMenu();
+						m_GameManager->m_bFullscreenPreference = m_fullscreenCheck->isChecked();
+						m_GameManager->StoreDataToXMLConfig("game/game_config.xml");
+						m_GameManager->RestartDevice();
+						return true;
 					}
 				}
 				break;
@@ -759,12 +789,27 @@ bool CGameGUI::OnMenuEvent(const SEvent& event)
 						m_GameManager->getFS()->changeWorkingDirectoryTo("media/strings");
 						m_GameManager->m_pLanguages->setLanguage(sel);
 						m_GameManager->backToWorkingDirectory();
-
+						m_GameManager->StoreDataToXMLConfig("game/game_config.xml");
 						m_GameName.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_GAME_NAME);
 						m_MenuNew.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_NEW);
 						m_MenuLoad.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LOAD);
 						m_MenuExit.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_EXIT);
 						m_FullscreenText.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_FULLSCREEN);
+						return true;
+					}
+					else if(m_resolutionCombo->getID()==id)
+					{
+						//change resolution
+						s32 sel = m_resolutionCombo->getSelected();
+						m_GameManager->m_Resolution.Width = m_GameManager->m_listOfResolutions[sel].width;
+						m_GameManager->m_Resolution.Height = m_GameManager->m_listOfResolutions[sel].height;
+						m_GameManager->m_Depth = m_GameManager->m_listOfResolutions[sel].depth;
+
+						m_GameManager->StoreDataToXMLConfig("game/game_config.xml");
+
+						m_GameManager->RestartDevice();
+
+						return true;
 					}
 				}
 			}
@@ -1067,6 +1112,16 @@ void CGameGUI::ClearConsole()
 	m_Console->setText(L"");
 }
 
+void CGameGUI::drawIntroMovie(float elapsedTime)
+{
+	m_MovieTextSlidingY -= elapsedTime*15;
+	m_MovieText1.rectangle.UpperLeftCorner.Y = (s32)m_MovieTextSlidingY;
+	m_MovieText1.font->draw(m_MovieText1.text,m_MovieText1.rectangle,m_MovieText1.color);
+
+	m_MovieText2.rectangle.UpperLeftCorner.Y = (s32)m_MovieTextSlidingY + 100;
+	m_MovieText2.font->draw(m_MovieText2.text,m_MovieText2.rectangle,m_MovieText2.color, false, false, &(m_MovieText2.rectangle));
+}
+
 void CGameGUI::drawMenu(float elapsedTime)
 {
 	position2di markerPosition = position2di(0,0);
@@ -1127,6 +1182,10 @@ bool CGameGUI::Init(CGameManager* gameMngr)
 	return true;
 }
 
+void CGameGUI::ClearIntroMovie()
+{
+}
+
 void CGameGUI::ClearMenu()
 {
 	//remove
@@ -1136,6 +1195,24 @@ void CGameGUI::ClearMenu()
 	//set invisible
 	m_langCombo->setVisible(false);
 	m_fullscreenCheck->setVisible(false);
+	m_resolutionCombo->setVisible(false);
+}
+
+bool CGameGUI::InitIntroMovie()
+{
+	m_MovieText1.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_INTRO_MOVIE_TEXT1);
+	m_MovieText1.rectangle = recti(360,260,750,610);
+	m_MovieText1.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	m_MovieText1.color = SColor(255,255,255,255);
+	
+	m_MovieText2.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_INTRO_MOVIE_TEXT2);
+	m_MovieText2.rectangle = recti(360,360,750,610);
+	m_MovieText2.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
+	m_MovieText2.color = SColor(255,255,255,255);
+
+	m_MovieTextSlidingY = (float)m_MovieText1.rectangle.UpperLeftCorner.Y;
+
+	return true;
 }
 
 bool CGameGUI::InitMenu()
@@ -1168,12 +1245,29 @@ bool CGameGUI::InitMenu()
 	//add preferences
 	
 	m_fullscreenCheck = m_GameManager->getGUIEnvironment()->addCheckBox(false,recti(60,460,100,480));
+	m_fullscreenCheck->setChecked(m_GameManager->m_bFullscreenPreference);
 	m_FullscreenText.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_FULLSCREEN);
 	m_FullscreenText.rectangle = recti(100,455,350,475);
 	m_FullscreenText.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin20.xml");
 	m_FullscreenText.color = SColor(255,255,255,255);
 
-	m_langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,500,260,520));
+	//resolution combo
+	m_resolutionCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,500,260,520),0,GUI_ID_MAIN_MENU_COMBOBOX_RESOLUTION);
+	for (u32 i = 0 ; i < m_GameManager->m_listOfResolutions.size() ; i++)
+	{
+		m_resolutionCombo->addItem(m_GameManager->m_listOfResolutions[i].text.c_str());
+	}
+	m_resolutionCombo->setSelected(0);
+	for(u32 i=0; i<m_GameManager->m_listOfResolutions.size(); i++)
+	{
+		if((m_GameManager->m_listOfResolutions[i].width == m_GameManager->m_Resolution.Width)&&(m_GameManager->m_listOfResolutions[i].height == m_GameManager->m_Resolution.Height))
+		{
+			m_resolutionCombo->setSelected(i);
+		}
+	}
+
+	//language combo
+	m_langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,540,260,560),0,GUI_ID_MAIN_MENU_COMBOBOX_LANGUAGE);
 	for (u32 i=0; i<m_GameManager->m_pLanguages->m_ListOfAvailableLanguages.size(); i++)
 	{
 		m_langCombo->addItem(stringw(m_GameManager->m_pLanguages->m_ListOfAvailableLanguages[i]->name.c_str()).c_str());
