@@ -103,13 +103,6 @@ bool CGameManager::Init()
 	//create irrlicht device
 	CreateDevice(m_bFullscreenPreference, (m_bFullscreenPreference?m_DesktopResolution:m_Resolution), m_Depth);
 
-	//Load data from XML config file
-	//if (!LoadDataFromXMLConfig("game/game_config.xml"))
-	//	return false;
-
-	//recreate device with fullscreen preference...
-	//CreateDevice(m_bFullscreenPreference);
-
 	//set window caption
 	m_pDevice->setWindowCaption(m_WndCaption.c_str());
 
@@ -265,32 +258,31 @@ void CGameManager::ExitIntroMovie()
 	m_GameGUI->ClearIntroMovie();
 }
 
-void CGameManager::NewGame()
+bool CGameManager::NewGame()
 {
-	m_GameState = GAME_STATE_LEVEL;
-
-	//if (!m_GameGUI->InitGameGUI(this))
-	//	return false;
+	if (!m_GameGUI->InitGameGUI())
+		return false;
 
 	//Load First Map
-	//if (!m_pLevelManager->OnLoadMap(m_StartMap))
-	//	return false;
+	if (!m_pLevelManager->OnLoadMap(m_StartMap))
+		return false;
 
 	//Load Player Character
-	//m_pPC = new CPlayerCharacter(this);
-	//stringc playerFile = stringc("game/") + m_PlayerConfigFile;
-	//if (!m_pPC->Load(m_pDevice,m_pSceneManager,playerFile.c_str()))
-	//{
-	//	return false;
-	//}
-	//m_pPC->setPosition(m_pLevelManager->GetStartPosition());
+	m_pPC = new CPlayerCharacter(this);
+	stringc playerFile = stringc("game/") + m_PlayerConfigFile;
+	if (!m_pPC->Load(m_pDevice,m_pSceneManager,playerFile.c_str()))
+		return false;
+	m_pPC->setPosition(m_pLevelManager->GetStartPosition());
 
-	//m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
+	m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
 
 	//colision response
-	//m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
-	//m_pLevelManager->SetMonstersCollisionAnimator();
+	m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
+	m_pLevelManager->SetMonstersCollisionAnimator();
 
+	m_GameState = GAME_STATE_LEVEL;
+
+	return true;
 }
 
 /*
@@ -1030,6 +1022,10 @@ void CGameManager::CreateDevice(bool fullscreen, dimension2d<u32> resolution, u3
 	//implement OnEvent function and handle its own events...
 	m_pDevice = createDevice( video::EDT_DIRECT3D9, resolution, depth, fullscreen, false, false, this);
 	//m_pDevice->setResizable(true);
+
+	m_WindowWidth = resolution.Width;
+	m_WindowHeight = resolution.Height;
+
    	m_pDriver = m_pDevice->getVideoDriver();
     m_pSceneManager = m_pDevice->getSceneManager();
 	m_pGUIEnvironment = m_pDevice->getGUIEnvironment();
@@ -1378,6 +1374,12 @@ bool CGameManager::OnEvent(const SEvent& event)
 	{
 		//Gui Handles its own events here
 		if(m_GameGUI->OnMenuEvent(event))
+			return false; //false will let irrlicht handle events too
+	}
+	else if(m_GameState == GAME_STATE_INTRO_MOVIE)
+	{
+		//Gui Handles its own events here
+		if(m_GameGUI->OnMovieEvent(event))
 			return false; //false will let irrlicht handle events too
 	}
 

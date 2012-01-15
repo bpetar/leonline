@@ -66,11 +66,8 @@ bool CLanguages::Init()
 			xml->drop(); // don't forget to delete the xml reader
 		}
 
-		
 	}
-	
 
-	
 
 	return true;
 }

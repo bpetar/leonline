@@ -93,7 +93,7 @@ public:
 	void ExitMainMenu();
 	void PlayIntroMovie();
 	void ExitIntroMovie();
-	void NewGame();
+	bool NewGame();
 	bool LoadDataFromXMLConfig(stringc filename);
 	bool StoreDataToXMLConfig(stringc filename);
 	IrrlichtDevice* getDevice();
@@ -172,6 +172,9 @@ public:
 	array <TResolution> m_listOfResolutions;
 
 	bool m_bRestartDevice;
+
+	u32 m_WindowWidth;
+	u32 m_WindowHeight;
 	
 private:
 	void HandleDeath(stringw message);

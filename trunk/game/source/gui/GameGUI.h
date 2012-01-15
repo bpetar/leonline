@@ -178,6 +178,7 @@ private:
 	TTextItem m_MovieText1;
 	TTextItem m_MovieText2;
 	float m_MovieTextSlidingY;
+	IGUIStaticText* m_MovieText3;
 	
 };
 
