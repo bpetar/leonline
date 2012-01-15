@@ -718,6 +718,12 @@ bool CGameGUI::OnMovieEvent(const SEvent& event)
 			m_GameManager->NewGame();
 		}
 	}
+	else if(event.EventType == EET_KEY_INPUT_EVENT)
+	{
+		//any key will exit movie
+		m_GameManager->ExitIntroMovie();
+		m_GameManager->NewGame();
+	}
 
 	return false;
 }
@@ -807,7 +813,10 @@ bool CGameGUI::OnMenuEvent(const SEvent& event)
 
 						m_GameManager->StoreDataToXMLConfig("game/game_config.xml");
 
-						m_GameManager->RestartDevice();
+						if(!m_GameManager->m_bFullscreenPreference)
+							m_GameManager->RestartDevice();
+						else
+							printf("in fullscreen mode, we force desktop resolution");
 
 						return true;
 					}
@@ -1118,8 +1127,9 @@ void CGameGUI::drawIntroMovie(float elapsedTime)
 	m_MovieText1.rectangle.UpperLeftCorner.Y = (s32)m_MovieTextSlidingY;
 	m_MovieText1.font->draw(m_MovieText1.text,m_MovieText1.rectangle,m_MovieText1.color);
 
-	m_MovieText2.rectangle.UpperLeftCorner.Y = (s32)m_MovieTextSlidingY + 100;
-	m_MovieText2.font->draw(m_MovieText2.text,m_MovieText2.rectangle,m_MovieText2.color, false, false, &(m_MovieText2.rectangle));
+	//m_MovieText2.rectangle.UpperLeftCorner.Y = (s32)m_MovieTextSlidingY + 100;
+	m_MovieText3->setRelativePosition(position2di(m_MovieText1.rectangle.UpperLeftCorner.X,(s32)m_MovieTextSlidingY + 100));
+	//m_MovieText2.font->draw(m_MovieText2.text,m_MovieText2.rectangle,m_MovieText2.color, false, false, &(m_MovieText2.rectangle));
 }
 
 void CGameGUI::drawMenu(float elapsedTime)
@@ -1184,6 +1194,7 @@ bool CGameGUI::Init(CGameManager* gameMngr)
 
 void CGameGUI::ClearIntroMovie()
 {
+	m_MovieText3->setVisible(false);
 }
 
 void CGameGUI::ClearMenu()
@@ -1200,15 +1211,17 @@ void CGameGUI::ClearMenu()
 
 bool CGameGUI::InitIntroMovie()
 {
+	u32 text_x = m_GameManager->m_WindowWidth/3;
+	u32 text_x_end = m_GameManager->m_WindowWidth-20;
+
 	m_MovieText1.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_INTRO_MOVIE_TEXT1);
-	m_MovieText1.rectangle = recti(360,260,750,610);
+	m_MovieText1.rectangle = recti(text_x,260,text_x_end,610);
 	m_MovieText1.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
 	m_MovieText1.color = SColor(255,255,255,255);
 	
-	m_MovieText2.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_INTRO_MOVIE_TEXT2);
-	m_MovieText2.rectangle = recti(360,360,750,610);
-	m_MovieText2.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
-	m_MovieText2.color = SColor(255,255,255,255);
+	m_MovieText3 = m_GameManager->getGUIEnvironment()->addStaticText(m_GameManager->m_pLanguages->getString(E_LANG_STRING_INTRO_MOVIE_TEXT2).c_str(),recti(text_x,460,text_x_end,910),false,true,0,-1,false);
+	m_MovieText3->setOverrideColor(SColor(255,255,255,255));
+	m_MovieText3->setOverrideFont(m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml"));
 
 	m_MovieTextSlidingY = (float)m_MovieText1.rectangle.UpperLeftCorner.Y;
 
@@ -1220,39 +1233,43 @@ bool CGameGUI::InitMenu()
 	// add irrlicht logo
 	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(IRRLOGO_FILE), position2d<s32>(50,50));
 
+	u32 menu_y_pos = m_GameManager->m_WindowHeight/3;
+
+	u32 pref_y_pos = 2*m_GameManager->m_WindowHeight/3;
+
 	//add game name
 	m_GameName.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_GAME_NAME);
-	m_GameName.rectangle = recti(60,180,350,360);
+	m_GameName.rectangle = recti(60,menu_y_pos,350,menu_y_pos+80);
 	m_GameName.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin56.xml");
 	m_GameName.color = SColor(255,255,255,255);
 
 	//add menu options
 	m_MenuNew.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_NEW);
-	m_MenuNew.rectangle = recti(60,260,350,310);
+	m_MenuNew.rectangle = recti(60,menu_y_pos+80,350,menu_y_pos+130);
 	m_MenuNew.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
 	m_MenuNew.color = SColor(255,255,255,255);
 
 	m_MenuLoad.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LOAD);
-	m_MenuLoad.rectangle = recti(60,310,350,360);
+	m_MenuLoad.rectangle = recti(60,menu_y_pos+130,350,menu_y_pos+180);
 	m_MenuLoad.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
 	m_MenuLoad.color = SColor(255,255,255,255);
 
 	m_MenuExit.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_EXIT);
-	m_MenuExit.rectangle = recti(60,360,350,410);
+	m_MenuExit.rectangle = recti(60,menu_y_pos+180,350,menu_y_pos+230);
 	m_MenuExit.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin.xml");
 	m_MenuExit.color = SColor(255,255,255,255);
 
 	//add preferences
 	
-	m_fullscreenCheck = m_GameManager->getGUIEnvironment()->addCheckBox(false,recti(60,460,100,480));
+	m_fullscreenCheck = m_GameManager->getGUIEnvironment()->addCheckBox(false,recti(60,pref_y_pos+50,100,pref_y_pos+70));
 	m_fullscreenCheck->setChecked(m_GameManager->m_bFullscreenPreference);
 	m_FullscreenText.text = m_GameManager->m_pLanguages->getString(E_LANG_STRING_FULLSCREEN);
-	m_FullscreenText.rectangle = recti(100,455,350,475);
+	m_FullscreenText.rectangle = recti(100,pref_y_pos+45,350,pref_y_pos+65);
 	m_FullscreenText.font = m_GameManager->getGUIEnvironment()->getFont("media/font/brin20.xml");
 	m_FullscreenText.color = SColor(255,255,255,255);
 
 	//resolution combo
-	m_resolutionCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,500,260,520),0,GUI_ID_MAIN_MENU_COMBOBOX_RESOLUTION);
+	m_resolutionCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,pref_y_pos+100,260,pref_y_pos+120),0,GUI_ID_MAIN_MENU_COMBOBOX_RESOLUTION);
 	for (u32 i = 0 ; i < m_GameManager->m_listOfResolutions.size() ; i++)
 	{
 		m_resolutionCombo->addItem(m_GameManager->m_listOfResolutions[i].text.c_str());
@@ -1267,7 +1284,7 @@ bool CGameGUI::InitMenu()
 	}
 
 	//language combo
-	m_langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,540,260,560),0,GUI_ID_MAIN_MENU_COMBOBOX_LANGUAGE);
+	m_langCombo = m_GameManager->getGUIEnvironment()->addComboBox(recti(60,pref_y_pos+140,260,pref_y_pos+160),0,GUI_ID_MAIN_MENU_COMBOBOX_LANGUAGE);
 	for (u32 i=0; i<m_GameManager->m_pLanguages->m_ListOfAvailableLanguages.size(); i++)
 	{
 		m_langCombo->addItem(stringw(m_GameManager->m_pLanguages->m_ListOfAvailableLanguages[i]->name.c_str()).c_str());
