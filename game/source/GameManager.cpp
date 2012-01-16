@@ -34,6 +34,7 @@ CGameManager::CGameManager()
 	m_GameGUI = NULL;
 	m_pLevelManager = NULL;
 	m_pPC = NULL;
+	m_PlayerConfigFile = "Player.xml";
 	m_WndCaption = "Test";
 	m_Resolution.Width = 800;
 	m_Resolution.Height = 600;
@@ -49,6 +50,7 @@ CGameManager::CGameManager()
 	m_ListOfConditions.clear();
 	m_pLanguagePreference = "en";
 	m_bRestartDevice = false;
+	m_SavedGameAvailable = false;
 }
 
 /**
@@ -81,6 +83,11 @@ bool CGameManager::Init()
 	if (!LoadDataFromXMLConfig("game/game_config.xml"))
 		return false;
 	
+	//Check if there is saved game (to enable Load button)
+	stringc playerFile = stringc("save/") + m_PlayerConfigFile;
+	if(m_FS->existFile(playerFile.c_str()))
+		m_SavedGameAvailable = true;
+
 	IVideoModeList* pVideoList = nulldevice->getVideoModeList() ;
 	m_DesktopResolution = pVideoList->getDesktopResolution();
 	for (int i = 0 ; i < pVideoList->getVideoModeCount() ; i++)
@@ -469,7 +476,7 @@ void CGameManager::ChangeLevel(stringc mapname, s32 startPositionID)
 void CGameManager::Restart()
 {
 	//load latest saved level
-	LoadGame(true);
+	ReLoadGame(true);
 }
 
 void CGameManager::ClearInventory()
@@ -478,7 +485,96 @@ void CGameManager::ClearInventory()
 	m_GameGUI->ClearInventory();
 }
 
+//Load game from main menu. 
+//First we initialize game gui, player class, arrows and other utils, then we load game.
 void CGameManager::LoadGame(bool restart)
+{
+	m_NewGame = false;
+	//Init Game GUI
+	m_GameGUI->InitGameGUI();
+	//Load Player Character
+	m_pPC = new CPlayerCharacter(this);
+	//clear temp
+	ClearTemp();
+	//Clear Inventory
+	ClearInventory();
+	//get latest level and load
+	stringc playerFile = stringc("save/") + m_PlayerConfigFile;
+	if(m_FS->existFile(playerFile.c_str())) {
+		//m_LoadedMapName is loaded with PC
+		LoadPC(playerFile);
+		//Load Level (m_LoadedMapName is loaded with PC)
+		m_pLevelManager->OnLoadMap(stringc("save/") + m_LoadedMapName);
+		//Adjust player to new Level
+		m_pPC->ReinitModel(m_pSceneManager);
+		m_pPC->SetLoadedPosition();
+		m_pPC->removeAnimators();
+		m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
+		//Move Camera above PC
+		m_pLevelManager->MoveCamera(m_pPC->getPosition());
+		//Load arrows
+		m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
+		//Load Dialogs
+		m_GameGUI->LoadNPCDialogs();
+		//Set HealthBar
+		m_GameGUI->healthBar->setBarValue(m_pPC->getAbilityValue("Health"));
+		//Colision response
+		m_pLevelManager->SetMonstersCollisionAnimator();
+		//Console info + clear console
+		m_GameGUI->ClearConsole();
+		m_GameGUI->AddConsoleText(L"Game loaded.");
+	}
+	else
+	{
+		//just restart the game if there is no saved game
+		if(restart)
+		{
+			m_GameGUI->AddConsoleText(L"Game restarted.");
+			stringc playerFile = stringc("game/") + m_PlayerConfigFile;
+			if(m_FS->existFile(playerFile.c_str())) {
+				//m_LoadedMapName is loaded with PC
+				LoadPC(playerFile);
+				//Load First Map
+				if (!m_pLevelManager->OnLoadMap(m_StartMap)) {
+					//Display error to message box
+					stringw message  = "Unknown problem reloading game from start!";
+					m_GameGUI->AddMsgBox(L"Error Loading Level", message.c_str());
+					return;
+				}
+				//Adjust player to new Level
+				m_pPC->ReinitModel(m_pSceneManager);
+				m_pPC->SetLoadedPosition();
+				m_pPC->removeAnimators();
+				m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
+				//Move Camera above PC
+				m_pLevelManager->MoveCamera(m_pPC->getPosition());
+				//Reset arrows
+				resetArrows();
+				m_GameGUI->LevelUp(false);
+				//Load Dialogs
+				m_GameGUI->LoadNPCDialogs();
+				//Set HealthBar
+				m_GameGUI->healthBar->setBarValue(m_pPC->getAbilityValue("Health"));
+				m_GameGUI->healthBar->setMaxBarValue(m_pPC->getAbilityValue("Health"));
+				//Console info + clear console
+				m_GameGUI->ClearConsole();
+			}
+		}
+		else
+		{
+			//Display error to console
+			stringw message  = "There is no saved game!";
+			m_GameGUI->AddMsgBox(L"Error Loading Game", message.c_str());
+		}
+	}
+
+	m_GameState = GAME_STATE_LEVEL;
+
+}
+
+//Load game called from level. 
+//This game reloading skips some intialization that is already done.
+void CGameManager::ReLoadGame(bool restart)
 {
 	m_NewGame = false;
 	//clear temp
