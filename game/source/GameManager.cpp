@@ -675,6 +675,9 @@ void CGameManager::SaveGame()
 
 	//Save NPC conversation
 	m_GameGUI->SaveNPCDialogs();
+
+	//Notify
+	m_GameGUI->AddConsoleText(L"Game saved.");
 }
 
 /**

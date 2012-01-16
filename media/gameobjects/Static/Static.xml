@@ -17,7 +17,8 @@
 		<Static filename="barn_01"/>
 	</Houses>
 	<Terrain>
-		<Static filename="well"/>
+		<Static filename="minefloor"/>
+    <Static filename="minewall"/>
 	</Terrain>
 	<Tiles>
 		<Static filename="grass1"/>

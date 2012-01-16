@@ -59,6 +59,9 @@ class CLevelManager;
 #define ACTIONS_SCRIPT_FILE "media/scripts/actions.script"
 #define FONT_FILE "media/Garamond14.xml"
 #define IRRLOGO_FILE "media/irrlichtlogo2.png"
+#define GAME_GUI_FILE "media/game_gui.png"
+#define GAME_GUI_RIGHT_FILE "media/game_gui_right.png"
+#define WINDOW_BKG_FILE "media/window_background.jpg"
 
 #define SKILLPOINTSPERLEVEL 5
 
@@ -177,6 +180,8 @@ public:
 	u32 m_WindowWidth;
 	u32 m_WindowHeight;
 	
+	IGUIFont* m_Font_Garamond14;
+
 private:
 	void HandleDeath(stringw message);
 	IrrlichtDevice* m_pDevice;  
@@ -189,8 +194,6 @@ private:
 	int m_AttackTargetID;
 	bool m_bDoAction;
 	bool m_NewGame;
-
-	IGUIFont* m_Font_Garamond14;
 
 	EGameState m_GameState;
 
