@@ -60,7 +60,20 @@ bool CGameGUI::OnEvent(const SEvent& event)
 
 	IGUIEnvironment* env = m_GameManager->getGUIEnvironment();
 
-	if(event.EventType == EET_MOUSE_INPUT_EVENT)
+	if(event.EventType == EET_KEY_INPUT_EVENT)
+	{
+		if(event.KeyInput.PressedDown && (event.KeyInput.Key == KEY_ESCAPE))
+		{
+			if(m_wnd_options)
+			{
+				//close options window if opened
+				m_wnd_options->remove();
+				m_wnd_options = 0;
+			}
+		}
+	}
+
+	else if(event.EventType == EET_MOUSE_INPUT_EVENT)
 	{
 		core::position2d<s32> p(event.MouseInput.X, event.MouseInput.Y);
 
@@ -74,6 +87,18 @@ bool CGameGUI::OnEvent(const SEvent& event)
 				m_CSheetButton->getAbsoluteClippingRect().isPointInside(p) ||
 				m_Console->getAbsoluteClippingRect().isPointInside(p))
 			{
+
+				if(m_wnd_options)
+				{
+					//click outside of options window closes the window
+					if(!m_wnd_options->getAbsoluteClippingRect().isPointInside(p) && !m_SettingsButton->getAbsoluteClippingRect().isPointInside(p))
+					{
+						m_wnd_options->remove();
+						m_wnd_options = 0;
+						return true;
+					}
+				}
+
 				return true; //makes sure others dont handle this click, like player move
 			}
 			if (m_wnd_containerContent)
@@ -461,10 +486,19 @@ bool CGameGUI::OnEvent(const SEvent& event)
 
 						return true;
 					}
-					if(!m_wnd_charSheet && !m_wnd_skills && !m_wnd_options && !m_wnd_containerContent && m_SettingsButton->getID() == event.GUIEvent.Caller->getID())
+					if(!m_wnd_charSheet && !m_wnd_skills && !m_wnd_containerContent && m_SettingsButton->getID() == event.GUIEvent.Caller->getID())
 					{
-						//bring up settings menu!
-						DisplayOptionsWindow(env);
+						if(m_wnd_options)
+						{
+							//close options window if opened
+							m_wnd_options->remove();
+							m_wnd_options = 0;
+						}
+						else
+						{
+							//bring up settings menu!
+							DisplayOptionsWindow(env);
+						}
 						return true;
 					}
 					if(!m_wnd_charSheet && !m_wnd_skills && !m_wnd_options && !m_wnd_containerContent && m_LevelUpButton->getID() == event.GUIEvent.Caller->getID())
@@ -983,11 +1017,14 @@ void CGameGUI::DisplayCharacterSheetWindow(IGUIEnvironment* env)
  */
 void CGameGUI::DisplayOptionsWindow(IGUIEnvironment* env)
 {
-		m_wnd_options = env->addWindow(core::rect<s32>(250,100,470,380), false, L"Options", 0, 5500);
-		m_SaveButton = env->addButton(core::rect<s32>(50,40,160,60), m_wnd_options, 5501, L"Save Game");
-		m_LoadButton  = env->addButton(core::rect<s32>(50,80,160,100), m_wnd_options, 5502, L"Load Game");
-		m_OptionsButton = env->addButton(core::rect<s32>(50,120,160,140), m_wnd_options, 5503, L"Options");
-		m_ExitButton = env->addButton(core::rect<s32>(50,160,160,180), m_wnd_options, 5504, L"Exit Game");
+	m_wnd_options = env->addWindow(core::rect<s32>(1,m_GameManager->m_WindowHeight-275,200,m_GameManager->m_WindowHeight-85), false, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_SETTINGS).c_str(), 0, 5500);
+		env->addImage(m_GameManager->getDriver()->getTexture(WINDOW_BKG_FILE), position2d<s32>(0,0), false, m_wnd_options);
+		m_SaveButton = env->addButton(core::rect<s32>(5,20,190,50), m_wnd_options, 5501, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_SAVE).c_str());
+		m_LoadButton  = env->addButton(core::rect<s32>(5,60,190,90), m_wnd_options, 5502, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_LOAD).c_str());
+		m_OptionsButton = env->addButton(core::rect<s32>(5,100,190,130), m_wnd_options, 5503, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_OPTIONS).c_str());
+		m_ExitButton = env->addButton(core::rect<s32>(5,140,190,170), m_wnd_options, 5504, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_EXIT).c_str());
+		m_wnd_options->setDrawTitlebar(false);
+		m_wnd_options->setDraggable(false);
 }
 
 /**
@@ -1316,11 +1353,18 @@ bool CGameGUI::InitGameGUI()
 		m_GameManager->getGUIEnvironment()->getSkin()->setColor((EGUI_DEFAULT_COLOR)i, col);
 	}
 
+	u32 windowBottom = m_GameManager->m_WindowHeight - 10;
+	u32 windowRight = m_GameManager->m_WindowWidth - 10;
+
+	// add gui background image
+	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(GAME_GUI_FILE), position2d<s32>(0,windowBottom-74));
+	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(GAME_GUI_RIGHT_FILE), position2d<s32>(windowRight-180,windowBottom-74));
+
 	//Add Inventory GUI
 	ITexture* slotTex = m_GameManager->getDriver()->getTexture("media/Icons/slot.png");
 	m_Inventory = AddGUIContainer(
 		m_GameManager->getGUIEnvironment(),
-		core::rect<s32>(65,570,585,634),
+		core::rect<s32>(80,windowBottom-64,600,windowBottom),
 		0,
 		GAME_CONST_INVENTORY_ID,
 		core::dimension2d<s32>(8,1),
@@ -1328,17 +1372,33 @@ bool CGameGUI::InitGameGUI()
 		slotTex
 		);
 
+
+
+	IGUIWindow * pWnd = m_GameManager->getGUIEnvironment()->addWindow(irr::core::rect<irr::s32>(220, 240, 540,580), false, L"Text");
+	pWnd->setDraggable(false);
+	pWnd->setDrawTitlebar(false);
+	//pWnd->setDrawBackground(false);
+
+
+
 	//add 'console'
-	m_Console = m_GameManager->getGUIEnvironment()->addEditBox(L"", core::rect<s32>(585,530,945,634), true, 0, 4519);
-	m_Console->setMultiLine(true);
-	m_Console->setAutoScroll(true);
-	m_Console->setWordWrap(true);
-	m_Console->setTextAlignment(EGUIA_UPPERLEFT,EGUIA_LOWERRIGHT);
+	//m_Console = m_GameManager->getGUIEnvironment()->addEditBox(L"", recti(610,windowBottom-64,windowRight,windowBottom), true, 0, 4519);
+	m_Console = new CGUITextBox(m_GameManager->m_Font_Garamond14,L"Test Text", m_GameManager->getGUIEnvironment(), recti(0,0,200,200), pWnd, -1);
+	//m_Console->setMultiLine(true);
+	//m_Console->setAutoScroll(true);
+	//m_Console->setWordWrap(true);
+	//m_Console->setTextAlignment(EGUIA_UPPERLEFT,EGUIA_LOWERRIGHT);
+		
+	// Set the Scrollbar to the left of the Text.
+	m_Console->setScrollbarRight(false);
+	// Scroll the text per pixel, not per line.
+	m_Console->setScrollModeLines(false);
+
 	m_Console->setText(L"Game Initialized.");
 
 	//add settings button:
-	m_SettingsButton = m_GameManager->getGUIEnvironment()->addButton(rect<s32>(0,570,65,634),0,5600,L"");
-	m_SettingsButton->setImage(m_GameManager->getDriver()->getTexture("media/Icons/house.png"));
+	m_SettingsButton = m_GameManager->getGUIEnvironment()->addButton(rect<s32>(10,windowBottom-64,74,windowBottom),0,5600,L"");
+	m_SettingsButton->setImage(m_GameManager->getDriver()->getTexture("media/Icons/gear.png"));
 	m_SettingsButton->setUseAlphaChannel(true);
 	m_SettingsButton->setDrawBorder(false);
 
@@ -1350,10 +1410,11 @@ bool CGameGUI::InitGameGUI()
 	m_LevelUpButton->setVisible(false);
 
 	//add character sheet button:
-	m_CSheetButton = m_GameManager->getGUIEnvironment()->addButton(rect<s32>(0,506,65,570),0,6600,L"");
+	m_CSheetButton = m_GameManager->getGUIEnvironment()->addButton(rect<s32>(10,windowBottom-64,74,windowBottom),0,6600,L"");
 	m_CSheetButton->setImage(m_GameManager->getDriver()->getTexture("media/Icons/sheet.png"));
 	m_CSheetButton->setUseAlphaChannel(true);
 	m_CSheetButton->setDrawBorder(false);
+	m_CSheetButton->setVisible(false);
 
 	//add health bar
 	ITexture* texture = 0;//m_GameManager->getDriver()->getTexture("media/Icons/bar.png");

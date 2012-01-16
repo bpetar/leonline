@@ -15,6 +15,7 @@
 #include "CGUIContainer.h"
 #include "CGUIBar.h"
 #include "CDialogWindow.h"
+#include "CGUITextBox.h"
 
 class CGameManager;
 class CLevelManager;
@@ -144,7 +145,8 @@ private:
 	IGUIWindow* m_wnd_death;
 	IGUIWindow* m_wnd_pickInfo;
 	IGUIContainer* m_Inventory;
-	IGUIEditBox* m_Console;
+	
+	CGUITextBox* m_Console;
 	IGUIEditBox* m_EditBox_Skills_Min;
 	IGUIEditBox* m_EditBox_Skills_AvailablePoints;
 	IGUIEditBox* m_EditBox_Skills_Max;
