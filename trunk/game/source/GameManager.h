@@ -134,6 +134,7 @@ public:
 	stringw getCurrentMapName();
 	void SaveGame();
 	void LoadGame(bool restart);
+	void ReLoadGame(bool restart);
 	void ClearTemp();
 	void ClearInventory();
 	void ClearSaved();
@@ -172,7 +173,7 @@ public:
 	array <TResolution> m_listOfResolutions;
 
 	bool m_bRestartDevice;
-
+	bool m_SavedGameAvailable;
 	u32 m_WindowWidth;
 	u32 m_WindowHeight;
 	

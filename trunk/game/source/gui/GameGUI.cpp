@@ -35,6 +35,7 @@ CGameGUI::CGameGUI()
 	m_DialogWindow = 0;
 	m_ActiveDialogIndex = -1;
 	m_EditBox_Skills_Min = 0;
+	m_Inventory = 0;
 }
 
 /**
@@ -497,7 +498,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 						//Load game
 						m_wnd_options->remove();
 						m_wnd_options = 0;
-						m_GameManager->LoadGame(false);
+						m_GameManager->ReLoadGame(false);
 						return true;
 					}
 					if(m_wnd_options && (m_SaveButton->getID() == event.GUIEvent.Caller->getID()))
@@ -758,6 +759,7 @@ bool CGameGUI::OnMenuEvent(const SEvent& event)
 			else if(m_MenuLoad.rectangle.isPointInside(p))
 			{
 				//load game clicked
+				m_GameManager->ExitMainMenu();
 				m_GameManager->LoadGame(false);
 			}
 			else if(m_MenuExit.rectangle.isPointInside(p))
@@ -896,9 +898,12 @@ void CGameGUI::RemovePickableFromInventory(s32 id)
 
 void CGameGUI::ClearInventory()
 {
-	for (u32 index = 0; index < m_Inventory->GetNumItems(); index++)
+	if(m_Inventory)
 	{
-		m_Inventory->RemoveItem(index);
+		for (u32 index = 0; index < m_Inventory->GetNumItems(); index++)
+		{
+			m_Inventory->RemoveItem(index);
+		}
 	}
 }
 
@@ -1150,13 +1155,13 @@ void CGameGUI::drawMenu(float elapsedTime)
 		m_MenuNew.font->draw(m_MenuNew.text,m_MenuNew.rectangle,SColor(255,155,155,0));
 	}
 
-	if(!m_MenuLoad.rectangle.isPointInside(mousePos))
+	if(m_MenuLoad.rectangle.isPointInside(mousePos)&& m_GameManager->m_SavedGameAvailable)
 	{
-		m_MenuLoad.font->draw(m_MenuLoad.text,m_MenuLoad.rectangle,m_MenuLoad.color);
+		m_MenuLoad.font->draw(m_MenuLoad.text,m_MenuLoad.rectangle,SColor(255,155,155,0));
 	}
 	else
 	{
-		m_MenuLoad.font->draw(m_MenuLoad.text,m_MenuLoad.rectangle,SColor(255,155,155,0));
+		m_MenuLoad.font->draw(m_MenuLoad.text,m_MenuLoad.rectangle,m_MenuLoad.color);
 	}
 
 	if(!m_MenuExit.rectangle.isPointInside(mousePos))
