@@ -522,14 +522,14 @@ void CGameManager::LoadGame(bool restart)
 		m_pLevelManager->SetMonstersCollisionAnimator();
 		//Console info + clear console
 		m_GameGUI->ClearConsole();
-		m_GameGUI->AddConsoleText(L"Game loaded.");
+		m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_LOAD);
 	}
 	else
 	{
 		//just restart the game if there is no saved game
 		if(restart)
 		{
-			m_GameGUI->AddConsoleText(L"Game restarted.");
+			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_RESTART);
 			stringc playerFile = stringc("game/") + m_PlayerConfigFile;
 			if(m_FS->existFile(playerFile.c_str())) {
 				//m_LoadedMapName is loaded with PC
@@ -563,8 +563,7 @@ void CGameManager::LoadGame(bool restart)
 		else
 		{
 			//Display error to console
-			stringw message  = "There is no saved game!";
-			m_GameGUI->AddMsgBox(L"Error Loading Game", message.c_str());
+			m_GameGUI->AddMsgBox(E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING, E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG1);
 		}
 	}
 
@@ -605,14 +604,14 @@ void CGameManager::ReLoadGame(bool restart)
 		m_GameGUI->healthBar->setBarValue(m_pPC->getAbilityValue("Health"));
 		//Console info + clear console
 		m_GameGUI->ClearConsole();
-		m_GameGUI->AddConsoleText(L"Game loaded.");
+		m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_LOAD);
 	}
 	else
 	{
 		//just restart the game if there is no saved game
 		if(restart)
 		{
-			m_GameGUI->AddConsoleText(L"Game restarted.");
+			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_RESTART);
 			stringc playerFile = stringc("game/") + m_PlayerConfigFile;
 			if(m_FS->existFile(playerFile.c_str())) {
 				//m_LoadedMapName is loaded with PC
@@ -677,7 +676,7 @@ void CGameManager::SaveGame()
 	m_GameGUI->SaveNPCDialogs();
 
 	//Notify
-	m_GameGUI->AddConsoleText(L"Game saved.");
+	m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_SAVE);
 }
 
 /**
@@ -757,7 +756,7 @@ void CGameManager::PCChangeHealth(s32 value, stringw deathReason)
 		//we could do: if (hp <= m_pPC->getAbilityMin("Health"))
 		if(hp <= 0)
 		{
-			m_GameGUI->AddConsoleText("You died.");
+			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_PLAYER_DIED);
 			HandleDeath(deathReason);
 		}
 		else
@@ -1089,7 +1088,7 @@ void CGameManager::TransferPickableFromNPCToPlayer(s32 NPCid, s32 itemID)
 			m_GameGUI->AddPickableToInventory(itemGO);
 
 			//display notification "item received"
-			m_GameGUI->AddConsoleText(stringw("Item gained: ") + itemGO->name);
+			m_GameGUI->AddConsoleText(m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_GAIN) + itemGO->name);
 			m_GameGUI->DrawFloatingText(m_pPC->node->getPosition()+vector3df(0,PLAYER_HEIGHT,0), stringc("Item gained: ") + itemGO->name, 5, SColor(255,40,240,40));
 		}
 	}
@@ -1460,7 +1459,7 @@ bool CGameManager::OnEvent(const SEvent& event)
 								else 
 								{
 									//click on the non terrain non action item
-									m_GameGUI->AddConsoleText(L"Nothing to be had there...");
+									m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_EMPTY_CLICK);
 								}
 							}
 						}

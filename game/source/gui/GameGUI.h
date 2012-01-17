@@ -16,6 +16,7 @@
 #include "CGUIBar.h"
 #include "CDialogWindow.h"
 #include "CGUITextBox.h"
+#include "../Languages.h"
 
 class CGameManager;
 class CLevelManager;
@@ -96,6 +97,7 @@ public:
 	void DisplayPickableInfo(IGUIEnvironment* env, CGameObject* go, recti pos);
 	bool InventoryFull() {return m_Inventory->isFull();}
 	void AddConsoleText(stringw text);
+	void AddConsoleText(ELanguageID textID);
 	void ClearConsole();
 	void AddPickableToInventory(CGameObject* item);
 	CGameObject* getItemFromInventory(s32 id);
@@ -106,6 +108,7 @@ public:
 	void LoadNPCDialogs();
 	void AddGameDialog(stringc dialog);
 	void AddMsgBox(stringw title, stringw message);
+	void AddMsgBox(ELanguageID titleID, ELanguageID messageID);
 	void DrawFloatingText(vector3df pos, stringc text, u32 timeout, SColor color);
 	void renderFloatingTexts(IGUIFont* font, float elapsedTime);
 	void drawMenu(float elapsedTime);
@@ -146,7 +149,9 @@ private:
 	IGUIWindow* m_wnd_pickInfo;
 	IGUIContainer* m_Inventory;
 	
-	CGUITextBox* m_Console;
+	//CGUITextBox* m_Console;
+	IGUIEditBox* m_Console;
+
 	IGUIEditBox* m_EditBox_Skills_Min;
 	IGUIEditBox* m_EditBox_Skills_AvailablePoints;
 	IGUIEditBox* m_EditBox_Skills_Max;
