@@ -124,7 +124,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 								else
 								{
 									//msg Cant combine two items in that container, do it in inventory
-									AddConsoleText(L"Can't combine two items in that container.");
+									AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_CONTAINER_COMBINE_ERROR);
 									return true;
 								}
 							}
@@ -141,14 +141,13 @@ bool CGameGUI::OnEvent(const SEvent& event)
 									{
 										m_Inventory->InsertItem(item); //add to inventory
 										container->RemoveItem(i);
-										AddConsoleText(item->name + stringw(L" moved to inventory."));
+										AddConsoleText(item->name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GUI_ITEM_MOVED_TO_INVENTORY));
 										return true;
 									}
 									else
 									{
 										//shib msg: inventory full!
-										stringw message = "Can't add any more items to inventory!";
-										AddMsgBox(L"Inventory Full", message.c_str());
+										AddMsgBox(E_LANG_STRING_LEVEL_GUI_MSGBOX_INVENTORY_FULL, E_LANG_STRING_LEVEL_GUI_MSGBOX_INVENTORY_FULL_MSG);
 										return true;
 									}
 								}
@@ -174,7 +173,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 								{
 									//TODO: Here combining should take place, no?
 									//msg Can't combine these two items
-									AddConsoleText(L"Can't combine these two items");
+									AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_COMBINE_ERROR);
 									return true;
 								}
 							}
@@ -271,7 +270,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 								//combine items
 								//m_bItemDragged = false;
 								//else
-								AddConsoleText(L"Can't combine these two items");
+								AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_COMBINE_ERROR);
 								return true;
 							}
 							else
@@ -892,6 +891,13 @@ void CGameGUI::AddMsgBox(stringw title, stringw message)
 	m_wnd_Msg = m_GameManager->getGUIEnvironment()->addMessageBox(title.c_str(), message.c_str(),true);
 }
 
+void CGameGUI::AddMsgBox(ELanguageID titleID, ELanguageID messageID)
+{
+	stringw title = m_GameManager->m_pLanguages->getString(titleID);
+	stringw message = m_GameManager->m_pLanguages->getString(messageID);
+	m_wnd_Msg = m_GameManager->getGUIEnvironment()->addMessageBox(title.c_str(), message.c_str(),true);
+}
+
 void CGameGUI::AddGameDialog(stringc dialog)
 {
 	m_DialogWindow->AddGameDialog(m_GameManager->getFS(), dialog);
@@ -1137,7 +1143,7 @@ void CGameGUI::DisplayContainerContent(s32 id,	IVideoDriver* driver, IGUIEnviron
 
 	if(m_bFirstTimeContainerClick)
 	{
-		AddMsgBox(L"Container Content",L"This is container window. \n\nTo move items to your inventory just click on them. Move mouse over item in your inventory to display info. To use items in your inventory right click on them. Items can be droped on the floor or put in other containers on the map. Some items can be used on other objects on the map.");
+		AddMsgBox(E_LANG_STRING_LEVEL_GUI_MSGBOX_CONTAINER_CONTENT, E_LANG_STRING_LEVEL_GUI_MSGBOX_CONTAINER_CONTENT_MSG);
 		m_bFirstTimeContainerClick = false;
 	}
 }
@@ -1152,6 +1158,16 @@ void CGameGUI::DisplayContainerContent(s32 id,	IVideoDriver* driver, IGUIEnviron
 void CGameGUI::AddConsoleText(stringw text)
 {
 	stringw temp;
+	temp = m_Console->getText();
+	temp += L"\n";
+	temp += text.c_str();
+	m_Console->setText(temp.c_str());
+}
+
+void CGameGUI::AddConsoleText(ELanguageID textID)
+{
+	stringw temp;
+	stringw text = m_GameManager->m_pLanguages->getString(textID);
 	temp = m_Console->getText();
 	temp += L"\n";
 	temp += text.c_str();
@@ -1373,28 +1389,25 @@ bool CGameGUI::InitGameGUI()
 		);
 
 
-
-	IGUIWindow * pWnd = m_GameManager->getGUIEnvironment()->addWindow(irr::core::rect<irr::s32>(220, 240, 540,580), false, L"Text");
-	pWnd->setDraggable(false);
-	pWnd->setDrawTitlebar(false);
+	//this is atempt to make scrolling console with CGUITextBox element.
+	//IGUIWindow * pWnd = m_GameManager->getGUIEnvironment()->addWindow(irr::core::rect<irr::s32>(220, 240, 540,580), false, L"Text");
+	//pWnd->setDraggable(false);
+	//pWnd->setDrawTitlebar(false);
 	//pWnd->setDrawBackground(false);
-
-
+	//m_Console = new CGUITextBox(m_GameManager->m_Font_Garamond14,L"Test Text", m_GameManager->getGUIEnvironment(), recti(0,0,200,200), pWnd, -1);
+	// Set the Scrollbar to the left of the Text.
+	//m_Console->setScrollbarRight(false);
+	// Scroll the text per pixel, not per line.
+	//m_Console->setScrollModeLines(false);
 
 	//add 'console'
-	//m_Console = m_GameManager->getGUIEnvironment()->addEditBox(L"", recti(610,windowBottom-64,windowRight,windowBottom), true, 0, 4519);
-	m_Console = new CGUITextBox(m_GameManager->m_Font_Garamond14,L"Test Text", m_GameManager->getGUIEnvironment(), recti(0,0,200,200), pWnd, -1);
-	//m_Console->setMultiLine(true);
-	//m_Console->setAutoScroll(true);
-	//m_Console->setWordWrap(true);
-	//m_Console->setTextAlignment(EGUIA_UPPERLEFT,EGUIA_LOWERRIGHT);
+	m_Console = m_GameManager->getGUIEnvironment()->addEditBox(L"", recti(610,windowBottom-64,windowRight,windowBottom), true, 0, 4519);
+	m_Console->setMultiLine(true);
+	m_Console->setAutoScroll(true);
+	m_Console->setWordWrap(true);
+	m_Console->setTextAlignment(EGUIA_UPPERLEFT,EGUIA_LOWERRIGHT);
 		
-	// Set the Scrollbar to the left of the Text.
-	m_Console->setScrollbarRight(false);
-	// Scroll the text per pixel, not per line.
-	m_Console->setScrollModeLines(false);
-
-	m_Console->setText(L"Game Initialized.");
+	m_Console->setText(m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_INIT).c_str());
 
 	//add settings button:
 	m_SettingsButton = m_GameManager->getGUIEnvironment()->addButton(rect<s32>(10,windowBottom-64,74,windowBottom),0,5600,L"");
