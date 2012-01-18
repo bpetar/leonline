@@ -686,15 +686,21 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 					{
 						//recreate procedural mesh here
 						//node = createTree(getProceduralTreeTypeFromName(attr->getAttributeAsString("Name")));
+						//gameObject = new CGameObject();
+						//gameObject->mesh = PROCEDURAL_TREE_MESH;
 					}
 					else if(meshPath == stringc(PARTICLE_GAME_OBJECT))
 					{
-						//recreate particle system here
+						//Create particle system here
+						gameObject = new CGameObject();
+						gameObject->mesh = PARTICLE_GAME_OBJECT;
 						node = CreateParticles(getParticleTypeFromName(attr->getAttributeAsString("Name")));
 					}
 					else if(meshPath == stringc(LIGHT_GAME_OBJECT))
 					{
 						//Insert light
+						gameObject = new CGameObject();
+						gameObject->mesh = LIGHT_GAME_OBJECT;
 						node = CreateLight(300.0f);
 						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
 						{
@@ -1230,7 +1236,8 @@ CGameObject* CLevel::getGameObjectFromID(int id)
 	
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{
-		if((*it)->id == id)
+		CGameObject* temp = (*it);
+		if(temp->id == id)
 		{
 			return *it;
 		}
@@ -1745,8 +1752,9 @@ void CLevel::EnlightAllNodes()
 
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{
-		ISceneNode* node = m_SMGR->getSceneNodeFromId((*it)->id);
-		if(!((*it)->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||(*it)->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
+		CGameObject* temp = (*it);
+		ISceneNode* node = m_SMGR->getSceneNodeFromId(temp->id);
+		if(!(temp->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||temp->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
 		{
 			node->setMaterialFlag(EMF_LIGHTING, true);
 		}
