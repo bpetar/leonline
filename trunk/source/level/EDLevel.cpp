@@ -2143,12 +2143,26 @@ void CEditorLevel::MoveSelectedElement(int axis, int amount)
 {
 	if(m_SelectedGameObject)
 	{
+		vector3df newPos;
+
+		CGameObject* go = _getGameObjectFromID(m_SelectedGameObject->getID());
+		if(stringc(m_SelectedGameObject->getName()).equals_ignore_case("Dancing Light GO"))
+		{
+			//For dancing light, we need to remove animator because it won't allow light to be moved
+			m_SelectedGameObject->removeAnimators();
+			//For dancing light, we need to get position from game object, because scene node is moving about, and GO stores center position.
+			newPos = go->pos;
+		}
+		else
+		{
+			newPos = m_SelectedGameObject->getPosition();
+		}
+
 		switch(axis)
 		{
 		case LE_AXIS_X:
 			{
 				//Move model up the X axis
-				vector3df newPos = m_SelectedGameObject->getPosition();
 				newPos.X += amount;
 				m_SelectedGameObject->setPosition(newPos);
 				m_EditorManager->getGUIManager()->SetPropertiesPosition(m_SelectedGameObject->getPosition().X, m_SelectedGameObject->getPosition().Y, m_SelectedGameObject->getPosition().Z);
@@ -2157,7 +2171,6 @@ void CEditorLevel::MoveSelectedElement(int axis, int amount)
 		case LE_AXIS_Y:
 			{
 				//Move model up the Y axis
-				vector3df newPos = m_SelectedGameObject->getPosition();
 				newPos.Y += amount;
 				m_SelectedGameObject->setPosition(newPos);
 				m_EditorManager->getGUIManager()->SetPropertiesPosition(m_SelectedGameObject->getPosition().X, m_SelectedGameObject->getPosition().Y, m_SelectedGameObject->getPosition().Z);
@@ -2166,12 +2179,22 @@ void CEditorLevel::MoveSelectedElement(int axis, int amount)
 		case LE_AXIS_Z:
 			{
 				//Move model up the Z axis
-				vector3df newPos = m_SelectedGameObject->getPosition();
 				newPos.Z += amount;
 				m_SelectedGameObject->setPosition(newPos);
 				m_EditorManager->getGUIManager()->SetPropertiesPosition(m_SelectedGameObject->getPosition().X, m_SelectedGameObject->getPosition().Y, m_SelectedGameObject->getPosition().Z);
 			}
 			break;
+		}
+
+		if(stringc(m_SelectedGameObject->getName()).equals_ignore_case("Dancing Light GO"))
+		{
+			//set new center position to go
+			go->pos = newPos;
+			//recreate animator
+			ISceneNodeAnimator* anim = 0;
+			anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(newPos,1.0f,0.04f,vector3df(1,0,0));
+			m_SelectedGameObject->addAnimator(anim);
+			anim->drop();
 		}
 	}
 }
@@ -2514,8 +2537,16 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 								m_LevelMetaTriangleSelector->addTriangleSelector(m_SelectedGameObject->getTriangleSelector());
 							}
 						}
-
-						go->SetPositionRotationScaleFromNode(m_SelectedGameObject);
+						if(go->name.equals_ignore_case("Dancing Light GO"))
+						{
+							//position is set during dragging, we skip setting it here because Dancing Light is moving about and node position is changed.
+							go->rot = m_SelectedGameObject->getRotation();
+							go->scale = m_SelectedGameObject->getScale();
+						}
+						else
+						{
+							go->SetPositionRotationScaleFromNode(m_SelectedGameObject);
+						}
 
 						if (m_bElementAtHand && m_bShiftPressed)
 							seedingAnother = true;
@@ -2653,17 +2684,23 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							//TGameObjectProperty properties;
 							vector3df instersection_point = GetIntersectionPoint(20);
 							if(m_bCtrlPressed)
+							{
+								//TODO: what is this? why dancing light are not here but just down in else branch?
 								m_SelectedGameObject->setPosition(instersection_point + m_objectMoveOffset);
+							}
 							else
 							{
 								m_SelectedGameObject->setPosition(instersection_point);
 								if(go->name.equals_ignore_case("Dancing Light GO"))
 								{
+									//For dancing light, we need to remove animator because it won't allow light to be moved
 									m_SelectedGameObject->removeAnimators();
 									ISceneNodeAnimator* anim = 0;
 									anim = m_EditorManager->getSceneMngr()->createFlyCircleAnimator(instersection_point,1.0f,0.04f,vector3df(1,0,0));
 									m_SelectedGameObject->addAnimator(anim);
 									anim->drop();
+
+									go->pos = instersection_point;
 								}
 							}
 							//set properties to reflect position coord change while moving object
