@@ -2216,6 +2216,20 @@ void CEditorLevel::RotateSelectedElement(int axis, int amount)
 	}
 }
 
+void CEditorLevel::DrawNormals()
+{
+	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
+	
+	for (; it != m_ListOfGameObjects.end(); ++it)
+	{
+		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
+		if(!((*it)->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||(*it)->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
+		{
+			node->setDebugDataVisible(node->isDebugDataVisible()^EDS_NORMALS);
+		}
+	}
+}
+
 /**
  * \brief Mouse and Keyboard events are handled here. 
  * Every mouse click on game object is caught, mouse move will move the 
@@ -2259,7 +2273,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 		{
 			if(m_SelectedGameObject && m_bElementAtHand)
 			{
-				//Move model up the Y axis
+				//Rotate model for 90 degrees
 				vector3df newRot = m_SelectedGameObject->getRotation();
 				if(m_bShiftPressed)
 					newRot.Y += 90;
@@ -2268,6 +2282,10 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 				m_SelectedGameObject->setRotation(newRot);
 				m_EditorManager->getGUIManager()->SetPropertiesRotation(m_SelectedGameObject->getRotation().X, m_SelectedGameObject->getRotation().Y, m_SelectedGameObject->getRotation().Z);
 			}
+		}
+		if((eventer.KeyInput.PressedDown) && (eventer.KeyInput.Key == KEY_KEY_N))
+		{
+			DrawNormals();
 		}
 		if(eventer.KeyInput.Key == KEY_KEY_X)
 		{
