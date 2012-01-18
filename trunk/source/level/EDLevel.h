@@ -97,6 +97,7 @@ public:
 	void addTerrainSelector();
 	void AddGameObjectToLevel(CGameObject* go);
 	void RemoveGameObjectFromMap(CGameObject* go);
+	void DrawNormals();
 	vector3df GetIntersectionPoint(f32 height);
 	bool SetElementAtHand(CGameObject* go);
 	bool SendModelToPhotoSession(CGameObject* go);
@@ -145,7 +146,6 @@ public:
 	bool m_bCtrlPressed;
 	bool m_bKeyXPressed;
 	bool m_bKeyZPressed;
-	
 	bool m_bRotateXSelectedNode;
 	bool m_bRotateYSelectedNode;
 	bool m_bRotateZSelectedNode;
