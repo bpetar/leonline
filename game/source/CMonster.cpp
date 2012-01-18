@@ -382,7 +382,7 @@ void CMonster::attack(eAttacktype attackType)
 vector3df CMonster::faceTarget(vector3df targetpos, ISceneNode* nod) {
 
 	vector3df posDiff = targetpos - nod->getPosition();
-	f32 degree = nod->getRotation().Y + 180; //keep current rotation if nothing to do
+	f32 degree = nod->getRotation().Y; //keep current rotation if nothing to do
 	posDiff.normalize();
 
   if (posDiff.X != 0.0f || posDiff.Z != 0.0f)
@@ -390,7 +390,7 @@ vector3df CMonster::faceTarget(vector3df targetpos, ISceneNode* nod) {
   //else
 	//degree = nod->getRotation().Y; //breakpoint to check axis problems
 
-  return vector3df(0,degree -180, 0);
+  return vector3df(0,degree, 0);
 }
 
 void CMonster::Nudge(s32 nudgerId, vector3df nudgerPosition)
@@ -441,7 +441,7 @@ void CMonster::moveto(ISceneNode *node, //node to move
 		vel = vel + colisionNormal; //this simple vector add results in colision tangent that we need!
 	}
 
-    node->setPosition(node->getPosition() - vel);
+    node->setPosition(node->getPosition() + vel);
     node->updateAbsolutePosition();
 
 	if(m_AmbientSound)
