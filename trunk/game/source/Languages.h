@@ -59,11 +59,14 @@ enum ELanguageID
 	E_LANG_STRING_LEVEL_CONSOLE_GAME_EMPTY_CLICK,
 	E_LANG_STRING_LEVEL_CONSOLE_GAME_PLAYER_DIED,
 	E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_GAIN,
+	E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_MISSUSE, // "This item can't be used like that"
+	E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_OBJECT_ERROR, // "This item can't be used with that object"
 
 	E_LANG_STRING_LEVEL_CONSOLE_GUI_MSG = 40,
 	E_LANG_STRING_LEVEL_CONSOLE_GUI_CONTAINER_COMBINE_ERROR, // "Can't combine two items in that container."
 	E_LANG_STRING_LEVEL_CONSOLE_GUI_ITEM_MOVED_TO_INVENTORY, // " moved to inventory."
 	E_LANG_STRING_LEVEL_CONSOLE_GUI_COMBINE_ERROR, // "Can't combine these two items"
+	E_LANG_STRING_LEVEL_CONSOLE_GUI_NO_ACTION, // "Unrecognized script action..."
 	
 	E_LANG_STRING_LEVEL_GUI_MSGBOX = 50,
 	E_LANG_STRING_LEVEL_GUI_MSGBOX_INVENTORY_FULL, // "Inventory Full"
@@ -73,7 +76,10 @@ enum ELanguageID
 
 	E_LANG_STRING_LEVEL_MSGBOX = 60,
 	E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING, // "Error Loading Game"
-	E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG1 // "There is no saved game!"
+	E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG1, // "There is no saved game!"
+	E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG2, // "Unknown problem reloading game from start!"
+	E_LANG_STRING_LEVEL_MSGBOX_SRIPT_ERROR, // "Script Error"
+	E_LANG_STRING_LEVEL_MSGBOX_SRIPT_ERROR_MSG1 // "InfoGUI action property missing! Must define both value and attribute fields."
 
 };
 

@@ -537,8 +537,7 @@ void CGameManager::LoadGame(bool restart)
 				//Load First Map
 				if (!m_pLevelManager->OnLoadMap(m_StartMap)) {
 					//Display error to message box
-					stringw message  = "Unknown problem reloading game from start!";
-					m_GameGUI->AddMsgBox(L"Error Loading Level", message.c_str());
+					m_GameGUI->AddMsgBox(E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING, E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG2);
 					return;
 				}
 				//Adjust player to new Level
@@ -619,8 +618,7 @@ void CGameManager::ReLoadGame(bool restart)
 				//Load First Map
 				if (!m_pLevelManager->OnLoadMap(m_StartMap)) {
 					//Display error to message box
-					stringw message  = "Unknown problem reloading game from start!";
-					m_GameGUI->AddMsgBox(L"Error Loading Level", message.c_str());
+					m_GameGUI->AddMsgBox(E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING, E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG2);
 					return;
 				}
 				//Adjust player to new Level
@@ -644,9 +642,8 @@ void CGameManager::ReLoadGame(bool restart)
 		}
 		else
 		{
-			//Display error to console
-			stringw message  = "There is no saved game!";
-			m_GameGUI->AddMsgBox(L"Error Loading Game", message.c_str());
+			//Display error window
+			m_GameGUI->AddMsgBox(E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING, E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING_MSG1);
 		}
 	}
 }
@@ -1089,7 +1086,7 @@ void CGameManager::TransferPickableFromNPCToPlayer(s32 NPCid, s32 itemID)
 
 			//display notification "item received"
 			m_GameGUI->AddConsoleText(m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_GAIN) + itemGO->name);
-			m_GameGUI->DrawFloatingText(m_pPC->node->getPosition()+vector3df(0,PLAYER_HEIGHT,0), stringc("Item gained: ") + itemGO->name, 5, SColor(255,40,240,40));
+			m_GameGUI->DrawFloatingText(m_pPC->node->getPosition()+vector3df(0,PLAYER_HEIGHT,0), m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_GAIN) + itemGO->name, 5, SColor(255,40,240,40));
 		}
 	}
 }
