@@ -419,7 +419,7 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				else //this item doesn't have script action for event OnUse
 				{
 					//msg: This item can't be used like that
-					m_GameManager->getGameGUI()->AddConsoleText(L"This item can't be used like that");
+					m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_MISSUSE);
 				}
 			}
 		}
@@ -499,7 +499,7 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 			else
 			{
 				//msg: This item can't be used with that object
-				m_GameManager->getGameGUI()->AddConsoleText(L"This item can't be used with that object");
+				m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_OBJECT_ERROR);
 			}
 		}
 		break;
@@ -680,9 +680,18 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	}
 	else if(action->name == stringw("InfoGUI"))
 	{
-		if(action->value != stringw(L""))
+		if((action->attribute != stringw(L""))&&(action->value != stringw(L"")))
 		{
-			m_GameManager->getGameGUI()->AddMsgBox(action->attribute, action->value);
+			u32 titleStringID;
+			u32 msgStringID;
+			//attribute holds string id, we parse it and get the string from selected language.
+			swscanf_s(action->attribute.c_str(), L"%d", &titleStringID);
+			swscanf_s(action->value.c_str(), L"%d", &msgStringID);
+			m_GameManager->getGameGUI()->AddMsgBox((ELanguageID)titleStringID, (ELanguageID)msgStringID);
+		}
+		else
+		{
+			m_GameManager->getGameGUI()->AddMsgBox(E_LANG_STRING_LEVEL_MSGBOX_SRIPT_ERROR, E_LANG_STRING_LEVEL_MSGBOX_SRIPT_ERROR_MSG1);
 		}
 	}
 	else if(action->name == stringw("InfluenceState"))
@@ -765,8 +774,6 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	}
 	else if(action->name == stringw("AnimateTrigger"))
 	{
-		//m_GameManager->getGameGUI()->AddConsoleText(L"Entering AnimateTrigger...");
-		
 		u32 TargetID = 0;
 
 		if(action->target == stringw("self"))
@@ -793,8 +800,6 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	}
 	else if(action->name == stringw("TranslateGameObject"))
 	{
-		//m_GameManager->getGameGUI()->AddConsoleText(L"Entering TranslateGameObject...");
-		
 		u32 TargetID = 0;
 
 		stringc translationVectorEndPositionStr = action->attribute;
@@ -906,6 +911,7 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	}
 	else
 	{
-		m_GameManager->getGameGUI()->AddConsoleText(L"Unrecognized script action...");
+		//Unrecognized script action...
+		m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_NO_ACTION);
 	}
 }
