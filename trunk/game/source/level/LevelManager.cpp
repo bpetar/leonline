@@ -678,8 +678,8 @@ bool CLevelManager::Action(s32 id)
 		{
 			if(!m_GameManager->getGameGUI()->InventoryFull())
 			{
-				m_GameManager->getGameGUI()->AddConsoleText(go->name + stringw(L" was picked up."));
-				m_GameManager->getGameGUI()->DrawFloatingText(go->pos+vector3df(0,15,0), stringc("Item gained: ") + go->name, 5, SColor(255,40,240,40));
+				m_GameManager->getGameGUI()->AddConsoleText(go->name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_PICKED));
+				m_GameManager->getGameGUI()->DrawFloatingText(go->pos+vector3df(0,15,0), m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_ITEM_GAIN) + go->name, 5, SColor(255,40,240,40));
 				//Move item to inventory automatically
 				m_GameManager->getGameGUI()->AddPickableToInventory(go);
 				//Remove item from PC targets
@@ -698,7 +698,7 @@ bool CLevelManager::Action(s32 id)
 			}
 			else
 			{
-				m_GameManager->getGameGUI()->AddConsoleText(stringw(L"Inventory is full!"));
+				m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_GUI_MSGBOX_INVENTORY_FULL);
 			}
 			//return is needed here because there is a situation when action causes level change (MoveToMap)
 			//and rest of the code (isNPC,isTrigger) can not be performed on new level cause it crashes naturally.
@@ -778,11 +778,11 @@ bool CLevelManager::Action(s32 id)
 				go->changeAbilityValueBy("Health",-dmg);
 				m_pLevels[m_LevelIndex]->UpdateMonsterHealthBar(go->id, -dmg);
 
-				m_GameManager->getGameGUI()->AddConsoleText(stringw(L"You hit ") + go->name + stringw(L" with ") + stringw(dmg) + stringw(L" damage!") + stringw(" (") + stringw(randomPCAttack) + stringw(" > ") + stringw(randomMonsterDefence) + stringw(")"));
+				m_GameManager->getGameGUI()->AddConsoleText(m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_YOU_HIT) + go->name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_WITH) + stringw(dmg) + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_DAMAGE) + stringw(" (") + stringw(randomPCAttack) + stringw(" > ") + stringw(randomMonsterDefence) + stringw(")"));
 				if(go->getAbilityValue("Health") <= 0)
 				{
 					//Monster Dies!
-					m_GameManager->getGameGUI()->AddConsoleText(go->name + stringw(L" is dead. ") + stringw(go->getAbilityValue("Experience")) + " exp gained.");
+					m_GameManager->getGameGUI()->AddConsoleText(go->name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_DEAD) + stringw(go->getAbilityValue("Experience")) + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_EXP_GAIN));
 				
 					debugPrint("Monster dies: %d\n",go->id);
 
@@ -829,7 +829,7 @@ bool CLevelManager::Action(s32 id)
 			{
 				//Miss!
 				m_GameManager->DisplayMonsterDamage(m_pLevels[m_LevelIndex]->getMonsterHealthBarPos(id),0); //this will display "miss" on screen...
-				m_GameManager->getGameGUI()->AddConsoleText(stringw(L"You missed ") + go->name + stringw(" (") + stringw(randomPCAttack) + stringw(" < ") + stringw(randomMonsterDefence) + stringw(")"));
+				m_GameManager->getGameGUI()->AddConsoleText(m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_MISSED) + go->name + stringw(" (") + stringw(randomPCAttack) + stringw(" < ") + stringw(randomMonsterDefence) + stringw(")"));
 			}
 			return true;
 		}

@@ -539,7 +539,7 @@ bool CDialogWindow::SaveNPCDialog(IFileSystem* fs, stringc file,TreeNode* rootNo
 
 void CDialogWindow::AddGameDialog(IFileSystem* fs, stringw filename)
 {
-	stringc dialogPath = stringw("media/Dialogs/") + filename;
+	stringc dialogPath = stringw(DIALOG_DIR) + filename;
 	IXMLReader* xml = fs->createXMLReader(dialogPath.c_str());
 	if(xml)
 	{

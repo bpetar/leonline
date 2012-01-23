@@ -1,0 +1,5 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Big Torch"/>
+	<Model value="Torchbig.b3d"/>
+</Config>

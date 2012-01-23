@@ -1,5 +1,13 @@
 <!-- Static Configuration File -->
 <Config>
+	<Levels>
+		<Static filename="torchbig"/>
+		<Static filename="well"/>
+	</Birstaff>
+	<Minelevel>
+		<Static filename="minefloor"/>
+		<Static filename="minewall"/>
+	</Minelevel>
 	<Furniture>
 		<Static filename="bed"/>
 		<Static filename="plate"/>
@@ -17,8 +25,7 @@
 		<Static filename="barn_01"/>
 	</Houses>
 	<Terrain>
-		<Static filename="minefloor"/>
-    <Static filename="minewall"/>
+    <Static filename="well"/>
 	</Terrain>
 	<Tiles>
 		<Static filename="grass1"/>

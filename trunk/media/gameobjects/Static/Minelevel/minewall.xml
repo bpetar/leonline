@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Mine Wall"/>
+	<Model value="MineWall.x"/>
+	<Description value="Mine level wall."/>
+</Config>

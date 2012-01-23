@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Mine Floor"/>
+	<Model value="MineFloor.x"/>
+	<Description value="Mine level floor."/>
+</Config>

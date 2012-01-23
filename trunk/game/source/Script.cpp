@@ -419,7 +419,7 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 				else //this item doesn't have script action for event OnUse
 				{
 					//msg: This item can't be used like that
-					m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_MISSUSE);
+					m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_ITEM_MISSUSE);
 				}
 			}
 		}
@@ -499,7 +499,7 @@ void CScript::OnEvent(SCRIPT_EVENT_TYPE event, stringw script_name, s32 id)
 			else
 			{
 				//msg: This item can't be used with that object
-				m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_OBJECT_ERROR);
+				m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_ITEM_OBJECT_ERROR);
 			}
 		}
 		break;
@@ -674,8 +674,10 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	{
 		if(action->value != stringw(L""))
 		{
-			m_GameManager->getGameGUI()->DrawFloatingText(m_GameManager->m_pPC->node->getPosition()+vector3df(0,15,0), action->value, 5, SColor(255,40,240,40));
-			m_GameManager->getGameGUI()->AddConsoleText(action->value);
+			u32 infoStringID;
+			swscanf_s(action->value.c_str(), L"%d", &infoStringID);
+			m_GameManager->getGameGUI()->AddConsoleText((ELanguageID)infoStringID);
+			m_GameManager->getGameGUI()->DrawFloatingText(m_GameManager->m_pPC->node->getPosition()+vector3df(0,15,0), m_GameManager->m_pLanguages->getString((ELanguageID)infoStringID), 5, SColor(255,40,240,40));
 		}
 	}
 	else if(action->name == stringw("InfoGUI"))
@@ -912,6 +914,6 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	else
 	{
 		//Unrecognized script action...
-		m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_NO_ACTION);
+		m_GameManager->getGameGUI()->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_NO_ACTION);
 	}
 }
