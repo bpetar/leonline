@@ -17,6 +17,7 @@
 #include "gui/EDGui.h"
 #include "Script.h"
 #include "UndoActions.h"
+#include "Languages.h"
 
 using namespace irr;
 using namespace core;
@@ -104,6 +105,8 @@ public:
 	bool SingleObjectSelected();
 	void OnNewMap();
 
+	stringw getTranslatedString(u32 id);
+
 	stringc m_WorkingDirectory;
 
 protected:
@@ -120,6 +123,7 @@ private:
 	CEditorGUI* m_pGuiManager; //our homemade gui manager
 	CEditorLevel* m_pEdiLevel;
 	CScript* m_ScriptEngine;
+	CLanguages* m_pLanguages;
 	/*irr::gui::IGUIFont* m_pFont;*/
 	CUndoActions* m_UndoActionsManager;
 	

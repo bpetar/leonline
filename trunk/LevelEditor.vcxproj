@@ -95,6 +95,7 @@
     <ClCompile Include="source\gui\GUIButtonHandler.cpp" />
     <ClCompile Include="source\gui\GUIMenuHandler.cpp" />
     <ClCompile Include="source\gui\GUIWndMaker.cpp" />
+    <ClCompile Include="source\Languages.cpp" />
     <ClCompile Include="source\level\CBillboardGroupSceneNode.cpp" />
     <ClCompile Include="source\level\CGrassPatchSceneNode.cpp" />
     <ClCompile Include="source\level\CGridSceneNode.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="source\gui\GUIWndMaker.h" />
     <ClInclude Include="source\gui\IGUIContainer.h" />
     <ClInclude Include="source\gui\IGUITreeCtrl.h" />
+    <ClInclude Include="source\Languages.h" />
     <ClInclude Include="source\level\CGrassPatchSceneNode.h" />
     <ClInclude Include="source\level\CGridSceneNode.h" />
     <ClInclude Include="source\level\CTreeGenerator.h" />

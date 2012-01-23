@@ -224,6 +224,7 @@ public:
 	
 
 	stringw name;
+	u32 nameID;
 	stringw mesh;
 	vector3d<f32> pos;
 	vector3d<f32> rot;
@@ -246,6 +247,7 @@ public:
 	bool isAnchored;
 	bool isTerrain;
 	stringw description;
+	u32 descriptionID;
 	stringw script;
 	stringw state;
 	stringw icon;

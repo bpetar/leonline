@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<Language name="English" value="en" />
+
+<string id="0" value="Error 702: string ID is 0 or doesn't exists."/>
+
+<string id="1" value="Psionic's Beast"/>
+<string id="2" value="One of the most dangerous species of Faerun, Psionic beast renders faul attacks with mare thoughts."/>
+<string id="3" value="Zombie"/>
+<string id="4" value="Persistant slow walker."/>
+<string id="5" value="Throwing Dagger"/>
+<string id="6" value="Standard throwing dagger; used for throwing, not so good for stabbing."/>
+<string id="7" value="Psionic's Beast"/>
+<string id="8" value="Psionic's Beast"/>
+<string id="9" value="Psionic's Beast"/>

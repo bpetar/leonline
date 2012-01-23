@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Zombie"/>
+	<Name value="Zombie" id="3"/>
 	<Model value="zombie.b3d"/>
 	<Monster value="true"/>
-	<Description value="Persistant slow walker."/>
+	<Description value="Persistant slow walker." id="4"/>
 	<Radius value="25"/>
 
 	<Animation name="Idle" start="137" end="200"/>

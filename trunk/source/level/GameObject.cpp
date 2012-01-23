@@ -37,6 +37,7 @@ CGameObject::CGameObject()
 	m_Sound_Hello = "";
 	m_Sound_Wound = "";
 	m_Sound_Die = "";
+	nameID = 0;
 }
 /**
  * Advanced constructor.
@@ -79,6 +80,7 @@ CGameObject::CGameObject(stringw _path, stringw _name, bool _static, IVideoDrive
 	m_Sound_Wound = "";
 	m_Sound_Die = "";
 	m_Driver = driver;
+	nameID = 0;
 }
 
 /**
@@ -116,6 +118,8 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	script = _name + ".script"; //default, but can be different
 	icon = _name + ".png"; //default, but can be different
 	m_Driver = driver;
+	nameID = 0;
+
 	if(xml)
 	{
 		LoadPropertiesFromXMLFile(xml);
@@ -189,6 +193,7 @@ void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)
 				else if (stringw("Name") == xml->getNodeName())
 				{
 					name = xml->getAttributeValue(L"value");
+					nameID = xml->getAttributeValueAsInt(L"id");
 				}
 				else if (stringw("Model") == xml->getNodeName())
 				{
@@ -201,6 +206,7 @@ void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)
 				else if (stringw("Description") == xml->getNodeName())
 				{
 					description = xml->getAttributeValue(L"value");
+					descriptionID = xml->getAttributeValueAsInt(L"id");
 				}
 				else if (stringw("Tile") == xml->getNodeName())
 				{

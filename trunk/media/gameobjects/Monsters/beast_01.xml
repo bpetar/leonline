@@ -1,10 +1,10 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Psionic's Beast"/>
+	<Name value="Psionic's Beast" id="1"/>
 	<Model value="beast_01.b3d"/>
 	<NPC value="true"/>
 	<Script value="beast_01.script"/>
-	<Description value="One of the most dangerous species of Faerun, Psionic beast renders faul attacks with mare thoughts."/>
+	<Description value="One of the most dangerous species of Faerun, Psionic beast renders faul attacks with mare thoughts." id="2"/>
 	
 	<Animation name="Idle" start="332" end="380"/>
 	<Animation name="Walk" start="1" end="25"/>

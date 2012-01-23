@@ -338,7 +338,11 @@ bool CGameGUI::OnEvent(const SEvent& event)
 							{
 								m_hoveredSlot = i;
 								pickInfoName->setText(go->name.c_str());
-								pickInfoDescription->setText(go->description.c_str());
+								if(go->descriptionID)
+									pickInfoDescription->setText(m_GameManager->m_pLanguages->getObjectString(go->descriptionID).c_str());
+								else
+									pickInfoDescription->setText(go->description.c_str());
+
 								pickInfoImage->setImage(go->m_IconTexture);
 							}
 						}
@@ -1097,7 +1101,11 @@ void CGameGUI::DisplayPickableInfo(IGUIEnvironment* env, CGameObject* go, recti 
 	env->addImage(m_PickInfoBackgroundTexture, vector2di(0,0), true, m_wnd_pickInfo);
 	pickInfoName = env->addStaticText(go->name.c_str(), recti(20,100,180,126),false,true,m_wnd_pickInfo);
 	pickInfoName->setTextAlignment(EGUIA_CENTER,EGUIA_UPPERLEFT);
-	pickInfoDescription = env->addStaticText(go->description.c_str(), recti(20,130,180,190),false,true,m_wnd_pickInfo);
+	if(go->descriptionID)
+		pickInfoDescription = env->addStaticText(m_GameManager->m_pLanguages->getObjectString(go->descriptionID).c_str(), recti(20,130,180,190),false,true,m_wnd_pickInfo);
+	else
+		pickInfoDescription = env->addStaticText(go->description.c_str(), recti(20,130,180,190),false,true,m_wnd_pickInfo);
+
 	pickInfoDescription->setOverrideFont(fontGaramond12);
 	pickInfoImage = env->addImage(go->m_IconTexture, vector2di(68,30), true, m_wnd_pickInfo);
 	//pickInfoDescription->setTextAlignment(EGUIA_CENTER,EGUIA_UPPERLEFT);

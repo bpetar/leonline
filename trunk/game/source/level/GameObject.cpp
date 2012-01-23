@@ -35,6 +35,8 @@ CGameObject::CGameObject()
 
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
+
+	nameID = 0;
 }
 
 /**
@@ -67,6 +69,7 @@ CGameObject::CGameObject(IXMLReader* xml, IVideoDriver* driver)
 	//hp = 10;
 	m_Radius = 15;
 	m_Mood = Touchy;
+	nameID = 0;
 
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
@@ -107,6 +110,7 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	isTerrain = false;
 	m_IconTexture = NULL;
 	m_Driver = driver;
+	nameID = 0;
 
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
@@ -205,6 +209,7 @@ void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)
 				else if (stringw("Name") == xml->getNodeName())
 				{
 					name = xml->getAttributeValue(L"value");
+					nameID = xml->getAttributeValueAsInt(L"id");
 				}
 				else if (stringw("Model") == xml->getNodeName())
 				{
@@ -218,6 +223,7 @@ void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)
 				else if (stringw("Description") == xml->getNodeName())
 				{
 					description = xml->getAttributeValue(L"value");
+					descriptionID = xml->getAttributeValueAsInt(L"id");
 				}
 				else if (stringw("Radius") == xml->getNodeName())
 				{

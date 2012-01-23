@@ -104,6 +104,7 @@ public:
 
 	//properties
 	stringw name;
+	u32 nameID;
 	stringw mesh;
 	stringw path;
 	stringw position;
@@ -131,6 +132,7 @@ public:
 	bool isAnimated;
 	bool isAnchored;
 	stringw description;
+	u32 descriptionID;
 	stringw script;
 	stringw state;
 	stringw icon;

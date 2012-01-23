@@ -17,6 +17,9 @@
 CLanguages::CLanguages(IFileSystem* fs)
 {
 	m_Language = new TLanguage();
+	m_Language->value = "en";
+	m_Language->name = "english";
+	m_Language->index = 0;
 	m_FS = fs;
 }
 
