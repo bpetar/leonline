@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
 	<Name value="Mine Wall"/>
-	<Model value="MineWall.x"/>
+	<Model value="MineWall.b3d"/>
 	<Description value="Mine level wall."/>
 </Config>

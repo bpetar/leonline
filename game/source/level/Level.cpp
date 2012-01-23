@@ -702,7 +702,7 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 						//Insert light
 						gameObject = new CGameObject();
 						gameObject->mesh = LIGHT_GAME_OBJECT;
-						node = CreateLight(300.0f);
+						node = CreateLight(900.0f);
 						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
 						{
 							//Vibrating light for fire dancing

@@ -1,0 +1,5 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Rock Pile2"/>
+	<Model value="RockPile2.b3d"/>
+</Config>
