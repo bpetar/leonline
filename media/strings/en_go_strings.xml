@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 
-<Language name="English" value="en" />
-
 <string id="0" value="Error 702: string ID is 0 or doesn't exists."/>
 
 <string id="1" value="Psionic's Beast"/>
