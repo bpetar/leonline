@@ -722,7 +722,7 @@ bool CLevelManager::Action(s32 id)
 		{
 			stringw NPCName = m_GameManager->getRootNameFromPathName(go->mesh);
 			NPCName += ".dlg";
-			m_GameManager->getGameGUI()->StartNPCDialog(NPCName);
+			m_GameManager->getGameGUI()->StartNPCDialog(NPCName, go->name);
 			return true;
 		}
 		if (go->isMonster)

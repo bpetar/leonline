@@ -99,6 +99,7 @@ bool RTSCamera::OnEvent(const SEvent& event)
 {
 	return false;
 }
+
 //Uvent?
 //Well, OnEvent is called by Irrlicht engine, cause camera is inheriting ICameraSceneNode
 //And I want to call OnEvent from my game engine loop, So i call OnUvent, and OnEvent is ignored.

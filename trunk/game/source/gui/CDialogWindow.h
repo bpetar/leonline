@@ -73,13 +73,13 @@ public:
 
 	CDialogWindow(); //constructor
 	~CDialogWindow(); //destructor
-	s32 DisplayDialog(IrrlichtDevice* device, IGUIEnvironment* env, stringw filename); //show dialog window
+	s32 DisplayDialog(CGameManager* pGameManager, stringw filename, stringw NPCName); //show dialog window
 	TreeNode* FindLink(TreeNode* node, u32 linkNodeID);
 	void OnClick(CGameManager* pGameManager, u32 nodeIndex, u32 dialogIndex);
 	void HideDialog();
 	void OnEvent(s32 Value);
 	void Init(rect<s32> Rect, IGUIElement* parent, s32 id, IGUIFont* font, ITexture* texture, SColor color);//font colors, font, position, dimension
-	void AddGameDialog(IFileSystem* fs, stringw filename);
+	void AddGameDialog(IFileSystem* fs, stringw language, stringw filename);
 	void SetDialogNodeEnabled(stringw filename, s32 nodeID, bool enable);
 	bool SetNodeEnable(TreeNode* node, u32 nodeID, bool enabled);
 	bool FindDialog(stringw dialogName, s32* dialogIndex);

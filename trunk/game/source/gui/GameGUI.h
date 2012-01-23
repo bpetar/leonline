@@ -102,7 +102,7 @@ public:
 	void AddPickableToInventory(CGameObject* item);
 	CGameObject* getItemFromInventory(s32 id);
 	void RemovePickableFromInventory(s32 id);
-	void StartNPCDialog(stringw dlgFilename);
+	void StartNPCDialog(stringw dlgFilename, stringw NPCName);
 	void ClearInventory();
 	void SaveNPCDialogs();
 	void LoadNPCDialogs();

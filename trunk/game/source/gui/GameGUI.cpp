@@ -900,7 +900,7 @@ void CGameGUI::AddMsgBox(ELanguageID titleID, ELanguageID messageID)
 
 void CGameGUI::AddGameDialog(stringc dialog)
 {
-	m_DialogWindow->AddGameDialog(m_GameManager->getFS(), dialog);
+	m_DialogWindow->AddGameDialog(m_GameManager->getFS(), m_GameManager->m_pLanguages->m_Language->value, dialog);
 }
 
 void CGameGUI::SaveNPCDialogs()
@@ -913,9 +913,9 @@ void CGameGUI::LoadNPCDialogs()
 	m_DialogWindow->LoadNPCDialogs(m_GameManager->getFS());
 }
 
-void CGameGUI::StartNPCDialog(stringw dlgFilename)
+void CGameGUI::StartNPCDialog(stringw dlgFilename, stringw NPCName)
 {
-	m_ActiveDialogIndex = m_DialogWindow->DisplayDialog(m_GameManager->getDevice(),m_GameManager->getGUIEnvironment(),dlgFilename.c_str());
+	m_ActiveDialogIndex = m_DialogWindow->DisplayDialog(m_GameManager,dlgFilename.c_str(), NPCName);
 	if(m_ActiveDialogIndex < 0)
 	{
 		//Display warning: No dialog file found!

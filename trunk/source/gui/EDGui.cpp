@@ -331,7 +331,8 @@ void CEditorGUI::SaveDialog(const stringc &file)
 {
 	if (file != stringc(""))
 	{
-		m_EditorManager->getDevice()->getFileSystem()->changeWorkingDirectoryTo(DIALOG_DIR);
+		//Change working dir to english dialogs by deafult
+		m_EditorManager->getDevice()->getFileSystem()->changeWorkingDirectoryTo(stringw(DIALOG_DIR) + stringw("en/"));
 
 		IXMLWriter* xml = m_EditorManager->getDevice()->getFileSystem()->createXMLWriter(file.c_str());
 		
