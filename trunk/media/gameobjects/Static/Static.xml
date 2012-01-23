@@ -7,6 +7,8 @@
 	<Minelevel>
 		<Static filename="minefloor"/>
 		<Static filename="minewall"/>
+    <Static filename="rockpile1"/>
+		<Static filename="rockpile2"/> 
 	</Minelevel>
 	<Furniture>
 		<Static filename="bed"/>
