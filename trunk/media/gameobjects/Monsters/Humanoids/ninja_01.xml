@@ -1,10 +1,10 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Disco Ninja"/>
+	<Name value="Disco Ninja" id="7"/>
 	<Model value="ninja_01.b3d"/>
 	<Monster value="true"/>
 	<Script value="ninja_01.script"/>
-	<Description value="This ninja likes to listen to the music and go out at night. He would like to record an album of folk music."/>
+	<Description value="This ninja likes to listen to the music and go out at night. He would like to record an album of folk music." id="8"/>
 	<Radius value="25"/>
 
 	<Animation name="Idle" start="206" end="250"/>
