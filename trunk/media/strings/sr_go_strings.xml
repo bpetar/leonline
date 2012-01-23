@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 
-<Language name="English" value="en" />
-
 <string id="0" value="Error 702: string ID je 0, ili ne postoji."/>
 
 <string id="1" value="Paukova Nocnomora"/>
