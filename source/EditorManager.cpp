@@ -52,6 +52,18 @@ void CEditorManager::Init()
 	m_ScriptEngine = new CScript();
 	m_UndoActionsManager = new CUndoActions(this);
 	m_ScriptEngine->Init(m_pDevice, ACTIONS_SCRIPT_FILE, CONDITIONS_SCRIPT_FILE);
+
+	//load languages
+	m_pLanguages = new CLanguages(m_FS);
+	m_FS->changeWorkingDirectoryTo("media/strings");
+	m_pLanguages->Init();
+	bool ret = m_pLanguages->setLanguage("en");
+	if(!ret)
+	{
+		//TODO: display warning message that language is not found!
+	}
+	backToWorkingDirectory();
+
 }
 
 /**
@@ -61,6 +73,11 @@ void CEditorManager::Init()
  */
 CEditorManager::~CEditorManager()
 {
+}
+
+stringw CEditorManager::getTranslatedString(u32 id)
+{
+	return m_pLanguages->getObjectString(id);
 }
 
 /**

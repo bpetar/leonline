@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Throwing Dagger"/>
+	<Name value="Throwing Dagger" id="5"/>
 	<Model value="dagger_01.x"/>
 	<Pickable value="true"/>
 	<Script value="dagger_01.script"/>
-	<Description value="Standard throwing dagger; used for throwing, not so good for stabbing."/>
+	<Description value="Standard throwing dagger; used for throwing, not so good for stabbing." id="6"/>
 </Config>

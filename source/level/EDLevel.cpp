@@ -1319,6 +1319,7 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 		// write properties
 		io::IAttributes* attr = m_EditorManager->getDevice()->getFileSystem()->createEmptyAttributes(m_EditorManager->getDriver());
 		attr->addString("Name",node->getName());
+		attr->addInt("NameID",gameObject->nameID);
 		attr->addInt("ID",node->getID());
 		attr->addString("Mesh",gameObject->mesh.c_str());
 		attr->addString("Path",gameObject->path.c_str());
@@ -1471,16 +1472,22 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 					if(meshPath == stringc(PROCEDURAL_TREE_MESH))
 					{
 						//recreate procedural mesh here
+						gameObject = new CGameObject();
+						gameObject->mesh = PROCEDURAL_TREE_MESH;
 						node = createTree(getProceduralTreeTypeFromName(attr->getAttributeAsString("Name")));
 					}
 					else if(meshPath == stringc(PARTICLE_GAME_OBJECT))
 					{
 						//recreate particle system here
+						gameObject = new CGameObject();
+						gameObject->mesh = PARTICLE_GAME_OBJECT;
 						node = CreateParticles(getParticleTypeFromName(attr->getAttributeAsString("Name")));
 					}
 					else if(meshPath == stringc(LIGHT_GAME_OBJECT))
 					{
 						//Insert light
+						gameObject = new CGameObject();
+						gameObject->mesh = LIGHT_GAME_OBJECT;
 						node = CreateLight();
 						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
 						{
@@ -1533,8 +1540,20 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						gameObject->mesh = attr->getAttributeAsString("Mesh");
 						gameObject->root = Util_GetRootNameFromPath(meshPath);
 
-						gameObject->name = attr->getAttributeAsString("Name");
-						node->setName(gameObject->name);
+						s32 nameID = attr->getAttributeAsInt("NameID");
+						if(nameID == 0)
+						{
+							//just for keeping backward compatibility
+							gameObject->name = attr->getAttributeAsString("Name");
+							node->setName(gameObject->name);
+						}
+						else
+						{
+							//get translated name from given ID.
+							node->setName(m_EditorManager->getTranslatedString(nameID));
+							gameObject->nameID = nameID;
+							gameObject->name = node->getName();
+						}
 						node->setID(gameObject->id);
 						node->setPosition(attr->getAttributeAsVector3d("Position"));
 						node->setRotation(attr->getAttributeAsVector3d("Rotation"));

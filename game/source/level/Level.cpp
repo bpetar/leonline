@@ -522,7 +522,8 @@ void CLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 
 			// write properties
 			io::IAttributes* attr = m_pFS->createEmptyAttributes(m_pDriver);
-			attr->addString("Name",node->getName());
+			attr->addString("Name",node->getName()); //kept for backward compatibility
+			attr->addInt("NameID",gameObject->nameID);
 			attr->addInt("ID",node->getID());
 			attr->addString("Mesh",gameObject->mesh.c_str());
 			attr->addVector3d("Position",node->getPosition());
@@ -740,7 +741,20 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 
 					if(node)
 					{
-						node->setName(attr->getAttributeAsString("Name"));
+						//Name attribute is changed to NameID. 
+						//ID string is translated so name depends on selected language.
+						//we check if nameID exists, otherwise use old name attribute (for backward compatibility).
+						s32 nameID = attr->getAttributeAsInt("NameID");
+						if(nameID == 0)
+						{
+							node->setName(attr->getAttributeAsString("Name"));
+						}
+						else
+						{
+							node->setName(m_GameManager->m_pLanguages->getObjectString(nameID));
+							gameObject->nameID = nameID;
+						}
+
 						node->setID(attr->getAttributeAsInt("ID"));
 						node->setPosition(attr->getAttributeAsVector3d("Position"));
 						node->setRotation(attr->getAttributeAsVector3d("Rotation"));
