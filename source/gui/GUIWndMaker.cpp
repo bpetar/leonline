@@ -756,9 +756,9 @@ IGUIWindow* MakeNPCScriptWindow(CEditorManager* editorManager, stringc dialogFil
 	edGui->m_DialogButton_Cancel = env->addButton(rect<s32>(middleX+20,Y_12+3*itemHeight,middleX+20+100,Y_12+4*itemHeight+10), wnd_NPC, GUI_ID_BUTTON_NPC_CANCEL, L"Cancel");
 	env->setFocus(edGui->m_DialogButton_AddNode);
 
-	//File system
+	//Change working dir to english dialogs by deafult (will be changed if Level Editor gets internationalization)
 	IFileSystem* fs = device->getFileSystem();
-	fs->changeWorkingDirectoryTo(DIALOG_DIR);
+	fs->changeWorkingDirectoryTo(stringw(DIALOG_DIR) + stringw("en/"));
 
 	//Load Dialog Tree
 	PopulateDialogTreeNodeFromXML(editorManager, dialogFilename.c_str(), tab, rect<s32>(leftMarginX,spaceY,X_10-3*leftMarginX,Y_10-spaceY-Y_2));

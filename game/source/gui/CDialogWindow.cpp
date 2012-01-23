@@ -337,16 +337,16 @@ bool CDialogWindow::LoadDialogFromXML(IXMLReader* xml, u32 index)
 	return true;
 }
 
-s32 CDialogWindow::DisplayDialog(IrrlichtDevice* device, IGUIEnvironment* env, stringw filename)
+s32 CDialogWindow::DisplayDialog(CGameManager* pGameManager, stringw filename, stringw NPCName)
 {
 	s32 index = -1;
 
 	if(FindDialog(filename,&index))
 	{
-		m_DlgWnd = env->addWindow(m_Rect,false,0,0,m_ID);
-		m_DlgWnd->setText(L"Conversation Dialog");
+		m_DlgWnd = pGameManager->getGUIEnvironment()->addWindow(m_Rect,false,0,0,m_ID);
+		m_DlgWnd->setText(stringw(NPCName + pGameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_MSGBOX_CONVERSATION_TITLE)).c_str());
 		//this can be moved to constructor
-		m_ImageBtnRead = device->getVideoDriver()->getTexture("media/Icons/button_read.png");
+		m_ImageBtnRead = pGameManager->getDevice()->getVideoDriver()->getTexture("media/Icons/button_read.png");
 
 		if(!m_LevelDialogs[index]->m_DialogRead)
 		{
@@ -367,7 +367,7 @@ s32 CDialogWindow::DisplayDialog(IrrlichtDevice* device, IGUIEnvironment* env, s
 		{
 			if(npcWelcome->Enabled)
 			{
-				m_Answer = env->addEditBox(npcWelcome->Text.c_str(), btnRect, true, m_DlgWnd);
+				m_Answer = pGameManager->getGUIEnvironment()->addEditBox(npcWelcome->Text.c_str(), btnRect, true, m_DlgWnd);
 				m_Answer->setAutoScroll(true);
 				m_Answer->setMultiLine(true);
 				m_Answer->setWordWrap(true);
@@ -383,7 +383,7 @@ s32 CDialogWindow::DisplayDialog(IrrlichtDevice* device, IGUIEnvironment* env, s
 			if(child->Enabled)
 			{
 				btnRect = rect<s32>(10, middle + m_NumberOfCurrentDialogChoices*(btnHeight+2), m_Rect.LowerRightCorner.X - m_Rect.UpperLeftCorner.X - 10, middle + btnHeight + m_NumberOfCurrentDialogChoices*(btnHeight+2));
-				m_ListOfButtons[m_NumberOfCurrentDialogChoices] = env->addButton(btnRect,m_DlgWnd,m_ID+child->ID,child->Text.c_str());
+				m_ListOfButtons[m_NumberOfCurrentDialogChoices] = pGameManager->getGUIEnvironment()->addButton(btnRect,m_DlgWnd,m_ID+child->ID,child->Text.c_str());
 				if(child->isRead)
 				{
 					m_ListOfButtons[m_NumberOfCurrentDialogChoices]->setImage(m_ImageBtnRead);
@@ -537,9 +537,9 @@ bool CDialogWindow::SaveNPCDialog(IFileSystem* fs, stringc file,TreeNode* rootNo
 	return false;
 }
 
-void CDialogWindow::AddGameDialog(IFileSystem* fs, stringw filename)
+void CDialogWindow::AddGameDialog(IFileSystem* fs, stringw language, stringw filename)
 {
-	stringc dialogPath = stringw(DIALOG_DIR) + filename;
+	stringc dialogPath = stringw(DIALOG_DIR) + language + stringw("/") + filename;
 	IXMLReader* xml = fs->createXMLReader(dialogPath.c_str());
 	if(xml)
 	{

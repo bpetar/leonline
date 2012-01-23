@@ -84,6 +84,7 @@ enum ELanguageID
 	E_LANG_STRING_LEVEL_GUI_MSGBOX_INVENTORY_FULL_MSG, // "Can't add any more items to inventory!"
 	E_LANG_STRING_LEVEL_GUI_MSGBOX_CONTAINER_CONTENT, // "Container Content"
 	E_LANG_STRING_LEVEL_GUI_MSGBOX_CONTAINER_CONTENT_MSG, // "This is container window. \n\nTo move items to your inventory just click on them. Move mouse over item in your inventory to display info. To use items in your inventory right click on them. Items can be droped on the floor or put in other containers on the map. Some items can be used on other objects on the map."
+	E_LANG_STRING_LEVEL_GUI_MSGBOX_CONVERSATION_TITLE, //" says:"
 
 	E_LANG_STRING_LEVEL_MSGBOX = 70,
 	E_LANG_STRING_LEVEL_MSGBOX_ERROR_LOADING, // "Error Loading Game"
