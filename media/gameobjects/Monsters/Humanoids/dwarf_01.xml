@@ -1,10 +1,10 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Friendly Dwarf Leopold"/>
+	<Name value="Friendly Dwarf Leopold" id="11"/>
 	<Model value="dwarf_01.b3d"/>
 	<NPC value="true"/>
 	<Script value="dwarf_01.script"/>
-	<Description value="Leopold the friendly dwarf is very sturdy and good hearted fellow. Never lets go of his axe."/>
+	<Description value="Leopold the friendly dwarf is very sturdy and good hearted fellow. Never lets go of his axe." id="12"/>
 
 	<Animation name="Idle" start="292" end="325"/>
 	<Animation name="Walk" start="2" end="14"/>

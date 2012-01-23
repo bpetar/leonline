@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Very small ninja"/>
+	<Name value="Very small ninja" id="9"/>
 	<Model value="micro-ninja.b3d"/>
 	<Monster value="true"/>
-	<Description value="Jiu jitzu."/>
+	<Description value="Small but very dangerous." id="10"/>
 
 	<Animation name="Idle" start="206" end="250"/>
 	<Animation name="Walk" start="1" end="14"/>
