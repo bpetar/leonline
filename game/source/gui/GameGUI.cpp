@@ -124,7 +124,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 								else
 								{
 									//msg Cant combine two items in that container, do it in inventory
-									AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_CONTAINER_COMBINE_ERROR);
+									AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_CONTAINER_COMBINE_ERROR);
 									return true;
 								}
 							}
@@ -141,7 +141,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 									{
 										m_Inventory->InsertItem(item); //add to inventory
 										container->RemoveItem(i);
-										AddConsoleText(item->name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GUI_ITEM_MOVED_TO_INVENTORY));
+										AddConsoleText(item->name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_ITEM_MOVED_TO_INVENTORY));
 										return true;
 									}
 									else
@@ -173,7 +173,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 								{
 									//TODO: Here combining should take place, no?
 									//msg Can't combine these two items
-									AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_COMBINE_ERROR);
+									AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_COMBINE_ERROR);
 									return true;
 								}
 							}
@@ -270,7 +270,7 @@ bool CGameGUI::OnEvent(const SEvent& event)
 								//combine items
 								//m_bItemDragged = false;
 								//else
-								AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GUI_COMBINE_ERROR);
+								AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_COMBINE_ERROR);
 								return true;
 							}
 							else
@@ -1079,10 +1079,10 @@ void CGameGUI::DisplaySkillsWindow(IGUIEnvironment* env)
  */
 void CGameGUI::DisplayDeathWindow(IGUIEnvironment* env, stringw message)
 {
-		m_wnd_death = env->addWindow(core::rect<s32>(250,100,650,380), false, L"You failed miserably", 0, 5500);
+	m_wnd_death = env->addWindow(core::rect<s32>(250,100,650,380), false, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_FAIL_TITLE).c_str(), 0, 5500);
 		env->addStaticText(message.c_str(),core::rect<s32>(70,40,400,100), false, true, m_wnd_death);
-		m_LoadButton = env->addButton(core::rect<s32>(150,100,260,120), m_wnd_death, 5502, L"Load Game");
-		m_ExitButton = env->addButton(core::rect<s32>(150,160,260,180), m_wnd_death, 5504, L"Exit Game");
+		m_LoadButton = env->addButton(core::rect<s32>(150,100,260,120), m_wnd_death, 5502, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_LOAD).c_str());
+		m_ExitButton = env->addButton(core::rect<s32>(150,160,260,180), m_wnd_death, 5504, m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_EXIT).c_str());
 }
 
 /**
@@ -1407,7 +1407,7 @@ bool CGameGUI::InitGameGUI()
 	m_Console->setWordWrap(true);
 	m_Console->setTextAlignment(EGUIA_UPPERLEFT,EGUIA_LOWERRIGHT);
 		
-	m_Console->setText(m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_INIT).c_str());
+	m_Console->setText(m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_INIT).c_str());
 
 	//add settings button:
 	m_SettingsButton = m_GameManager->getGUIEnvironment()->addButton(rect<s32>(10,windowBottom-64,74,windowBottom),0,5600,L"");

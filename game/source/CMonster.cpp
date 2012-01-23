@@ -158,7 +158,7 @@ bool CMonster::Init(ISceneManager *smgr, IAnimatedMeshSceneNode* node, CGameObje
 			m_RingNode->setPosition(m_Node->getPosition()+vector3df(0,3.0f,0));
 		}
 
-		m_CauseOfDeath = stringw("You were killed by ") + go->name;
+		m_CauseOfDeath = m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_KILLED_BY) + go->name;
 
 		m_MonsterDefenseMin = go->getSkillMin("Defense");
 		m_MonsterDefenseMax = go->getSkillMax("Defense");	
@@ -638,7 +638,7 @@ void CMonster::notifyAttackEnd()
 				damage = m_MonsterDamageMin;
 			}
 
-			m_GameManager->getGameGUI()->AddConsoleText(m_Name + stringw(" hit you with ") + stringw(damage) + stringw(" damage! ") + stringw("(") + stringw(randomMonsterAttack) + stringw(">=") + stringw(randomPCDefence) + stringw(")"));
+			m_GameManager->getGameGUI()->AddConsoleText(m_Name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_HIT_YOU) + stringw(damage) + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_DAMAGE) + stringw(" (") + stringw(randomMonsterAttack) + stringw(">=") + stringw(randomPCDefence) + stringw(")"));
 
 			//PlayHitSound();
 
@@ -647,7 +647,7 @@ void CMonster::notifyAttackEnd()
 		else
 		{
 			//Miss! 
-			m_GameManager->getGameGUI()->AddConsoleText(m_Name + stringw(" missed you!"));
+			m_GameManager->getGameGUI()->AddConsoleText(m_Name + m_GameManager->m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_MISS_YOU));
 			//Play miss sound?
 		}
 	}

@@ -182,8 +182,6 @@ bool CGameManager::Init()
 	//m_pPC->addAnimator(m_pLevelManager->GetObstacleMetaTriangleSelector());
 	//m_pLevelManager->SetMonstersCollisionAnimator();
 
-	InitNPCDialogs();
-
 	//load conditions from file
 	LoadConditions("media/Scripts/conditions.script");
 	
@@ -273,6 +271,9 @@ bool CGameManager::NewGame()
 	//Load First Map
 	if (!m_pLevelManager->OnLoadMap(m_StartMap))
 		return false;
+
+	//Init NPC dialogs
+	InitNPCDialogs();
 
 	//Load Player Character
 	m_pPC = new CPlayerCharacter(this);
@@ -498,6 +499,8 @@ void CGameManager::LoadGame(bool restart)
 	ClearTemp();
 	//Clear Inventory
 	ClearInventory();
+	//Init NPC Dialogs
+	InitNPCDialogs();
 	//get latest level and load
 	stringc playerFile = stringc("save/") + m_PlayerConfigFile;
 	if(m_FS->existFile(playerFile.c_str())) {
@@ -522,14 +525,14 @@ void CGameManager::LoadGame(bool restart)
 		m_pLevelManager->SetMonstersCollisionAnimator();
 		//Console info + clear console
 		m_GameGUI->ClearConsole();
-		m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_LOAD);
+		m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_LOAD);
 	}
 	else
 	{
 		//just restart the game if there is no saved game
 		if(restart)
 		{
-			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_RESTART);
+			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_RESTART);
 			stringc playerFile = stringc("game/") + m_PlayerConfigFile;
 			if(m_FS->existFile(playerFile.c_str())) {
 				//m_LoadedMapName is loaded with PC
@@ -603,14 +606,14 @@ void CGameManager::ReLoadGame(bool restart)
 		m_GameGUI->healthBar->setBarValue(m_pPC->getAbilityValue("Health"));
 		//Console info + clear console
 		m_GameGUI->ClearConsole();
-		m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_LOAD);
+		m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_LOAD);
 	}
 	else
 	{
 		//just restart the game if there is no saved game
 		if(restart)
 		{
-			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_RESTART);
+			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_RESTART);
 			stringc playerFile = stringc("game/") + m_PlayerConfigFile;
 			if(m_FS->existFile(playerFile.c_str())) {
 				//m_LoadedMapName is loaded with PC
@@ -673,7 +676,7 @@ void CGameManager::SaveGame()
 	m_GameGUI->SaveNPCDialogs();
 
 	//Notify
-	m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_SAVE);
+	m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_SAVE);
 }
 
 /**
@@ -723,7 +726,7 @@ void CGameManager::PCChangeAbility(stringw name, s32 value)
 {
 	if(name.equals_ignore_case("Health"))
 	{
-		PCChangeHealth(value, "You successfully reduced your Health below 0!");
+		PCChangeHealth(value, m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_HEALTH_0));
 	}
 	else if (name.equals_ignore_case("Experience"))
 	{
@@ -753,7 +756,7 @@ void CGameManager::PCChangeHealth(s32 value, stringw deathReason)
 		//we could do: if (hp <= m_pPC->getAbilityMin("Health"))
 		if(hp <= 0)
 		{
-			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_PLAYER_DIED);
+			m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_PLAYER_DIED);
 			HandleDeath(deathReason);
 		}
 		else
@@ -939,7 +942,7 @@ void CGameManager::Update(f32 elapsed_time)
 			if(m_pPC->getPosition().Y < -50)
 			{
 				//you fell off the world?
-				HandleDeath("You fell off the edge of the world?");
+				HandleDeath(m_pLanguages->getString(E_LANG_STRING_LEVEL_GUI_DEATH_FROM_FALL));
 			}
 		}
 
@@ -1085,8 +1088,8 @@ void CGameManager::TransferPickableFromNPCToPlayer(s32 NPCid, s32 itemID)
 			m_GameGUI->AddPickableToInventory(itemGO);
 
 			//display notification "item received"
-			m_GameGUI->AddConsoleText(m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_GAIN) + itemGO->name);
-			m_GameGUI->DrawFloatingText(m_pPC->node->getPosition()+vector3df(0,PLAYER_HEIGHT,0), m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_GAME_ITEM_GAIN) + itemGO->name, 5, SColor(255,40,240,40));
+			m_GameGUI->AddConsoleText(m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_ITEM_GAIN) + itemGO->name);
+			m_GameGUI->DrawFloatingText(m_pPC->node->getPosition()+vector3df(0,PLAYER_HEIGHT,0), m_pLanguages->getString(E_LANG_STRING_LEVEL_CONSOLE_ITEM_GAIN) + itemGO->name, 5, SColor(255,40,240,40));
 		}
 	}
 }
@@ -1456,7 +1459,7 @@ bool CGameManager::OnEvent(const SEvent& event)
 								else 
 								{
 									//click on the non terrain non action item
-									m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_GAME_EMPTY_CLICK);
+									m_GameGUI->AddConsoleText(E_LANG_STRING_LEVEL_CONSOLE_EMPTY_CLICK);
 								}
 							}
 						}
