@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Cat"/>
+	<Name value="Cat" id="15"/>
 	<Model value="cat.b3d"/>
 	<Monster value="true"/>
-	<Description value="Kitty."/>
+	<Description value="Kitty." id="16"/>
 	<Radius value="15"/>
 	
 	<Animation name="Idle" start="16" end="59"/>

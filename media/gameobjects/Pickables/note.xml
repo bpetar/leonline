@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Paper Note"/>
+	<Name value="Paper Note" id="47"/>
 	<Model value="note.3ds"/>
 	<Pickable value="true"/>
 	<Script value="note.script"/>
-	<Description value="Note to self: don't forget to write notes."/>
+	<Description value="Note to self: don't forget to write notes." id="48"/>
 </Config>

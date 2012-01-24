@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Giant Ant"/>
+	<Name value="Giant Ant" id="13"/>
 	<Model value="ant02.b3d"/>
 	<Monster value="true"/>
-	<Description value="Ant is first enemy in fallout 2."/>
+	<Description value="Ant is first enemy in fallout 2." id="14"/>
 	<Radius value="15"/>
 	
 	<Animation name="Idle" start="47" end="65"/>

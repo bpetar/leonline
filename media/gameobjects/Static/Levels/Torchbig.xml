@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Big Torch"/>
+	<Name value="Big Torch" id="77"/>
 	<Model value="Torchbig.b3d"/>
+  <Description value="Torch standing on the ground." id="78"/>
 </Config>

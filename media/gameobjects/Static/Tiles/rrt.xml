@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="temple floor 3"/>
+	<name value="Floor Tile Red" id="97"/>
 	<Model value="rrt.3ds"/>
   <Tile value="true"/>
   <Terrain value="true"/>
-	<Description value="Seamless rough red floor tile."/>
+	<Description value="Seamless rough red floor tile." id="98"/>
 </Config>

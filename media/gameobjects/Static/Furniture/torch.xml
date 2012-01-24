@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Torch"/>
+	<Name value="Torch" id="71"/>
+  <Description value="Wall mounted, wood and iron torch." id="72"/>
 	<Model value="torch.3ds"/>
 </Config>

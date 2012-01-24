@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Long Rope"/>
+	<Name value="Long Rope" id="51"/>
 	<Model value="rope.x"/>
 	<Pickable value="true"/>
 	<Script value="rope.script"/>
-	<Description value="Just a standard rope. Can be used for climbing, tying, and other."/>
+	<Description value="Just a standard rope. Can be used for climbing, tying, and other." id="52"/>
 </Config>

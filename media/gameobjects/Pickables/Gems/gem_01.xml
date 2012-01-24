@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Turquoise"/>
+	<Name value="Turquoise" id="23"/>
 	<Model value="gem_01.x"/>
 	<Pickable value="true"/>
 	<Script value="gem_01.script"/>
-	<Description value="Turquoise. Value 10gp."/>
+	<Description value="Turquoise. Value 10gp." id="24"/>
 </Config>

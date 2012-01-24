@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Mine Floor"/>
+	<Name value="Mine Floor" id="81"/>
 	<Model value="MineFloor.b3d"/>
-	<Description value="Mine level floor."/>
+	<Description value="Mine level floor." id="82"/>
 </Config>

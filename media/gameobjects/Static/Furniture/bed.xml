@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Simple Bed"/>
+	<Name value="Simple Bed" id="55"/>
+  <Description value="Simple indeed." id="54/>
 	<Model value="bed.3ds"/>
 </Config>

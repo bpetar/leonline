@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Rat"/>
+	<Name value="Rat" id="19"/>
 	<Model value="rat.b3d"/>
 	<Monster value="true"/>
-	<Description value="Rat knows when to leave the ship."/>
+	<Description value="Rat knows when to leave the ship." id="20"/>
 	<Radius value="15"/>
 	
 	<Animation name="Idle" start="2" end="10"/>

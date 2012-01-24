@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Pink"/>
+	<Name value="Pink" id="27"/>
 	<Model value="gem_03.x"/>
 	<Pickable value="true"/>
 	<Script value="gem_03.script"/>
-	<Description value="Magic Pink Gem. Value: 17gp."/>
+	<Description value="Magic Pink Gem. Value: 17gp." id="28"/>
 </Config>

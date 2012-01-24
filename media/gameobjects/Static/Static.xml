@@ -26,9 +26,6 @@
 		<Static filename="house_01"/>
 		<Static filename="barn_01"/>
 	</Houses>
-	<Terrain>
-    <Static filename="well"/>
-	</Terrain>
 	<Tiles>
 		<Static filename="grass1"/>
 		<Static filename="pgu1"/>

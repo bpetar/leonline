@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Dwarven Axe"/>
+	<Name value="Dwarven Axe" id="37"/>
 	<Model value="axe_01.x"/>
 	<Pickable value="true"/>
 	<Script value="axe_01.script"/>
-	<Description value="Dwarven axe; used, but still sharp."/>
+	<Description value="Dwarven axe; used, but still sharp." id="38"/>
 </Config>

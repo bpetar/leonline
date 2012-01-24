@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="temple floor 2"/>
+	<name value="Floor Tile Blue" id="89"/>
 	<Model value="bms.3ds"/>
   <Tile value="true"/>
   <Terrain value="true"/>
-	<Description value="Seamless blue stone floor tile."/>
+	<Description value="Seamless blue stone floor tile." id="90"/>
 </Config>
