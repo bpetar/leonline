@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Chair"/>
+	<Name value="Chair" id="59"/>
+  <Description value="Simple wooden chair." id="60"/>
 	<Model value="chair.x"/>
 </Config>

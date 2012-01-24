@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Mace"/>
+	<Name value="Mace" id="39"/>
 	<Model value="mace.x"/>
 	<Pickable value="true"/>
 	<Script value="mace.script"/>
-	<Description value="Bludgeoning weapon; making funny sounds when it hits."/>
+	<Description value="Bludgeoning weapon; making funny sounds when it hits." id="40"/>
 </Config>

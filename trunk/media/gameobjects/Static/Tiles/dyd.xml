@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="temple floor 1"/>
+	<name value="Floor Tile Colored" id="91"/>
 	<Model value="dyd.3ds"/>
   <Tile value="true"/>
   <Terrain value="true"/>
-	<Description value="Seamless colored stone floor tile."/>
+	<Description value="Seamless colored stone floor tile." id="92"/>
 </Config>

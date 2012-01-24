@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Healing Potion"/>
+	<Name value="Healing Potion" id="33"/>
 	<Model value="potion_healing.x"/>
 	<Pickable value="true"/>
 	<Script value="potion_healing.script"/>
-	<Description value="Healing Potion. Repairs minor mistakes."/>
+	<Description value="Healing Potion. Repairs minor mistakes." id="34"/>
 </Config>

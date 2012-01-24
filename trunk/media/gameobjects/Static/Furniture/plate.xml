@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Wall Plate"/>
+	<Name value="Wall Plate" id="65"/>
 	<Model value="plate.3ds"/>
 	<Trigger value="true"/>
-	<Description value="Notifies about house rules."/>
+	<Description value="Notifies about house rules." id="66"/>
 </Config>

@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Tuki The Turtle"/>
+	<Name value="Tuki The Turtle" id="21"/>
 	<Model value="turtle.b3d"/>
 	<Monster value="true"/>
-	<Description value="Tuki the turtle use to be a shepherd, but now he's onto something bigger."/>
+	<Description value="Tuki the turtle used to be a shepherd, but now he's onto something bigger." id="22"/>
 	
 	<Animation name="Idle" start="101" end="150"/>
 	<Animation name="Walk" start="1" end="11"/>

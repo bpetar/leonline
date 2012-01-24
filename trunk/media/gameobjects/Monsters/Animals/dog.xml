@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Dog"/>
+	<Name value="Dog" id="17"/>
 	<Model value="dog.b3d"/>
 	<Monster value="true"/>
-	<Description value="Best friend."/>
+	<Description value="Best friend." id="18"/>
 	<Radius value="25"/>
 	
 	<Animation name="Idle" start="26" end="60"/>

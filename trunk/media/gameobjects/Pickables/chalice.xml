@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="Golden Chalice"/>
+	<name value="Golden Chalice" id="43"/>
 	<Model value="chalice.3ds"/>
 	<Pickable value="true"/>
 	<Script value="chalice.script"/>
-	<Description value="Goblet, valuable."/>
+	<Description value="Goblet, valuable." id="44"/>
 </Config>

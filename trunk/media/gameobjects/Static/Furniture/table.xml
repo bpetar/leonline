@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Table"/>
+	<Name value="Table" id="69"/>
+  <Description value="Simple wooden table." id="70"/>
 	<Model value="table.x"/>
 </Config>

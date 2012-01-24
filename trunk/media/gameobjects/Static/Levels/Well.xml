@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Mine .b3d"/>
+	<Name value="Well" id="79"/>
 	<Model value="Well.b3d"/>
+  <Description value="Water well." id="80"/>
 </Config>

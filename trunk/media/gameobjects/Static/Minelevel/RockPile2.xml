@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Rock Pile2"/>
+	<Name value="Rock Pile 2" id="87"/>
 	<Model value="RockPile2.b3d"/>
+  <Description value="Rock." id="88"/>
 </Config>

@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="grass path up 1"/>
+	<name value="Floor Tile GPU" id="95"/>
 	<Model value="pgu1.3ds"/>
   <Tile value="true"/>
   <Terrain value="true"/>
-	<Description value="Seamless outdoor path in the grass tile, oriented upwars."/>
+	<Description value="Seamless outdoor path in the grass. GPU = Grass Path Upward." id="96"/>
 </Config>

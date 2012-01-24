@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Closet"/>
+	<Name value="Closet" id="63"/>
+  <Description value="Simple wooden closet." id="64"/>
 	<Model value="closet.x"/>
 </Config>

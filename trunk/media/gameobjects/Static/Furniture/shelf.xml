@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Book Shelf"/>
+	<Name value="Book Shelf" id="67"/>
+  <Description value="Simple book shelf." id="68"/>
 	<Model value="bookshelf_3DS.3DS"/>
 </Config>

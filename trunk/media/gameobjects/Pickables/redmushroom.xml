@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Red Mushroom"/>
+	<Name value="Red Mushroom" id="49"/>
 	<Model value="redmushroom.x"/>
 	<Pickable value="true"/>
 	<Script value="redmushroom.script"/>
-	<Description value="Peculiar Mushroom. Can be eaten but to what end?"/>
+	<Description value="Peculiar Mushroom. Can be eaten but to what end?" id="50"/>
 </Config>
