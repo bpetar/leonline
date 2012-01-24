@@ -16,6 +16,7 @@
 		<Pickables filename="axe_01"/>
 		<Pickables filename="sword_01"/>
 		<Pickables filename="mace"/>
+    <Pickables filename="pickaxe"/>
 	</Weapons>
 	<Pickables filename="chalice"/>
 	<Pickables filename="redmushroom"/>
