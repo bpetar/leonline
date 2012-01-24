@@ -56,7 +56,7 @@
 <string id="48" value="Note to self: don't forget to write notes."/>
 <string id="49" value="Red Mushroom"/>
 
-<string id="50" value="Peculiar Mushroom. Can be eaten but to what end?"/>
+<string id="50" value="Peculiar Mushroom. Can be eaten but to what und?"/>
 <string id="51" value="Long Rope"/>
 <string id="52" value="Just a standard rope. Can be used for climbing, tying, and other."/>
 <string id="53" value="Stone Altar"/>
@@ -156,7 +156,7 @@
 <string id="139" value="Wheat Sack"/>
 
 <string id="140" value="Sack of wheat."/>
-<string id="141" value="Start Flag"/>
+<string id="141" value="Start Flag"/> <!-- Don't translate this one -->
 <string id="142" value="Marks players start position on this map."/>
 <string id="143" value="Teleport"/>
 <string id="144" value="Teleport. Magic device that transports you to predefined location instantly."/>
@@ -164,7 +164,7 @@
 <string id="146" value="Yellow red tractor."/>
 <string id="147" value="Horse Trough"/>
 <string id="148" value="Horses drink water from it."/>
-<string id="149" value="undefined string."/>
+<string id="149" value="Pickaxe"/>
 
-<string id="150" value="undefined string."/>
+<string id="150" value="Pickaxe is not used for picking locks."/>
 <string id="151" value="undefined string."/>
