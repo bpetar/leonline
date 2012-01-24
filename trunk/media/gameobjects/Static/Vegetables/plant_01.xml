@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Plant 1"/>
+	<Name value="Plant 1" id="101"/>
 	<Model value="plant_01.x"/>
-	<Description value="Rusty mushrooms."/>
+	<Description value="Rusty mushrooms." id="102"/>
 </Config>
