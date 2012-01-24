@@ -1,6 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Container value="true"/>
-	<Name value="Horse Trough"/>
+	<Name value="Horse Trough" id="147"/>
 	<Model value="trough.x"/>
+	<Container value="true"/>
+	<Description value="Horses drink water from it." id="148"/>
 </Config>

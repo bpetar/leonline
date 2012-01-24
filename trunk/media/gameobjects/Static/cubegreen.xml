@@ -1,8 +1,0 @@
-<!-- Game Object Configuration File -->
-<Config>
-	<name value="Cube green"/>
-	<Model value="cubegreen.3ds"/>
-	<Script value="cubegreen.script"/>
-	<Description value="cubegreeneen"/>
-
-</Config>

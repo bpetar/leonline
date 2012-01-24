@@ -8,6 +8,163 @@
 <string id="4" value="Spor, ali uporan."/>
 <string id="5" value="Bodež"/>
 <string id="6" value="Dobar za bacanje, ne tako dobar za macevanje."/>
-<string id="7" value="Psionic's Beast"/>
-<string id="8" value="Psionic's Beast"/>
-<string id="9" value="Psionic's Beast"/>
+<string id="7" value="Disko Nindza"/>
+<string id="8" value="Kakav nindza? Disko nindza!"/>
+<string id="9" value="Vrlo Mali Nindza"/>
+
+<string id="10" value="Mali, ali tehnicar."/>
+<string id="11" value="Patuljak Leopold"/>
+<string id="12" value="Stari dobri patuljak Leopold nikad ne ispusta sekiru iz ruke."/>
+<string id="13" value="Dzinovski Mrav"/>
+<string id="14" value="Mrav je prvi protivnik u Fallout 2."/>
+<string id="15" value="Macka"/>
+<string id="16" value="Crna macka."/>
+<string id="17" value="Pas"/>
+<string id="18" value="Najbolji prijatelj."/>
+<string id="19" value="Pacov"/>
+
+<string id="20" value="Zna kad je vreme da napusti brod."/>
+<string id="21" value="Tuki Kornjacon"/>
+<string id="22" value="Kornjaca Tuki krece u avanturu."/>
+<string id="23" value="Tirkiz"/>
+<string id="24" value="Tirkiz. Vredi 10gp."/>
+<string id="25" value="Rubin"/>
+<string id="26" value="Rubin. Vredi: 100gp."/>
+<string id="27" value="Pink"/>
+<string id="28" value="Magicni Pink Gem. Vredi: 17gp."/>
+<string id="29" value="Pivo"/>
+
+<string id="30" value="Ko bi napravio igru brez pive?"/>
+<string id="31" value="Prazna Flasa"/>
+<string id="32" value="Prazna flasa. Na mom stolu."/>
+<string id="33" value="Lekoviti Napitak"/>
+<string id="34" value="Drugim recima: Healing Potion."/>
+<string id="35" value="Magicni Napitak"/>
+<string id="36" value="More mana potion."/>
+<string id="37" value="Patuljacka Sekira"/>
+<string id="38" value="Za sekiranje protivnika."/>
+<string id="39" value="Buzdovan"/>
+
+<string id="40" value="Buzdovan sestoperac."/>
+<string id="41" value="Dugi Mac"/>
+<string id="42" value="Dugi Mac - standardno dobro."/>
+<string id="43" value="Zlatni Pehar"/>
+<string id="44" value="Pehar, vredan."/>
+<string id="45" value="Zardjali Kljuc"/>
+<string id="46" value="Rdjav kljuc. Verovatno vodi tamo gde se ne ide cesto."/>
+<string id="47" value="Papirna Poruka"/>
+<string id="48" value="Pise: seti se da zapisujes stvari."/>
+<string id="49" value="Crvena Pecurka"/>
+
+<string id="50" value="Cudna pecurka. Moze se pojesti, ali sta dalje?"/>
+<string id="51" value="Dug Kanap"/>
+<string id="52" value="Standardni kanap. Moze da se penjes, vezivas i slicno."/>
+<string id="53" value="Kameni Oltar"/>
+<string id="54" value="Pogodan za serviranje ladnih predjela, i zrtvovanje devica."/>
+<string id="55" value="Krevet"/>
+<string id="56" value="Obican krevet."/>
+<string id="57" value="Kameni Svecnjak"/>
+<string id="58" value="Pokretan, al tezak ko djavo."/>
+<string id="59" value="Stolica"/>
+
+<string id="60" value="Obicna drvena stolica."/>
+<string id="61" value="Kovceg"/>
+<string id="62" value="Pun blaga."/>
+<string id="63" value="Orman"/>
+<string id="64" value="Pun prljavih carapa."/>
+<string id="65" value="Ploca"/>
+<string id="66" value="Stoji na zidu i obavestava."/>
+<string id="67" value="Polica Za Knjige"/>
+<string id="68" value="Polica za knjige, pivo..."/>
+<string id="69" value="Sto"/>
+
+<string id="70" value="Obican drveni sto."/>
+<string id="71" value="Baklja"/>
+<string id="72" value="Zidna baklja, drvo i gvozdje."/>
+<string id="73" value="Staja"/>
+<string id="74" value="Za krave i seno i alat."/>
+<string id="75" value="Patuljkova Kuca"/>
+<string id="76" value="Leopoldova kuca. Drzi stvari pod kljucem."/>
+<string id="77" value="Velika Baklja"/>
+<string id="78" value="Baklja koja stoji zabodena u zemlju."/>
+<string id="79" value="Bunar"/>
+
+<string id="80" value="Zelja."/>
+<string id="81" value="Pod Rudnika"/>
+<string id="82" value="Pod u rudniku."/>
+<string id="83" value="Zidovi Rudnika"/>
+<string id="84" value="Zidovi u rudniku."/>
+<string id="85" value="Kamen 1."/>
+<string id="86" value="Kamen."/>
+<string id="87" value="Kamen 2."/>
+<string id="88" value="Kamen."/>
+<string id="89" value="Plocica Plava."/>
+
+<string id="90" value="Plava kamena podna plocica."/>
+<string id="91" value="Plocica Sarena"/>
+<string id="92" value="Sarena kamena podna plocica."/>
+<string id="93" value="Plocica Travnata."/>
+<string id="94" value="Ploca trave za napolje."/>
+<string id="95" value="Plocica Put."/>
+<string id="96" value="Put u travi."/>
+<string id="97" value="Plocica Crvena"/>
+<string id="98" value="Gruba crvena podna plocica."/>
+<string id="99" value="Beli Cvet"/>
+
+<string id="100" value="U beli svet."/>
+<string id="101" value="Biljka 1"/>
+<string id="102" value="Rdjave pecurke."/>
+<string id="103" value="Biljka 2"/>
+<string id="104" value="Ruzicaste bobice."/>
+<string id="105" value="Plasticno Drvo 1"/>
+<string id="106" value="Plasticno Drvo."/>
+<string id="107" value="Plasticno Drvo 2"/>
+<string id="108" value="Plasticno Drvo."/>
+<string id="109" value="Luk"/>
+
+<string id="110" value="Kameni luk."/>
+<string id="111" value="Zid Cosak"/>
+<string id="112" value="Cosak kamenog zida."/>
+<string id="113" value="Drvena vrata"/>
+<string id="114" value="Drvena vrata."/>
+<string id="115" value="Vrata Sa Resetkama"/>
+<string id="116" value="Vrata nekakvog zatvora."/>
+<string id="117" value="Okvir Duplih Vrata"/>
+<string id="118" value="Veliki drveni okvir duplih vrata."/>
+<string id="119" value="Dupla Drvena Vrata"/>
+
+<string id="120" value="Velika dupla drvena vrata."/>
+<string id="121" value="Kamin"/>
+<string id="122" value="Kameni kamin."/>
+<string id="123" value="Poluga"/>
+<string id="124" value="Prekidac koji otvara vrata ili ponekad okida zamke."/>
+<string id="125" value="Stepenice"/>
+<string id="126" value="Do sledeceg nivoa."/>
+<string id="127" value="Kameni Zid"/>
+<string id="128" value="Zid od kamena."/>
+<string id="129" value="Nisa"/>
+
+<string id="130" value="Udubljenje u kamenom zidu."/>
+<string id="131" value="Bure"/>
+<string id="132" value="Standardno bure, al obicno puno blaga."/>
+<string id="133" value="Krug"/>
+<string id="134" value="Ma neka glupost."/>
+<string id="135" value="Kocka"/>
+<string id="136" value="Samo kocka. Ali kad je nevidljiva bude dobar okidac."/>
+<string id="137" value="Taraba"/>
+<string id="138" value="Stara drvena taraba."/>
+<string id="139" value="Dzak"/>
+
+<string id="140" value="Dzak zitarica."/>
+<string id="141" value="Startno Mesto"/>
+<string id="142" value="Obelezava odakle ce igrac da pocne nivo na mapi."/>
+<string id="143" value="Teleport"/>
+<string id="144" value="Teleport. Magicni uredjaj koji te baci na predefinisanu lokaciju."/>
+<string id="145" value="Igracka Traktor"/>
+<string id="146" value="Zut i crven traktor."/>
+<string id="147" value="Valov"/>
+<string id="148" value="Konji piju vodu iz njega."/>
+<string id="149" value="undefined string."/>
+
+<string id="150" value="undefined string."/>
+<string id="151" value="undefined string."/>

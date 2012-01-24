@@ -1,9 +1,9 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Double Door Frame"/>
+	<Name value="Double Door Frame" id="117"/>
 	<Model value="dwdframe.x"/>
   <Wall value="true"/>
 	<Script value="dwdframe.script"/>
-	<Description value="Grand double wooden door frame."/>
+	<Description value="Grand double wooden door frame." id="118"/>
 
 </Config>

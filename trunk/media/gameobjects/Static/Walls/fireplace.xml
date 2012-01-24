@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="Fireplace 1"/>
+	<name value="Fireplace" id="121"/>
 	<Model value="fireplace.3ds"/>
   <Wall value="true"/>
-	<Description value="Stone fireplace."/>
+	<Description value="Stone fireplace." id="122"/>
 </Config>

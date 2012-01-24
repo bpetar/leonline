@@ -1,5 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Toy Tractor"/>
+	<Name value="Toy Tractor" id="145"/>
 	<Model value="tractor.x"/>
+	<Description value="Yellow red tractor." id="146"/>
 </Config>

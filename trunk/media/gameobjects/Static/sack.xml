@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="Wheat Sack"/>
+	<name value="Wheat Sack" id="139"/>
 	<Model value="sack.3ds"/>
-	<Description value="Sack of wheat."/>
+	<Description value="Sack of wheat." id="140"/>
 </Config>

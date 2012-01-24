@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="Archway 1"/>
+	<Name value="Archway" id="109"/>
 	<Model value="archway.3ds"/>
   <Wall value="true"/>
-	<Description value="Stone archway."/>
+	<Description value="Stone archway." id="110"/>
 </Config>

@@ -61,7 +61,6 @@
 	<Static filename="sack"/>
 	<Static filename="circle"/>
 	<Static filename="barrel"/>
-	<Static filename="cubegreen"/>
 	<Static filename="cube"/>
 	<Static filename="trough"/>
 	<Static filename="start_flag"/>

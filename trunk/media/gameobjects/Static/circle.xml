@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Circle"/>
+	<Name value="Circle" id="133"/>
 	<Model value="circle.3ds"/>
 	<Script value="circle.script"/>
-	<Description value="Nothing special."/>
+	<Description value="Nothing special." id="134"/>
 </Config>
