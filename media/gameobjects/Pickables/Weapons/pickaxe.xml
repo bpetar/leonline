@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Pick Axe" id="149"/>
+	<Model value="Pickaxe.b3d"/>
+  <Description value="Pickaxe is not used for picking locks." id="150"/>
+</Config>
