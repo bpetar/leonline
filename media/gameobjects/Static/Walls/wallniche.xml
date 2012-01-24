@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="wall with niche"/>
+	<name value="Wall Niche" id="129"/>
 	<Model value="wallniche.3ds"/>
   <Wall value="true"/>
-	<Description value="Stone wall with niche."/>
+	<Description value="Stone wall with niche." id="130"/>
 </Config>

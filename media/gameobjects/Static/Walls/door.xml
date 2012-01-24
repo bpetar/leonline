@@ -1,10 +1,10 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Wooden Door"/>
+	<Name value="Wooden Door" id="113"/>
 	<Model value="door.b3d"/>
   <Wall value="true"/>
   <Trigger value="true"/>
 	<Script value="door.script"/>
-	<Description value="Wooden door."/>
+	<Description value="Wooden door." id="114"/>
 
 </Config>

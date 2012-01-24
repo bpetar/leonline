@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="Start Flag"/>
+	<Name value="Start Flag" id="141"/>
 	<Model value="start_flag.3ds"/>
 	<Invisible value="true"/>
-	<Description value="Marks players start position on this map."/>
+	<Description value="Marks players start position on this map." id="142"/>
 
 </Config>

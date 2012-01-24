@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="corner 1"/>
+	<name value="Corner" id="111"/>
 	<Model value="corner.3ds"/>
   <Wall value="true"/>
-	<Description value="Stone wall corner."/>
+	<Description value="Stone wall corner." id="112"/>
 </Config>

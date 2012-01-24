@@ -8,6 +8,163 @@
 <string id="4" value="Persistant slow walker."/>
 <string id="5" value="Throwing Dagger"/>
 <string id="6" value="Standard throwing dagger; used for throwing, not so good for stabbing."/>
-<string id="7" value="Psionic's Beast"/>
-<string id="8" value="Psionic's Beast"/>
-<string id="9" value="Psionic's Beast"/>
+<string id="7" value="Disco Ninja"/>
+<string id="8" value="This ninja likes to listen to the music and go out at night. He would like to record an album of folk music."/>
+<string id="9" value="Very small ninja"/>
+
+<string id="10" value="Small but very dangerous."/>
+<string id="11" value="Friendly Dwarf Leopold"/>
+<string id="12" value="Leopold the friendly dwarf is very sturdy and good hearted fellow. Never lets go of his axe."/>
+<string id="13" value="Giant Ant"/>
+<string id="14" value="Ant is first enemy in fallout 2."/>
+<string id="15" value="Cat"/>
+<string id="16" value="Kitty."/>
+<string id="17" value="Dog"/>
+<string id="18" value="Best friend."/>
+<string id="19" value="Rat"/>
+
+<string id="20" value="Rat knows when to leave the ship."/>
+<string id="21" value="Tuki The Turtle"/>
+<string id="22" value="Tuki the turtle used to be a shepherd, but now he's onto something bigger."/>
+<string id="23" value="Turquoise"/>
+<string id="24" value="Turquoise. Value 10gp."/>
+<string id="25" value="Ruby"/>
+<string id="26" value="Ruby. Value: 100gp."/>
+<string id="27" value="Pink"/>
+<string id="28" value="Magic Pink Gem. Value: 17gp."/>
+<string id="29" value="Beer"/>
+
+<string id="30" value="Who would make a game without beer?"/>
+<string id="31" value="Empty Flask"/>
+<string id="32" value="Empty flask; suitable for containing potions."/>
+<string id="33" value="Healing Potion"/>
+<string id="34" value="Healing Potion. Repairs minor mistakes."/>
+<string id="35" value="Mana Potion"/>
+<string id="36" value="Mana potion heals your magic mojo."/>
+<string id="37" value="Dwarven Axe"/>
+<string id="38" value="Dwarven axe; used, but still sharp."/>
+<string id="39" value="Mace"/>
+
+<string id="40" value="Bludgeoning weapon; making funny sounds when it hits."/>
+<string id="41" value="Long Sword"/>
+<string id="42" value="Long sword - best weapon for all."/>
+<string id="43" value="Golden Chalice"/>
+<string id="44" value="Goblet, valuable."/>
+<string id="45" value="Rusty Key"/>
+<string id="46" value="Rusty Key. Probably leads to a place not often visited."/>
+<string id="47" value="Paper Note"/>
+<string id="48" value="Note to self: don't forget to write notes."/>
+<string id="49" value="Red Mushroom"/>
+
+<string id="50" value="Peculiar Mushroom. Can be eaten but to what end?"/>
+<string id="51" value="Long Rope"/>
+<string id="52" value="Just a standard rope. Can be used for climbing, tying, and other."/>
+<string id="53" value="Stone Altar"/>
+<string id="54" value="Suitable for serving cold dishes, and sacrificing virgins."/>
+<string id="55" value="Simple Bed"/>
+<string id="56" value="Simple indeed."/>
+<string id="57" value="Stone candlestick"/>
+<string id="58" value="Movable, but heavy as hell."/>
+<string id="59" value="Chair"/>
+
+<string id="60" value="Simple wooden chair."/>
+<string id="61" value="Nice Chest"/>
+<string id="62" value="Holds valuables. Never dirty socks."/>
+<string id="63" value="Closet"/>
+<string id="64" value="Simple wooden closet."/>
+<string id="65" value="Wall Plate"/>
+<string id="66" value="Notifies about house rules."/>
+<string id="67" value="Book Shelf"/>
+<string id="68" value="Simple book shelf."/>
+<string id="69" value="Table"/>
+
+<string id="70" value="Simple wooden table."/>
+<string id="71" value="Torch"/>
+<string id="72" value="Wall mounted, wood and iron torch."/>
+<string id="73" value="Barn"/>
+<string id="74" value="For cows and hay and tools."/>
+<string id="75" value="Dwarven House"/>
+<string id="76" value="Leopolds house. It keeps many secrets locked."/>
+<string id="77" value="Big Torch"/>
+<string id="78" value="Torch standing on the ground."/>
+<string id="79" value="Well"/>
+
+<string id="80" value="Water well."/>
+<string id="81" value="Mine Floor"/>
+<string id="82" value="Mine level floor."/>
+<string id="83" value="Mine Wall"/>
+<string id="84" value="Mine level wall."/>
+<string id="85" value="Rock Pile 1."/>
+<string id="86" value="Rock."/>
+<string id="87" value="Rock Pile 2."/>
+<string id="88" value="Rock."/>
+<string id="89" value="Floor Tile Blue."/>
+
+<string id="90" value="Seamless blue stone floor tile."/>
+<string id="91" value="Floor Tile Colored"/>
+<string id="92" value="Seamless colored stone floor tile."/>
+<string id="93" value="Floor Tile Grass"/>
+<string id="94" value="Seamless outdoor grass tile."/>
+<string id="95" value="Floor Tile GPU"/>
+<string id="96" value="Seamless outdoor path in the grass. GPU = Grass Path Upward."/>
+<string id="97" value="Floor Tile Red"/>
+<string id="98" value="Seamless rough red floor tile."/>
+<string id="99" value="White Flower"/>
+
+<string id="100" value="White flower."/>
+<string id="101" value="Plant 1"/>
+<string id="102" value="Rusty mushrooms."/>
+<string id="103" value="Plant 2"/>
+<string id="104" value="Pink berries."/>
+<string id="105" value="Toy Tree 1"/>
+<string id="106" value="Tree Toy."/>
+<string id="107" value="Toy Tree 2"/>
+<string id="108" value="Tree Toy."/>
+<string id="109" value="Archway"/>
+
+<string id="110" value="Stone archway."/>
+<string id="111" value="Corner"/>
+<string id="112" value="Stone wall corner."/>
+<string id="113" value="Wooden Door"/>
+<string id="114" value="Wooden door."/>
+<string id="115" value="Door Bars"/>
+<string id="116" value="Prison door."/>
+<string id="117" value="Double Door Frame"/>
+<string id="118" value="Grand double wooden door frame."/>
+<string id="119" value="Double Wooden Door"/>
+
+<string id="120" value="Grand double wooden door."/>
+<string id="121" value="Fireplace"/>
+<string id="122" value="Stone fireplace."/>
+<string id="123" value="Lever"/>
+<string id="124" value="Lever is trigger that usually opens door or sometimes triggers the traps."/>
+<string id="125" value="Stairs"/>
+<string id="126" value="Stairways."/>
+<string id="127" value="Stone Wall"/>
+<string id="128" value="Stone wall."/>
+<string id="129" value="Wall Niche"/>
+
+<string id="130" value="Stone wall with niche."/>
+<string id="131" value="Water Barrel"/>
+<string id="132" value="Just a standard barrel. Unknown people keep valuable things in them."/>
+<string id="133" value="Circle"/>
+<string id="134" value="Nothing special."/>
+<string id="135" value="Cube"/>
+<string id="136" value="Just cube. Useful for invisible triggers."/>
+<string id="137" value="Old Paddock"/>
+<string id="138" value="Old wooden paddock."/>
+<string id="139" value="Wheat Sack"/>
+
+<string id="140" value="Sack of wheat."/>
+<string id="141" value="Start Flag"/>
+<string id="142" value="Marks players start position on this map."/>
+<string id="143" value="Teleport"/>
+<string id="144" value="Teleport. Magic device that transports you to predefined location instantly."/>
+<string id="145" value="Toy Tractor"/>
+<string id="146" value="Yellow red tractor."/>
+<string id="147" value="Horse Trough"/>
+<string id="148" value="Horses drink water from it."/>
+<string id="149" value="undefined string."/>
+
+<string id="150" value="undefined string."/>
+<string id="151" value="undefined string."/>

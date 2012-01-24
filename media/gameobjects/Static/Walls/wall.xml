@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<name value="wall 1"/>
+	<name value="Stone Wall" id="127"/>
 	<Model value="wall.3ds"/>
   <Wall value="true"/>
-	<Description value="Stone wall."/>
+	<Description value="Stone wall." id="128"/>
 </Config>

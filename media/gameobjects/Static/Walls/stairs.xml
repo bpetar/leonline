@@ -1,8 +1,8 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="stairs 1"/>
+	<Name value="Stairs" id="125"/>
 	<Model value="stairs.3ds"/>
   	<Wall value="true"/>
 	<Trigger value="true"/>
-	<Description value="Stairways."/>
+	<Description value="Stairways." id="126"/>
 </Config>
