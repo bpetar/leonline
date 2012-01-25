@@ -32,7 +32,7 @@ class CGameGUI;
  *
  * It takes care of init/saving/loading levels 
  * holds array of CLevel objects m_pLevels, which are dynamically loaded as user transfers from one level to another
- * servers as public API provider from GameManager to Clevel.
+ * serves as public API provider from GameManager to Clevel.
  *
  * \author Petar Bajic \date July, 21 2008.
  */
@@ -87,6 +87,7 @@ public:
 	CGameObject* getGameObjectFromID(int id);
 	void MoveCamera(vector3df pos);
 	void DropPickableToMap(CGameObject* pick, vector3df position);
+	void DisintegrateObjectFromLevel(s32 objectID);
 	stringw getCurrentMapName();
 	u32 _GetLevelIndex(stringc map_filename);
 	u32 FindNPCsOnMap(stringc mapname, stringc NPCNames[]);

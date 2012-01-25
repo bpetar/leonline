@@ -876,6 +876,17 @@ bool CLevelManager::OnEvent(const SEvent& ovent)
 	return false;
 }
 
+void CLevelManager::DisintegrateObjectFromLevel(s32 objectID)
+{
+	//Remove object from the scene
+	m_pLevels[m_LevelIndex]->EraseElement(objectID);
+	m_pLevels[m_LevelIndex]->DeleteActuatorFromQueue(objectID);
+	ISceneNode* doomedNode = m_GameManager->getSceneMngr()->getSceneNodeFromId(objectID);
+	m_pLevels[m_LevelIndex]->m_LevelMetaTriangleSelector->removeTriangleSelector(doomedNode->getTriangleSelector());
+	m_pLevels[m_LevelIndex]->m_ObstacleMetaTriangleSelector->removeTriangleSelector(doomedNode->getTriangleSelector());
+	doomedNode->remove();
+}
+
 void CLevelManager::DropPickableToMap(CGameObject* pick, vector3df position)
 {
 	m_pLevels[m_LevelIndex]->AddObjectToScene(pick, position);

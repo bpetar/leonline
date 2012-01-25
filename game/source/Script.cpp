@@ -738,7 +738,9 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		}
 		else //target is id
 		{
-			stringc value = action->target.c_str();
+			s32 disintegrateID = 0;
+			swscanf_s(action->target.c_str(), L"%d", &disintegrateID);
+			m_GameManager->DisintegrateObjectFromLevel(disintegrateID);
 		}
 	}
 	else if(action->name == stringw("LeadToMap"))
