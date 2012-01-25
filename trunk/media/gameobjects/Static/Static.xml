@@ -22,9 +22,22 @@
 		<Static filename="closet"/>
 		<Static filename="torch"/>
 	</Furniture>
-	<Houses>
-		<Static filename="house_01"/>
-		<Static filename="barn_01"/>
+	<Introlevel>
+		<Static filename="barn"/>
+		<Static filename="barrel"/>
+		<Static filename="fence"/>
+		<Static filename="flower_pink"/>
+		<Static filename="flower_white"/>
+		<Static filename="poplar"/>
+		<Static filename="grass"/>
+		<Static filename="house"/>
+		<Static filename="paddock"/>
+		<Static filename="sky"/>
+		<Static filename="terrain"/>
+		<Static filename="tractor"/>
+		<Static filename="tree1"/>
+		<Static filename="tree2"/>
+		<Static filename="tree3"/>
 	</Houses>
 	<Tiles>
 		<Static filename="grass1"/>

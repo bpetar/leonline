@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Sky Sphere" id="161"/>
+	<Model value="sky.x"/>
+	<Description value="Sky sphere, not sky box." id="162"/>
+</Config>

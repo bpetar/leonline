@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="White Flower" id="155"/>
+	<Model value="flower_white.x"/>
+	<Description value="White flower." id="156"/>
+</Config>
