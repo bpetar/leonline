@@ -474,6 +474,13 @@ void CGameManager::ChangeLevel(stringc mapname, s32 startPositionID)
 	}
 }
 
+
+void CGameManager::DisintegrateObjectFromLevel(s32 objectID)
+{
+	//remove that object from current level
+	m_pLevelManager->DisintegrateObjectFromLevel(objectID);
+}
+
 void CGameManager::Restart()
 {
 	//load latest saved level
