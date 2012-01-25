@@ -769,7 +769,7 @@ CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
 	return tree;
 }
 
-ISceneNode* CEditorLevel::CreateLight()
+ISceneNode* CEditorLevel::CreateLight(f32 radius)
 {
 	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -777,7 +777,7 @@ ISceneNode* CEditorLevel::CreateLight()
 	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
 
 	// attach light to bilboard
-	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), radius);
 
 	return bilboard;
 }
@@ -1488,7 +1488,8 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						//Insert light
 						gameObject = new CGameObject();
 						gameObject->mesh = LIGHT_GAME_OBJECT;
-						node = CreateLight();
+						f32 radius = attr->getAttributeAsFloat("Radius");
+						node = CreateLight(radius);
 						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
 						{
 							//Vibrating light for fire dancing
@@ -3085,7 +3086,7 @@ void CEditorLevel::EnlightAllNodes()
 {
 	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
 	
-	m_EditorManager->getSceneMngr()->setAmbientLight(SColorf(0.3f, 0.1f, 0.1f, 0.5f));
+	m_EditorManager->getSceneMngr()->setAmbientLight(SColorf(0.2f, 0.2f, 0.1f, 0.8f));
 
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{

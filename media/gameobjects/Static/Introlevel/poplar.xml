@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Poplar" id="157"/>
+	<Model value="poplar.x"/>
+	<Description value="Cut poplar tree." id="158"/>
+</Config>

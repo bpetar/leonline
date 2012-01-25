@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Barn" id="73"/>
+	<Model value="barn.x"/>
+	<Description value="For cows and hay and tools." id="74"/>
+</Config>

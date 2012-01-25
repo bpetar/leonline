@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Terrain" id="163"/>
+	<Model value="terrain.x"/>
+	<Description value="Small terrain model." id="164"/>
+</Config>

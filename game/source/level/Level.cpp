@@ -186,7 +186,7 @@ ISceneNode* CLevel::CreateLight(float radius)
 	bilboard->setMaterialTexture(0,	m_pDriver->getTexture("media/particle1.bmp"));*/
 
 	// attach light to bilboard
-	ISceneNode* light = m_SMGR->addLightSceneNode(0, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), radius);
+	ISceneNode* light = m_SMGR->addLightSceneNode(0, vector3df(0,0,0), 	SColorf(0.6f, 0.6f, 0.6f, 1.0f), radius);
 
 	return light;
 }
@@ -702,7 +702,8 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 						//Insert light
 						gameObject = new CGameObject();
 						gameObject->mesh = LIGHT_GAME_OBJECT;
-						node = CreateLight(900.0f);
+						f32 radius = attr->getAttributeAsFloat("Radius");
+						node = CreateLight(radius);
 						if(attr->getAttributeAsString("Name").equals_ignore_case("Dancing Light GO"))
 						{
 							//Vibrating light for fire dancing
@@ -1762,7 +1763,7 @@ void CLevel::EnlightAllNodes()
 {
 	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
 	
-	m_SMGR->setAmbientLight(SColorf(0.3f, 0.1f, 0.1f, 0.5f));
+	m_SMGR->setAmbientLight(SColorf(0.1f, 0.1f, 0.1f, 0.1f));
 
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{

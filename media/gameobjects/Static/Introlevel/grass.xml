@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Grass" id="159"/>
+	<Model value="grass.x"/>
+	<Description value="Grass textured surface." id="160"/>
+</Config>

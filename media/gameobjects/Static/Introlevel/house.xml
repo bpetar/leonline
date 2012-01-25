@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Dwarven House" id="75"/>
+	<Model value="house.x"/>
+	<Description value="Leopolds house. It keeps many secrets locked." id="76"/>
+</Config>
