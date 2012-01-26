@@ -325,6 +325,17 @@ void CLevelManager::SetCameraPos(vector3df position)
 	m_pCamera->setTarget(position);
 }
 
+/**
+ * \brief Sets movie camera position and target
+ * \author Petar Bajic 
+ * \date February 10, 2010.
+ */
+void CLevelManager::SetMovieCamera(vector3df position, vector3df target)
+{
+	m_pCamera->setPosition(position);
+	m_pCamera->setTarget(target);
+}
+
 stringw CLevelManager::getCurrentMapName()
 {
 	return m_pLevels[m_LevelIndex]->m_MapName;

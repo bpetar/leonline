@@ -51,6 +51,8 @@ CGameManager::CGameManager()
 	m_pLanguagePreference = "en";
 	m_bRestartDevice = false;
 	m_SavedGameAvailable = false;
+	m_IntroMovieCameraStartPosition = vector3df(120.0,1300,-350.0);
+	m_IntroMovieCameraStartTarget = vector3df(120.0,1300,-360.0);
 }
 
 /**
@@ -250,17 +252,27 @@ void CGameManager::ExitMainMenu()
 	m_GameGUI->ClearMenu();
 }
 
+//TODO: error checking
 void CGameManager::PlayIntroMovie()
 {
 	m_GameState = GAME_STATE_INTRO_MOVIE;
 	
 	m_GameGUI->InitIntroMovie();
 
+	//Load Intro Map
+	m_pLevelManager->OnLoadMap(m_StartMap);
+
 }
 
 void CGameManager::ExitIntroMovie()
 {
+	//clean intro gui
 	m_GameGUI->ClearIntroMovie();
+
+	//Intro map is same as first level, so we skip clearing here...
+	
+	//clean intro map
+	//m_pLevelManager->CleanCurrentMap();
 }
 
 bool CGameManager::NewGame()
@@ -268,9 +280,11 @@ bool CGameManager::NewGame()
 	if (!m_GameGUI->InitGameGUI())
 		return false;
 
+	//Intro map is same as first level, so we skip loading here...
+	
 	//Load First Map
-	if (!m_pLevelManager->OnLoadMap(m_StartMap))
-		return false;
+	//if (!m_pLevelManager->OnLoadMap(m_StartMap))
+	//	return false;
 
 	//Init NPC dialogs
 	InitNPCDialogs();
@@ -1029,8 +1043,27 @@ void CGameManager::Update(f32 elapsed_time)
 	}
 	else if (m_GameState == GAME_STATE_INTRO_MOVIE)
 	{
-		//draw movie
+		//draw movie 'GUI' (just text)
 		m_GameGUI->drawIntroMovie(elapsed_time);
+
+		//animate level
+
+		//move camera
+		m_IntroMovieCameraStartPosition.Y -= elapsed_time*50;
+		m_IntroMovieCameraStartTarget.Y -= elapsed_time*50;
+		if(m_IntroMovieCameraStartTarget.Y < 1000.0f)
+		{
+			if(m_IntroMovieCameraStartTarget.Z<-350.0f)
+			{
+				m_IntroMovieCameraStartTarget.X += 2*elapsed_time;
+			}
+			else if(m_IntroMovieCameraStartTarget.Z<-340.0f)
+			{
+				m_IntroMovieCameraStartTarget.X -= 2*elapsed_time;
+			}
+			m_IntroMovieCameraStartTarget.Z += 2*elapsed_time;
+		}
+		m_pLevelManager->SetMovieCamera(m_IntroMovieCameraStartPosition,m_IntroMovieCameraStartTarget);
 	}
 
 

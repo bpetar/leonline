@@ -50,6 +50,7 @@ public:
 	void SavePreviousLevelToTemp();
 	void CreateCamera(vector3df position);
 	void SetCameraPos(vector3df position);
+	void SetMovieCamera(vector3df position, vector3df target);
 	vector3df GetStartPosition();
 	void SetMonstersMood(eMood mood);
 	void Update(IVideoDriver* driver, IrrlichtDevice* pDevice, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font);
