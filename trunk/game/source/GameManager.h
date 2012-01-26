@@ -208,6 +208,10 @@ private:
 	/*irr::gui::IGUIFont* m_pFont;*/
 
 	CGoToArrows* m_Arrows;
+
+	//Intro Movie
+	vector3df m_IntroMovieCameraStartPosition;
+	vector3df m_IntroMovieCameraStartTarget;
 	
 };
 #endif

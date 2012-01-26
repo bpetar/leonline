@@ -1,0 +1,10 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Sheep" id="165"/>
+	<Model value="sheep.x"/>
+	<Description value="White sheep." id="166"/>
+	
+	<Animation name="Idle" start="1" end="10"/>
+	<Animation name="Walk" start="1" end="255"/>
+
+</Config>
