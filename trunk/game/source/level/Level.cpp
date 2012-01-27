@@ -1768,10 +1768,13 @@ void CLevel::EnlightAllNodes()
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{
 		CGameObject* temp = (*it);
-		ISceneNode* node = m_SMGR->getSceneNodeFromId(temp->id);
-		if(!(temp->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||temp->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
+		if(temp->id > 0)
 		{
-			node->setMaterialFlag(EMF_LIGHTING, true);
+			ISceneNode* node = m_SMGR->getSceneNodeFromId(temp->id);
+			if(!(temp->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||temp->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
+			{
+				node->setMaterialFlag(EMF_LIGHTING, true);
+			}
 		}
 	}
 }

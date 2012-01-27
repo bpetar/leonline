@@ -1052,23 +1052,23 @@ void CGameManager::Update(f32 elapsed_time)
 		//move camera
 		if(m_IntroMovieCameraStartPosition.Y > 200)
 		{
-			m_IntroMovieCameraStartPosition.Y -= elapsed_time*50;
-			m_IntroMovieCameraStartTarget.Y -= elapsed_time*50;
-			if(m_IntroMovieCameraStartTarget.Y < 1000.0f)
+			m_IntroMovieCameraStartPosition.Y -= elapsed_time*25;
+			m_IntroMovieCameraStartTarget.Y -= elapsed_time*25;
+			if(m_IntroMovieCameraStartTarget.Y < 900.0f)
 			{
 				if(m_IntroMovieCameraStartTarget.Z<-350.0f)
 				{
-					m_IntroMovieCameraStartTarget.X += 2*elapsed_time;
-					m_IntroMovieCameraStartTarget.Z += 2*elapsed_time;
+					m_IntroMovieCameraStartTarget.X += elapsed_time;
+					m_IntroMovieCameraStartTarget.Z += elapsed_time;
 				}
 				else if(m_IntroMovieCameraStartTarget.Z<-340.0f)
 				{
-					m_IntroMovieCameraStartTarget.X -= 2*elapsed_time;
-					m_IntroMovieCameraStartTarget.Z += 2*elapsed_time;
+					m_IntroMovieCameraStartTarget.X -= elapsed_time;
+					m_IntroMovieCameraStartTarget.Z += elapsed_time;
 				}
 				else
 				{
-					m_IntroMovieCameraStartTarget.X -= 2*elapsed_time;
+					m_IntroMovieCameraStartTarget.X -= elapsed_time;
 				}
 				
 			}
