@@ -14,7 +14,7 @@
 #include "../GameManager.h"
 #include "../gui/GameGUI.h"
 
-#define CAMERA_OFFSET vector3df(50,180,50)
+#define CAMERA_OFFSET vector3df(120,200,-350)
 
 /**
  * \brief Standard constructor.

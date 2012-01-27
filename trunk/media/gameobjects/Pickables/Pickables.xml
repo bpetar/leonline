@@ -12,8 +12,9 @@
 		<Pickables filename="beer"/>
 	</Potions>
 	<Weapons>
-		<Pickables filename="dagger_01"/>
 		<Pickables filename="axe_01"/>
+    <Pickables filename="dagger_01"/>
+		<Pickables filename="helmet"/>
 		<Pickables filename="sword_01"/>
 		<Pickables filename="mace"/>
     <Pickables filename="pickaxe"/>

@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Campfire" id="165"/>
+	<Model value="campfire.b3d"/>
+	<Description value="Simple campfire." id="166"/>
+</Config>

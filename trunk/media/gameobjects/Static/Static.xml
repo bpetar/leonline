@@ -25,6 +25,7 @@
 	<Introlevel>
 		<Static filename="barn"/>
 		<Static filename="barrel"/>
+    <Static filename="campfire"/>
 		<Static filename="fence"/>
 		<Static filename="flower_pink"/>
 		<Static filename="flower_white"/>
