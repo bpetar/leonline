@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Moon"/>
+	<Model value="moon.3ds"/>
+	<Description value="Full moon."/>
+</Config>

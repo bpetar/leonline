@@ -72,7 +72,7 @@
 	<Static filename="tele"/>
 	<Static filename="sack"/>
 	<Static filename="crate"/>
-	<Static filename="sack"/>
+	<Static filename="moon"/>
 	<Static filename="circle"/>
 	<Static filename="barrel"/>
 	<Static filename="cube"/>
