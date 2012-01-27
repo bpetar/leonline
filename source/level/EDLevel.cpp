@@ -785,6 +785,7 @@ ISceneNode* CEditorLevel::CreateLight(f32 radius)
 void CEditorLevel::InsertLight()
 {
 	stringw name = L"Light GO";
+	float radius = 500.0f;
 
 	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -792,7 +793,7 @@ void CEditorLevel::InsertLight()
 	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
 
 	// attach light to bilboard
-	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), radius);
 
 	m_SelectedGameObject = bilboard;
 	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
@@ -800,6 +801,7 @@ void CEditorLevel::InsertLight()
 	CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = LIGHT_GAME_OBJECT;
 	gameObject->name = name;
+	gameObject->m_Radius = radius;
 	m_SelectedGameObject->setName(name);
 	
 	gameObject->id = m_EditorManager->m_ID;
@@ -820,6 +822,7 @@ void CEditorLevel::InsertLight()
 void CEditorLevel::InsertDancingLight()
 {
 	stringw name = L"Dancing Light GO";
+	float radius = 500.0f;
 
 	ISceneNode* bilboard = m_EditorManager->getSceneMngr()->addBillboardSceneNode(0, core::dimension2d<f32>(50, 50));
 	bilboard->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -827,7 +830,7 @@ void CEditorLevel::InsertDancingLight()
 	bilboard->setMaterialTexture(0,	m_EditorManager->getDriver()->getTexture("media/particle1.bmp"));
 
 	// attach light to bilboard
-	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), 300.0f);
+	ISceneNode* light = m_EditorManager->getSceneMngr()->addLightSceneNode(bilboard, vector3df(0,0,0), 	SColorf(1.0f, 0.6f, 0.6f, 1.0f), radius);
 
 	//Vibrating light for fire dancing
 	ISceneNodeAnimator* anim = 0;
@@ -841,6 +844,7 @@ void CEditorLevel::InsertDancingLight()
 	CGameObject* gameObject = new CGameObject();
 	gameObject->mesh = LIGHT_GAME_OBJECT;
 	gameObject->name = name;
+	gameObject->m_Radius = radius;
 	m_SelectedGameObject->setName(name);
 	
 	gameObject->id = m_EditorManager->m_ID;
@@ -1372,6 +1376,9 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 			if (gameObject->m_Radius != gameObject->m_Radius_Default)
 				attr->addFloat("Radius", gameObject->m_Radius);
 		}
+
+		if (gameObject->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
+			attr->addFloat("Radius", gameObject->m_Radius);
 
 		attr->write(writer);
 		//writer->writeLineBreak();

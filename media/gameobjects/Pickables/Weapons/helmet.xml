@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Helmet" id="167"/>
+	<Model value="DwarfHelmet.b3d"/>
+	<Pickable value="true"/>
+	<Description value="Dwarven helmet." id="168"/>
+</Config>

@@ -295,6 +295,7 @@ bool CGameManager::NewGame()
 	if (!m_pPC->Load(m_pDevice,m_pSceneManager,playerFile.c_str()))
 		return false;
 	m_pPC->setPosition(m_pLevelManager->GetStartPosition());
+	m_pLevelManager->SetCameraPos(m_pLevelManager->GetStartPosition());
 
 	m_Arrows = new CGoToArrows(m_pDevice,m_pSceneManager,m_pSceneManager->getRootSceneNode(),-1,SColor(255,150,0,150),0);
 
@@ -1049,19 +1050,28 @@ void CGameManager::Update(f32 elapsed_time)
 		//animate level
 
 		//move camera
-		m_IntroMovieCameraStartPosition.Y -= elapsed_time*50;
-		m_IntroMovieCameraStartTarget.Y -= elapsed_time*50;
-		if(m_IntroMovieCameraStartTarget.Y < 1000.0f)
+		if(m_IntroMovieCameraStartPosition.Y > 200)
 		{
-			if(m_IntroMovieCameraStartTarget.Z<-350.0f)
+			m_IntroMovieCameraStartPosition.Y -= elapsed_time*50;
+			m_IntroMovieCameraStartTarget.Y -= elapsed_time*50;
+			if(m_IntroMovieCameraStartTarget.Y < 1000.0f)
 			{
-				m_IntroMovieCameraStartTarget.X += 2*elapsed_time;
+				if(m_IntroMovieCameraStartTarget.Z<-350.0f)
+				{
+					m_IntroMovieCameraStartTarget.X += 2*elapsed_time;
+					m_IntroMovieCameraStartTarget.Z += 2*elapsed_time;
+				}
+				else if(m_IntroMovieCameraStartTarget.Z<-340.0f)
+				{
+					m_IntroMovieCameraStartTarget.X -= 2*elapsed_time;
+					m_IntroMovieCameraStartTarget.Z += 2*elapsed_time;
+				}
+				else
+				{
+					m_IntroMovieCameraStartTarget.X -= 2*elapsed_time;
+				}
+				
 			}
-			else if(m_IntroMovieCameraStartTarget.Z<-340.0f)
-			{
-				m_IntroMovieCameraStartTarget.X -= 2*elapsed_time;
-			}
-			m_IntroMovieCameraStartTarget.Z += 2*elapsed_time;
 		}
 		m_pLevelManager->SetMovieCamera(m_IntroMovieCameraStartPosition,m_IntroMovieCameraStartTarget);
 	}
