@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<name value="Crowbar" id="169"/>
+	<Model value="Crowbar.b3d"/>
+	<Pickable value="true"/>
+	<Description value="Crawbar. Useful for loose doors." id="170"/>
+</Config>

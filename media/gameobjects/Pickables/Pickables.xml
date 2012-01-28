@@ -17,11 +17,14 @@
 		<Pickables filename="helmet"/>
 		<Pickables filename="sword_01"/>
 		<Pickables filename="mace"/>
+		<Pickables filename="mace"/>
+		<Pickables filename="crowbar"/>
     <Pickables filename="pickaxe"/>
 	</Weapons>
 	<Pickables filename="chalice"/>
 	<Pickables filename="redmushroom"/>
 	<Pickables filename="rope"/>
 	<Pickables filename="note"/>
+	<Pickables filename="plank"/>
 	<Pickables filename="key_01"/>
 </Config>
