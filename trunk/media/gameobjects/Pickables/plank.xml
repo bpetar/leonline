@@ -1,0 +1,8 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Plank" id="171"/>
+	<Model value="plank.3ds"/>
+	<Pickable value="true"/>
+	<Script value="plank.script"/>
+	<Description value="Wooden plank." id="172"/>
+</Config>
