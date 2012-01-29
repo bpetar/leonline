@@ -841,6 +841,10 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 		m_GameManager->getGameGUI()->m_pDraggedPickableItem = 0;
 		m_GameManager->getGameGUI()->m_bDraggingPickableItem = false;
 	}
+	else if(action->name == stringw("StaticToPickable"))
+	{
+		m_GameManager->getLevelManager()->StaticToPickable(id);
+	}
 	else if(action->name == stringw("ParticleEffect"))
 	{
 		//Create particle effect

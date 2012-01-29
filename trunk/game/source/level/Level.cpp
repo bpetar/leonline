@@ -871,11 +871,14 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 							m_pDevice->getFileSystem()->changeWorkingDirectoryTo(temp.c_str());
 						}
 
+						//we get icon name even if its not pickable (because some items may become pickable during gameplay)
+						rootName = GetRootFromPath(meshPath);
+						gameObject->icon = rootName + ".png";
 						if(gameObject->isPickable)
 						{
-							rootName = GetRootFromPath(meshPath);
-							stringw icon = rootName + ".png";
-							gameObject->m_IconTexture = m_pDriver->getTexture(stringw(L"media/icons/") + icon);
+							//rootName = GetRootFromPath(meshPath);
+							//stringw icon = rootName + ".png";
+							gameObject->m_IconTexture = m_pDriver->getTexture(stringw(L"media/icons/") + gameObject->icon);
 						}
 
 						if(gameObject->isAnimated)

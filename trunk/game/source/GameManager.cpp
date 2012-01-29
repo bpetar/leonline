@@ -934,6 +934,9 @@ void CGameManager::Update(f32 elapsed_time)
 			debugPrint("m_bDoAction: %d\n",m_ClickedNodeID);
 			m_pLevelManager->Action(m_ClickedNodeID);
 			m_bDoAction = false;
+
+			//do we really need this return here?
+			m_pDriver->endScene();
 			return;
 		}
 

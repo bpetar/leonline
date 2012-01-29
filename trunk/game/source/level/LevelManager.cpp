@@ -903,6 +903,16 @@ void CLevelManager::DropPickableToMap(CGameObject* pick, vector3df position)
 	m_pLevels[m_LevelIndex]->AddObjectToScene(pick, position);
 }
 
+void CLevelManager::StaticToPickable(s32 id)
+{
+		CGameObject* go = getGameObjectFromID(id);
+		go->isStatic = false;
+		go->isTrigger = false;
+		go->isPickable = true;
+		m_pLevels[m_LevelIndex]->m_ObstacleMetaTriangleSelector->removeTriangleSelector(m_GameManager->getSceneMngr()->getSceneNodeFromId(id)->getTriangleSelector());
+		go->m_IconTexture = m_GameManager->getDriver()->getTexture(stringw(L"media/icons/") + go->icon);
+}
+
 void CLevelManager::MoveCamera(vector3df pos)
 {
 	vector3df move = pos - m_pCamera->getTarget();
