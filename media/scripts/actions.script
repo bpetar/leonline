@@ -16,5 +16,6 @@
 	<ChangeCondition/>
 	<PlacePickable/>
 	<ParticleEffect/>
+	<StaticToPickable/>
   <AddLight/>
 </ScriptActions>
