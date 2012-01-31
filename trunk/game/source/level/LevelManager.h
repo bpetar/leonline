@@ -87,7 +87,7 @@ public:
 	vector3df GetObjectPosition(int id);
 	CGameObject* getGameObjectFromID(int id);
 	void MoveCamera(vector3df pos);
-	void DropPickableToMap(CGameObject* pick, vector3df position);
+	void DropPickableToMap(CGameObject* pick, vector3df position, bool obstacle);
 	void StaticToPickable(s32 id);
 	void DisintegrateObjectFromLevel(s32 objectID);
 	stringw getCurrentMapName();

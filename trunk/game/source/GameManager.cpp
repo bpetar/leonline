@@ -1498,7 +1498,7 @@ bool CGameManager::OnEvent(const SEvent& event)
 									{
 										//drop pickable item on terrain
 										m_GameGUI->m_bDraggingPickableItem = false;
-										m_pLevelManager->DropPickableToMap(m_GameGUI->m_pDraggedPickableItem,instersection_point + vector3df(0,1,0));
+										m_pLevelManager->DropPickableToMap(m_GameGUI->m_pDraggedPickableItem,instersection_point + vector3df(0,1,0), false);
 										m_GameGUI->m_pDraggedPickableItem = 0;
 									}
 									else

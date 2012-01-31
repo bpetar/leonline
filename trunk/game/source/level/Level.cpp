@@ -533,7 +533,7 @@ void CLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 				//adding attribute isInvisible
 				attr->addBool("isInvisible",true);
 			if (gameObject->isIllusion)
-				//adding attribute isInvisible
+				//adding attribute isIllusion
 				attr->addBool("isIllusion",true);
 			if (gameObject->isTrigger)
 				//adding atribute isTrigger
@@ -802,8 +802,8 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 							//node->setMaterialFlag(EMF_WIREFRAME, true);
 						}*/
 
-						if(!gameObject->isInvisible)
-						{
+						//if(!gameObject->isInvisible)
+						//{
 							m_LevelMetaTriangleSelector->addTriangleSelector(node->getTriangleSelector());
 							if(!gameObject->isPickable && !gameObject->isMonster && !gameObject->isNPC && !gameObject->isInvisible  && !gameObject->isIllusion)
 							{
@@ -826,7 +826,7 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 									debugPrint("Bad situation in obstacle node linking. First obstacle false, but root obstacle node still null?\n");
 								}*/
 							}
-						}
+						//}
 
 						if(gameObject->isMonster)
 						{
@@ -1211,7 +1211,7 @@ bool CLevel::EraseElement(int id)
 }
 
 //used only for pickables now!! double check for other uses...
-void CLevel::AddObjectToScene(CGameObject* pick, vector3df position)
+void CLevel::AddObjectToScene(CGameObject* pick, vector3df position, bool obstacle)
 {
 	CGameObject* go = getGameObjectFromID(pick->id);
 	if(go)
@@ -1234,6 +1234,8 @@ void CLevel::AddObjectToScene(CGameObject* pick, vector3df position)
 		ITriangleSelector *selector = m_SMGR->createTriangleSelector(((IAnimatedMeshSceneNode*)node)->getMesh(), node);
 		node->setTriangleSelector(selector);
 		m_LevelMetaTriangleSelector->addTriangleSelector(selector);
+		if(obstacle)
+			m_ObstacleMetaTriangleSelector->addTriangleSelector(selector);
 		selector->drop();
 
 		node->setName(pick->name);
@@ -1358,12 +1360,12 @@ ISceneNode* CLevel::isActionItemUnderMousePointer()
 	vector3df point;
 	triangle3df triangle;
 	ISceneNode* pickedNode = m_GameManager->getSceneMngr()->getSceneCollisionManager()->getSceneNodeAndCollisionPointFromRay(picking_line, point, triangle, 0, 0, false);
-	if(pickedNode)
-	{
+	//if(pickedNode)
+	//{
 		for(u32 i=0; i < m_ListOfActuators.size(); i++)
 		{
 			ISceneNode* node = (ISceneNode*)m_ListOfActuators[i];
-			if(node == pickedNode)
+			if((pickedNode) && (node == pickedNode))
 			{
 				//node->setDebugDataVisible(EDS_BBOX);
 				//dWorldBox = ((IAnimatedMeshSceneNode*)node)->getMesh()->getBoundingBox();
@@ -1372,8 +1374,40 @@ ISceneNode* CLevel::isActionItemUnderMousePointer()
 				//((IAnimatedMeshSceneNode*)node)->getAbsoluteTransformation().transformBoxEx(dWorldBox);
 				return node;
 			}
+			if(!node->isVisible())
+			{
+				//Invisible triggers are not detected with getSceneNodeAndCollisionPointFromRay. I remember I changed irrlicht source once because of that, but now that change is gone.
+				//I probably forgot why I changed it in the first place, and removed it. This becomes quite a problem, this project span over several years... 
+				//Anyway, now I check invisible nodes separately here. 
+				
+				//matrix4 AbsoluteTransformation; is not working on invisible nodes
+				node->updateAbsolutePosition();
+				aabbox3d<f32> invisibleBox = node->getTransformedBoundingBox();
+				if (invisibleBox.intersectsWithLine(picking_line))
+				{
+					//This method is faulty because it will detect the box 'through the wall'. It doesn't take rest of the scene into account.
+					//To fix this, check pickedNode 'point' variable to see if it is closer to camera then invisible trigger picking point.
+					if(pickedNode)
+					{
+						vector3df triggerPoint;
+						vector3df cameraPoint = picking_line.start;
+						const ISceneNode* outNode;
+						//this method works here only because we called node->updateAbsolutePosition(); above, I think.
+						m_GameManager->getSceneMngr()->getSceneCollisionManager()->getCollisionPoint(picking_line,node->getTriangleSelector(), triggerPoint, triangle, outNode);
+						if(triggerPoint.getDistanceFrom(cameraPoint) < point.getDistanceFrom(cameraPoint))
+						{
+							return node;
+						}
+					}
+					else
+					{
+						//mouse is moving over our invisible area with nothing else under the mouse. Its automatic hit.
+						return node;
+					}
+				}
+			}
 		}
-	}
+	//}
 
 	return 0;
 }

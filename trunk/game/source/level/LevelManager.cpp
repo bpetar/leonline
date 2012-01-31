@@ -704,7 +704,9 @@ bool CLevelManager::Action(s32 id)
 				ISceneNode* pickedNode = m_GameManager->getSceneMngr()->getSceneNodeFromId(id);
 				m_pLevels[m_LevelIndex]->m_LevelMetaTriangleSelector->removeTriangleSelector(pickedNode->getTriangleSelector());
 				//I think pickables are not added to Obstacles in the first place so commenting out...
-				//m_pLevels[m_LevelIndex]->m_ObstacleMetaTriangleSelector->removeTriangleSelector(pickedNode->getTriangleSelector());
+				//There is special case when pickable is needed to be obstacle (plank in drwaven gold game), so we need to remove it in those cases.
+				//Since it doesn't cost to call this if triangle selector is not in the list, we remove it for all 
+				m_pLevels[m_LevelIndex]->m_ObstacleMetaTriangleSelector->removeTriangleSelector(pickedNode->getTriangleSelector());
 				pickedNode->remove();
 			}
 			else
@@ -815,7 +817,7 @@ bool CLevelManager::Action(s32 id)
 					//Drop pickables from inventory
 					for(u32 i = 0; i< go->m_ListOfPickableItems.size(); i++)
 					{
-						DropPickableToMap(go->m_ListOfPickableItems[i], monstrousNode->getPosition());
+						DropPickableToMap(go->m_ListOfPickableItems[i], monstrousNode->getPosition(), false);
 					}
 
 					//Remove object from the scene
@@ -898,9 +900,9 @@ void CLevelManager::DisintegrateObjectFromLevel(s32 objectID)
 	doomedNode->remove();
 }
 
-void CLevelManager::DropPickableToMap(CGameObject* pick, vector3df position)
+void CLevelManager::DropPickableToMap(CGameObject* pick, vector3df position, bool obstacle)
 {
-	m_pLevels[m_LevelIndex]->AddObjectToScene(pick, position);
+	m_pLevels[m_LevelIndex]->AddObjectToScene(pick, position, obstacle);
 }
 
 void CLevelManager::StaticToPickable(s32 id)

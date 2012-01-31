@@ -836,14 +836,19 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	}
 	else if(action->name == stringw("PlacePickable"))
 	{
+		bool obstacle = false;
 		vector3df vectorPosition = getVectorFromString(action->value.c_str());
-		m_GameManager->getLevelManager()->DropPickableToMap(m_GameManager->getGameGUI()->m_pDraggedPickableItem, vectorPosition);
+		if(action->attribute.equals_ignore_case("obstacle")) obstacle = true;
+		m_GameManager->getLevelManager()->DropPickableToMap(m_GameManager->getGameGUI()->m_pDraggedPickableItem, vectorPosition, obstacle);
 		m_GameManager->getGameGUI()->m_pDraggedPickableItem = 0;
 		m_GameManager->getGameGUI()->m_bDraggingPickableItem = false;
 	}
 	else if(action->name == stringw("StaticToPickable"))
 	{
-		m_GameManager->getLevelManager()->StaticToPickable(id);
+		s32 targetID = id;
+		if(action->target.size()>0)
+			swscanf_s(action->target.c_str(), L"%d", &targetID);
+		m_GameManager->getLevelManager()->StaticToPickable(targetID);
 	}
 	else if(action->name == stringw("ParticleEffect"))
 	{
