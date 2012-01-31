@@ -57,7 +57,7 @@ bool CCharacter::Init(ISceneManager *smgr, const c8* meshPath)
    {
 		node->setMaterialFlag(video::EMF_LIGHTING, false);
 
-		fSpeed = 84.f;
+		fSpeed = 849.f;
 
 		curState = Idle;
 		oldState = Idle;

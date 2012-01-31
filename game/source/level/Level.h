@@ -110,7 +110,7 @@ public:
 	void SetObjectState(int id, stringw state);
 	stringw GetObjectState(int id);
 	vector3df GetObjectPosition(int id);
-	void AddObjectToScene(CGameObject* pick, vector3df position);
+	void AddObjectToScene(CGameObject* pick, vector3df position, bool obstacle);
 
 	stringw GetRootFromPath(stringw path);
 
