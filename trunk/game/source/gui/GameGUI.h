@@ -187,6 +187,7 @@ private:
 	float m_MovieTextSlidingY;
 	IGUIStaticText* m_MovieText3;
 	
+	IGUIImage* m_IrrLogo;
 };
 
 #endif
