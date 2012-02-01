@@ -36,6 +36,7 @@ CGameGUI::CGameGUI()
 	m_ActiveDialogIndex = -1;
 	m_EditBox_Skills_Min = 0;
 	m_Inventory = 0;
+	m_IrrLogo = 0;
 }
 
 /**
@@ -1297,7 +1298,7 @@ bool CGameGUI::InitIntroMovie()
 bool CGameGUI::InitMenu()
 {
 	// add irrlicht logo
-	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(IRRLOGO_FILE), position2d<s32>(50,50));
+	m_IrrLogo = m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(IRRLOGO_FILE), position2d<s32>(50,50));
 
 	u32 menu_y_pos = m_GameManager->m_WindowHeight/3;
 
@@ -1384,6 +1385,9 @@ bool CGameGUI::InitGameGUI()
 	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(GAME_GUI_FILE), position2d<s32>(0,windowBottom-74));
 	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture(GAME_GUI_RIGHT_FILE), position2d<s32>(windowRight-180,windowBottom-74));
 
+	//remove irr logo
+	if(m_IrrLogo) m_IrrLogo->remove();
+
 	//Add Inventory GUI
 	ITexture* slotTex = m_GameManager->getDriver()->getTexture("media/Icons/slot.png");
 	m_Inventory = AddGUIContainer(
@@ -1437,9 +1441,11 @@ bool CGameGUI::InitGameGUI()
 	m_CSheetButton->setDrawBorder(false);
 	m_CSheetButton->setVisible(false);
 
+	// add turtle hud
+	m_GameManager->getGUIEnvironment()->addImage(m_GameManager->getDriver()->getTexture("media/hud.png"), position2d<s32>(20,20));
 	//add health bar
 	ITexture* texture = 0;//m_GameManager->getDriver()->getTexture("media/Icons/bar.png");
-	healthBar = new CGUIBar(40, 30, 200, 50, 20, 20, texture, L"Health");
+	healthBar = new CGUIBar(145, 52, 375, 72, 20, 20, texture, L"Health");
 	//m_GameManager->getGUIEnvironment()->addStaticText(L"Health",rect<s32>(10,30,40,50),false,false,0,-1,true);
 
 	//dialog window

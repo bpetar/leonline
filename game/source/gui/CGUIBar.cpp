@@ -78,8 +78,8 @@ void CGUIBar::renderGUIBars(video::IVideoDriver* driver, IGUIFont* font){
 						video::SColor(255, 180, 180, 0));
 	
 	stringw value = stringw((s32)(BarValue+0.5)) + stringw(L"/") + stringw(maxBarValue);
-	font->draw(m_Name.c_str(),rect<s32>(x1Bar+4, y1Bar+4,x1Bar+barSize, y2Bar-4),SColor(255,0,0,0));
-	font->draw(value.c_str(),rect<s32>(x1Bar+50, y1Bar+4,x1Bar+barSize, y2Bar-4),SColor(255,0,0,0));
+	font->draw(m_Name.c_str(),rect<s32>(x1Bar+4, y1Bar,x1Bar+barSize, y2Bar-4),SColor(255,0,0,0));
+	font->draw(value.c_str(),rect<s32>(x1Bar+60, y1Bar,x1Bar+barSize, y2Bar-4),SColor(255,0,0,0));
 
 } 
 
