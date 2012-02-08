@@ -23,6 +23,8 @@
 		<Static filename="torch"/>
 	</Furniture>
 	<Introlevel>
+		<Static filename="land"/>
+		<Static filename="introt"/>
 		<Static filename="barn"/>
 		<Static filename="barrel"/>
     <Static filename="campfire"/>
