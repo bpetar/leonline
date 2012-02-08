@@ -37,7 +37,7 @@ RTSCamera::RTSCamera(IrrlichtDevice* devicepointer,ISceneNode* parent,ISceneMana
    rotateSpeed = rs;
    translateSpeed = ts;
    targetMinDistance = 1.0f;
-   targetMaxDistance = 900.0f;
+   targetMaxDistance = 4000.0f;
    Target.set(0.0f,0.0f,0.0f);
    rotX = 0;
    rotY = 0;

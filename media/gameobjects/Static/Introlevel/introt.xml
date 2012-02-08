@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Intro Terrain"/>
+	<Model value="introt.3ds"/>
+  <Tile value="true"/>
+	<Description value="Terrain for intro level."/>
+</Config>
