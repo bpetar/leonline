@@ -1,0 +1,16 @@
+Paths
+
+Paths can be used to define movements of game objects. Pedestrian walking the street, birds flying in the sky, ramp lifting, bridge opening, carousel spining, baloon inflating... etc. It can be used to define camera position in game cutscenes. Transition, scale and rotation are defined as path coordinates.
+
+How to add path
+
+Select object in level editor and click Insert Path...
+Current position will be added to path.
+Define speed and loop mode for whole path.
+Move/rotate/scale object to new position and press 'P' to add new coordinate to path.
+Repeat for each path coordinate.
+Arrows are visible on the map for each coordinate.
+Click anywhere on the map to stop entering path.
+Selecting object again will display its path arrows.
+Path node (arrow) can be selected and moved to new position.
+Path node can be duplicated to add more path points.

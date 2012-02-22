@@ -107,3 +107,10 @@ stringw Util_GetRootPathFromPath(stringw path)
 	rootName = rootName.subString(0,rootName.findLast('.'));
 	return rootName;
 }
+
+vector3df Util_getVectorFromString(stringw str) 
+{ 
+   vector3df vector; 
+   swscanf_s(str.c_str(), L"%f %f %f", &vector.X,&vector.Y,&vector.Z ); 
+   return vector; 
+}

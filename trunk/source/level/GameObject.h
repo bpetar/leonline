@@ -54,6 +54,23 @@ typedef struct S_Skill
 
 } TSkill;
 
+typedef struct S_PathNode
+{
+	vector3df position;
+	vector3df rotation;
+	vector3df scale;
+	f32 speed;
+	f32 pause;
+	ISceneNode* sceneNode;
+} TPathNode;
+
+typedef struct S_Path
+{
+	bool loop;
+	stringw name;
+	array <TPathNode> nodes;
+} TPath;
+
 typedef struct S_Ability
 {
 	u32 min;
@@ -101,6 +118,7 @@ public:
 	void ClearScriptActions();
 	void SetDriver(IVideoDriver* _driver) {m_Driver = _driver;}
 	void SetPositionRotationScaleFromNode(ISceneNode* node);
+	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr);
 
 	//properties
 	stringw name;
@@ -131,6 +149,7 @@ public:
 	bool isArea;
 	bool isAnimated;
 	bool isAnchored;
+	bool hasTrajectoryPath;
 	stringw description;
 	u32 descriptionID;
 	stringw script;
@@ -148,6 +167,7 @@ public:
 	array <TSkill> m_ListOfSkills;
 	array <TAbility> m_ListOfAbilities_Default;
 	array <TSkill> m_ListOfSkills_Default;
+	array <TPath> m_ListOfTrajectoryPaths;
 
 	//only container objects have this list to asociate them to pickable items they contain
 	ITexture* m_IconTexture;

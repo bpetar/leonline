@@ -1510,6 +1510,13 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 					{
 						//load mesh from file
 						IAnimatedMesh* m = m_EditorManager->getSceneMngr()->getMesh(meshPath.c_str());
+
+						//weld mesh vertices
+						//if(meshPath.equals_substring_ignore_case(".3ds",0))
+						//{
+						//	m = (IAnimatedMesh*)m_EditorManager->getSceneMngr()->getMeshManipulator()->createMeshWelded(m,0);
+						//}
+
 						if(m)
 						{
 							node = m_EditorManager->getSceneMngr()->addAnimatedMeshSceneNode(m);
@@ -1547,6 +1554,22 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						gameObject->path = attr->getAttributeAsString("Path");
 						gameObject->mesh = attr->getAttributeAsString("Mesh");
 						gameObject->root = Util_GetRootNameFromPath(meshPath);
+
+						gameObject->hasTrajectoryPath = attr->getAttributeAsBool("hasTrajectoryPath"); //this path is different from mesh path
+						if(gameObject->hasTrajectoryPath) 
+						{
+							if(gameObject->isPickable) m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/pickables");
+							else m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/static");
+
+							IXMLReader* xml = m_EditorManager->getFS()->createXMLReader(stringc(gameObject->script).c_str());
+
+							if(xml)
+							{
+								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr()); //this path refers to game object moving trajectory
+							}
+
+							m_EditorManager->backToWorkingDirectory();
+						}
 
 						s32 nameID = attr->getAttributeAsInt("NameID");
 						if(nameID == 0)
@@ -2544,6 +2567,26 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 
 					if(m_SelectedGameObject)
 					{
+						if(go->hasTrajectoryPath)
+						{
+							//If selected go has trajectory path, we draw it here
+							for(u32 i=0; i < go->m_ListOfTrajectoryPaths.size(); i++)
+							{
+								//usualy there is only one path
+								for (u32 j=0; j< go->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+								{
+									if(go->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode) 
+									{
+										go->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->setVisible(true);
+									}
+									else
+									{
+										//create arrow scene node for this trajectory node..
+									}
+								}
+							}
+						}
+
 						/* I think this is some old stuff? what is this for? im commenting this out!!!*/
 						/* Nope, this is used for stacking barrels on top of each other... */
 						if(!m_bRotateYSelectedNode && !m_bRotateXSelectedNode)
@@ -3100,6 +3143,7 @@ void CEditorLevel::EnlightAllNodes()
 		ISceneNode* node = m_EditorManager->getSceneMngr()->getSceneNodeFromId((*it)->id);
 		if(!((*it)->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||(*it)->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
 		{
+			node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 			node->setMaterialFlag(EMF_LIGHTING, true);
 		}
 	}

@@ -10,7 +10,7 @@
 
 #include "GameObject.h"
 #include "../EditorManager.h"
-
+#include "../Utils.h"
 
 CGameObject::CGameObject()
 {
@@ -28,6 +28,7 @@ CGameObject::CGameObject()
 	isAnimated = false;
 	isInvisible = false;
 	isIllusion = false;
+	hasTrajectoryPath = false;
 	m_Radius = 20.0f;
 	m_HP = 10;
 	m_Exp = 50;
@@ -38,6 +39,10 @@ CGameObject::CGameObject()
 	m_Sound_Wound = "";
 	m_Sound_Die = "";
 	nameID = 0;
+	animations.clear();
+	m_ListOfAbilities_Default.clear();
+	m_ListOfSkills_Default.clear();
+	m_ListOfTrajectoryPaths.clear();
 }
 /**
  * Advanced constructor.
@@ -47,6 +52,7 @@ CGameObject::CGameObject(stringw _path, stringw _name, bool _static, IVideoDrive
 	animations.clear();
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
+	m_ListOfTrajectoryPaths.clear();
 	isAnimated = false;
 	name = _name;
 	path = _path;
@@ -65,6 +71,7 @@ CGameObject::CGameObject(stringw _path, stringw _name, bool _static, IVideoDrive
 	isTerrain = false;
 	isTile = false;
 	isWall = false;
+	hasTrajectoryPath = false;
 	m_IconTexture = NULL;
 	if (_static) isStatic = true;
 	description = L"No description specified";
@@ -95,6 +102,7 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	animations.clear();
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
+	m_ListOfTrajectoryPaths.clear();
 	isAnimated = false;
 	name = _name;
 	path = _path;
@@ -113,6 +121,7 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	isTerrain = false;
 	isTile = false;
 	isWall = false;
+	hasTrajectoryPath = false;
 	m_IconTexture = 0;
 	description = L"No description specified";
 	script = _name + ".script"; //default, but can be different
@@ -129,6 +138,59 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 
 CGameObject::~CGameObject()
 {
+}
+
+void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
+{
+	bool startStoringPathNodes = false;
+	TPath path;
+
+	while(xml->read())
+	{
+		switch(xml->getNodeType())
+		{
+			case io::EXN_ELEMENT:
+			{
+				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
+				{
+					startStoringPathNodes = true;
+					path.name = xml->getAttributeValue(L"name");
+					stringw loopStrValue = xml->getAttributeValue(L"loop");
+					if(loopStrValue.equals_ignore_case("true")) path.loop = true;
+					else path.loop = false;
+					path.nodes.clear();
+				}
+				if(startStoringPathNodes)
+				{
+					if(stringw("Coord").equals_ignore_case(xml->getNodeName()))
+					{
+						TPathNode pathNode;
+						pathNode.speed = xml->getAttributeValueAsFloat(L"speed");
+						pathNode.position = Util_getVectorFromString(xml->getAttributeValue(L"position"));
+						pathNode.rotation = Util_getVectorFromString(xml->getAttributeValue(L"rotation"));
+						pathNode.scale = Util_getVectorFromString(xml->getAttributeValue(L"scale"));
+						pathNode.pause = xml->getAttributeValueAsFloat(L"pause");
+						SColor color = SColor(255,100,100,255);
+						f32 size = 10;
+						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh("trajectory_arrow", color, color, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size));
+						pathNode.sceneNode->setPosition(pathNode.position);
+						path.nodes.push_back(pathNode);
+					}
+				}
+			}
+			break;
+
+			case io::EXN_ELEMENT_END:
+			{
+				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
+				{
+					//Path loaded.
+					m_ListOfTrajectoryPaths.push_back(path);
+					startStoringPathNodes = false;
+				}
+			}
+		}
+	}
 }
 
 void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)

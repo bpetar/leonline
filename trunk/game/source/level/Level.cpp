@@ -1810,6 +1810,7 @@ void CLevel::EnlightAllNodes()
 			ISceneNode* node = m_SMGR->getSceneNodeFromId(temp->id);
 			if(!(temp->mesh.equals_ignore_case(LIGHT_GAME_OBJECT)||temp->mesh.equals_ignore_case(PARTICLE_GAME_OBJECT)))
 			{
+				//node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 				node->setMaterialFlag(EMF_LIGHTING, true);
 			}
 		}
