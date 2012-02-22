@@ -1,7 +1,7 @@
 <!-- Game Object Configuration File -->
 <Config>
 	<Name value="Landscape"/>
-	<Model value="land_lp.3ds"/>
+	<Model value="land_lp_hilly.x"/>
   <Tile value="true"/>
 	<Description value="Landscape surrounding square terrain map."/>
 </Config>

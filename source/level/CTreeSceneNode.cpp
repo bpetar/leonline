@@ -23,7 +23,7 @@ CTreeSceneNode::CTreeSceneNode( ISceneNode* parent, ISceneManager* manager, s32 
     : ISceneNode( parent, manager, id, position, rotation, scale )
 {
     MidRange = 500.0f;
-    FarRange = 1300.0f;
+    FarRange = 13000.0f;
     Size = 0.0f;
     
     HighLODMeshBuffer = 0;

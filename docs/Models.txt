@@ -1,0 +1,17 @@
+
+Blender Exporting Tips
+------------
+
+.3ds 
+
+- model needs to have material name 3 letters long.
+- texture name should only be 3 letters long + extension.
+- 3ds model loaded to irrlicht has 3 normals for each vertex - unable to do smooth shading.
+
+.x
+
+- specular material component color need to be set to something neutral grey.
+- specular and difuse intensity in blender must be 1.
+- Ctrl + A, need to apply rot/scale/translate transformation before exporting to fix normals.
+- if model has two textures, there should be two materials, and two vertex groups.
+- we need to explicitly click Assign in edit mode to assign material to selected vertices.

@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
 	<Name value="Toy Tree 1" id="105"/>
-	<Model value="tree1.x"/>
+	<Model value="tree.x"/>
 	<Description value="Tree Toy." id="106"/>
 </Config>

@@ -23,7 +23,7 @@ void Util_PopulateTreeNodeGameObjectsFromXML(CEditorManager* editorManager, stri
 stringw Util_GetRootNameFromPath(stringw path);
 stringw Util_GetRootPathFromPath(stringw path);
 void PropagateEnabled(TreeNode* node, bool enabled);
-
+vector3df Util_getVectorFromString(stringw str);
 stringw GetPathFromRootName(stringw root);
 
 #endif;
