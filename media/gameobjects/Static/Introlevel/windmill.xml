@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Windmill" id="161"/>
+	<Model value="windmill.x"/>
+	<Description value="Windmill." id="162"/>
+</Config>
