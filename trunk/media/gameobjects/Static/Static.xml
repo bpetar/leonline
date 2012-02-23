@@ -24,6 +24,7 @@
 	</Furniture>
 	<Introlevel>
 		<Static filename="land"/>
+		<Static filename="windmill"/>
 		<Static filename="introt"/>
 		<Static filename="barn"/>
 		<Static filename="barrel"/>
