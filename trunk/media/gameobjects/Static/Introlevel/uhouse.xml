@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="House" id="161"/>
+	<Model value="uhouse.x"/>
+	<Description value="House." id="162"/>
+</Config>
