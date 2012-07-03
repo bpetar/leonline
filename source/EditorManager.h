@@ -52,6 +52,9 @@ using namespace gui;
 #define PARTICLE_GAME_OBJECT "particle_game_object_mesh"
 #define LIGHT_GAME_OBJECT "light_game_object_mesh"
 
+#define LEVEL_EDITOR_CONFIG_FILE "level_editor_config.xml"
+
+
 /**
  * \brief CEditorManager class is the boss. The manager. It creates 3D device (irrlicht of course),
  * creates GUI, and 3D environment so called Level Editor. Calls all the initialization functions and 
@@ -76,6 +79,9 @@ public:
 	CScript* getScriptEngine() {return m_ScriptEngine;}
 	IFileSystem* getFS() {return m_FS;}
 	void backToWorkingDirectory();
+	bool LoadProperties();
+	bool StorePropertiesToConfigFile(stringc filename);
+	bool LoadPropertiesFromConfigFile(stringc filename);
 	virtual bool OnEvent(const SEvent& event);
 	void AddGameObjectToLevel(CGameObject* go);
 	void RemoveGameObjectFromMap(CGameObject* go);
@@ -124,9 +130,15 @@ private:
 	CEditorLevel* m_pEdiLevel;
 	CScript* m_ScriptEngine;
 	CLanguages* m_pLanguages;
+	stringc m_SelectedLanguage;
 	/*irr::gui::IGUIFont* m_pFont;*/
 	CUndoActions* m_UndoActionsManager;
 	
+	dimension2d<u32> m_Resolution; // chosen resolution
+	dimension2d<u32> m_DesktopResolution;
+	bool m_bFullscreen;
+	bool m_bMaximized;
+
 	int lastFPS;
 };
 #endif

@@ -1307,7 +1307,7 @@ bool CGameManager::LoadDataFromXMLConfig(stringc filename)
 				}
 				else if (core::stringw("Fullscreen") == xml->getNodeName())
 				{
-					//Chosen Language.
+					//Chosen fullscreen option.
 					figo = xml->getAttributeValue(L"value");
 					if(figo.equals_ignore_case("true"))
 					{
