@@ -23,6 +23,9 @@ CEditorManager::CEditorManager()
 	m_FS = NULL;
 	m_WorkingDirectory = ".";
 	lastFPS = -1;
+	m_bFullscreen = false;
+	m_SelectedLanguage = "en";
+	m_bMaximized = true;
 }
 
 /**
@@ -32,6 +35,8 @@ CEditorManager::CEditorManager()
  */
 void CEditorManager::Init()
 {
+	//load properties
+	LoadProperties();
 	//create irrlicht device
 	CreateDevice();
 	//we gonna use filesystem everuwhere so lets store the pointer
@@ -57,7 +62,7 @@ void CEditorManager::Init()
 	m_pLanguages = new CLanguages(m_FS);
 	m_FS->changeWorkingDirectoryTo("media/strings");
 	m_pLanguages->Init();
-	bool ret = m_pLanguages->setLanguage("en");
+	bool ret = m_pLanguages->setLanguage(m_SelectedLanguage);
 	if(!ret)
 	{
 		//TODO: display warning message that language is not found!
@@ -73,8 +78,138 @@ void CEditorManager::Init()
  */
 CEditorManager::~CEditorManager()
 {
+	//save window size, language
+	m_Resolution.Width = m_pDriver->getScreenSize().Width;
+	m_Resolution.Height = m_pDriver->getScreenSize().Height;
+
+	//because we don't have m_pDevice->isWindowMaximized in irrlicht 1.6, this is how we determine if window is maximized or not...
+	if(m_Resolution.Width < m_DesktopResolution.Width)
+	{
+		m_bMaximized = false;
+	}
+	else
+	{
+		m_bMaximized = true;
+	}
+
+	StorePropertiesToConfigFile(LEVEL_EDITOR_CONFIG_FILE);
 }
 
+
+/**
+ * \brief Save config data to given XML file
+ * \author Petar Bajic 
+ * \date July, 3 2012.
+ */
+bool CEditorManager::StorePropertiesToConfigFile(stringc filename)
+{
+	io::IXMLWriter* xml = m_FS->createXMLWriter(filename.c_str());
+
+	if (!xml)
+	{
+		//Display error message and exit
+		return false;
+	}
+
+	xml->writeXMLHeader();
+
+	xml->writeElement(L"Config",false); 
+	xml->writeLineBreak();
+	
+	xml->writeElement(L"Window",true,L"width",stringw(m_Resolution.Width).c_str(),L"height",stringw(m_Resolution.Height).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Language",true,L"value",stringw(m_pLanguages->m_Language->value).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Maximized",true,L"value",stringw(m_bMaximized?"true":"false"/*m_pDevice->isWindowMaximized()*/).c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Fullscreen",true,L"value",stringw(m_bFullscreen?"true":"false").c_str()); 
+	xml->writeLineBreak();
+
+	xml->writeClosingTag(L"Config");
+	xml->writeLineBreak();
+
+	xml->drop(); // don't forget to delete the xml writer
+
+	return true;
+}
+
+
+/**
+ * \brief Save config data to given XML file
+ * \author Petar Bajic 
+ * \date July, 3 2012.
+ */
+bool CEditorManager::LoadPropertiesFromConfigFile(stringc filename)
+{
+	io::IXMLReader* xml = m_FS->createXMLReader(filename.c_str());
+
+	if (!xml)
+	{
+		//Display error message and exit
+
+		return false;
+	}
+
+	while(xml->read())
+	{
+		switch(xml->getNodeType())
+		{
+		case io::EXN_ELEMENT:
+			{
+				stringw figo;
+				if (core::stringw("Window") == xml->getNodeName())
+				{
+					m_Resolution.Width = xml->getAttributeValueAsInt(L"width");
+					m_Resolution.Height = xml->getAttributeValueAsInt(L"height");
+				}
+				else if (core::stringw("Language") == xml->getNodeName())
+				{
+					//Chosen Language.
+					m_SelectedLanguage = xml->getAttributeValue(L"value");
+				}
+				else if (core::stringw("Maximized") == xml->getNodeName())
+				{
+					// Maximized
+					figo = xml->getAttributeValue(L"value");
+					if(figo.equals_ignore_case("true"))
+					{
+						m_bMaximized = true;
+					}
+					else
+					{
+						m_bMaximized = false;
+					}
+				}
+				else if (core::stringw("Fullscreen") == xml->getNodeName())
+				{
+					figo = xml->getAttributeValue(L"value");
+					if(figo.equals_ignore_case("true"))
+					{
+						m_bFullscreen = true;
+					}
+					else
+					{
+						m_bFullscreen = false;
+					}
+				}
+			}
+			break;
+		}
+	}
+
+	xml->drop(); // don't forget to delete the xml reader
+
+	return true;
+}
+
+/**
+ * \brief Returns string in chosen language from given id. 
+ * \author Petar Bajic 
+ * \date July, 3 2012.
+ */
 stringw CEditorManager::getTranslatedString(u32 id)
 {
 	return m_pLanguages->getObjectString(id);
@@ -181,6 +316,29 @@ void CEditorManager::Update()
 }
 
 /**
+ * \brief Loads properties like window resolution, position, size, last used objectID
+ * \author Petar Bajic 
+ * \date July, 3 2012.
+ */
+bool CEditorManager::LoadProperties()
+{
+	IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
+	m_FS = nulldevice->getFileSystem();
+
+	IVideoModeList* pVideoList = nulldevice->getVideoModeList();
+	m_DesktopResolution = pVideoList->getDesktopResolution();
+
+	//Load data from XML config file
+	if (!LoadPropertiesFromConfigFile(LEVEL_EDITOR_CONFIG_FILE))
+	{
+		//initial default settings
+	}
+
+	nulldevice->drop();
+	return true;
+}
+
+/**
  * \brief Creates the Irrlicht device and get pointers to the main subsytems
  * for later use, the Editor manager is the central interface point to the rendering engine
  * \author Petar Bajic 
@@ -190,6 +348,7 @@ void CEditorManager::CreateDevice()
 {
 	//create irrlicht device and send "this" as event receiver meaning this class should 
 	//implement OnEvent function and handle its own events...
+	
 	//Daniel start
 	//choose platform specific driver type
 	video::E_DRIVER_TYPE driverType;
@@ -199,8 +358,10 @@ void CEditorManager::CreateDevice()
 	driverType = video::EDT_DIRECT3D9;	
 	#endif
 	//Daniel end
-	m_pDevice = createDevice(driverType, dimension2d<u32>(1200, 970), 16, false, false, false, this);
+
+	m_pDevice = createDevice(driverType, dimension2d<u32>(m_Resolution.Width, m_Resolution.Height), 16, m_bFullscreen, false, false, this);
 	m_pDevice->setResizable(true);
+	if (m_bMaximized) m_pDevice->maximizeWindow();
    	m_pDriver = m_pDevice->getVideoDriver();
     m_pSceneManager = m_pDevice->getSceneManager();
 	m_pGUIEnvironment = m_pDevice->getGUIEnvironment();
