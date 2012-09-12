@@ -138,7 +138,7 @@ bool CEditorManager::StorePropertiesToConfigFile(stringc filename)
 
 
 /**
- * \brief Save config data to given XML file
+ * \brief Load config data from given XML file
  * \author Petar Bajic 
  * \date July, 3 2012.
  */
