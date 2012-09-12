@@ -55,6 +55,7 @@ CEditorLevel::CEditorLevel()
 	m_LevelMusic_MusicFile = "";
 	m_LevelMusic_SoundFile = "";
 	m_LevelMusic_NarationFile = "";
+	m_gameObjectWithTrajectoryPathVisible = 0;
 }
 
 /**
@@ -1233,7 +1234,6 @@ bool CEditorLevel::Init(CEditorManager* edMngr)
 {
 	m_EditorManager = edMngr;
 	m_ListOfGameObjects.clear();
-	m_EditorManager->m_ID = 1000;
 	m_MapName = "untitled";
 	InitLevel();
 	
@@ -1952,7 +1952,8 @@ void CEditorLevel::getPickedNodeBBB(ISceneNode* root, const core::line3df& ray, 
          const core::aabbox3df& box = current->getBoundingBox();
 
 		 s32 idnj = current->getID();
-		 if(idnj >= 0 && !(_getGameObjectFromID(current->getID())->isAnchored))
+		 CGameObject* go = _getGameObjectFromID(current->getID());
+		 if(idnj >= 0 && go && !(go->isAnchored))
 		 {
 			 // do intersection test in object space
 			 if (box.intersectsWithLine(line))
@@ -2567,25 +2568,55 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 
 					if(m_SelectedGameObject)
 					{
-						if(go->hasTrajectoryPath)
+						//turn off invisible old trajectory paths
+						if((m_gameObjectWithTrajectoryPathVisible)&&(go != m_gameObjectWithTrajectoryPathVisible))
 						{
-							//If selected go has trajectory path, we draw it here
-							for(u32 i=0; i < go->m_ListOfTrajectoryPaths.size(); i++)
+							if(m_gameObjectWithTrajectoryPathVisible->hasTrajectoryPath)
 							{
-								//usualy there is only one path
-								for (u32 j=0; j< go->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+								//If previous selected go has trajectory path, we hide it here
+								for(u32 i=0; i < m_gameObjectWithTrajectoryPathVisible->m_ListOfTrajectoryPaths.size(); i++)
 								{
-									if(go->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode) 
+									//usualy there is only one path
+									for (u32 j=0; j< m_gameObjectWithTrajectoryPathVisible->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
 									{
-										go->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->setVisible(true);
-									}
-									else
-									{
-										//create arrow scene node for this trajectory node..
+										if(m_gameObjectWithTrajectoryPathVisible->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode) 
+										{
+											m_gameObjectWithTrajectoryPathVisible->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->setVisible(false);
+										}
 									}
 								}
 							}
 						}
+
+						if(go->hasTrajectoryPath)
+						{
+							if(go != m_gameObjectWithTrajectoryPathVisible)
+							{
+								m_gameObjectWithTrajectoryPathVisible = go;
+								//If selected go has trajectory path, we draw it here
+								for(u32 i=0; i < go->m_ListOfTrajectoryPaths.size(); i++)
+								{
+									//usualy there is only one path
+									for (u32 j=0; j< go->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+									{
+										if(go->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode) 
+										{
+											go->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->setVisible(true);
+										}
+										else
+										{
+											//create arrow scene node for this trajectory node..
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							//new go has no trajectory
+							m_gameObjectWithTrajectoryPathVisible = 0;
+						}
+						
 
 						/* I think this is some old stuff? what is this for? im commenting this out!!!*/
 						/* Nope, this is used for stacking barrels on top of each other... */

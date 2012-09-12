@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
-	<Name value="House" id="161"/>
+	<Name value="Straw House" id="105"/>
 	<Model value="uhouse.x"/>
-	<Description value="House." id="162"/>
+	<Description value="Ukranian Straw House." id="106"/>
 </Config>

@@ -1,6 +1,6 @@
 /** 
  * \file CGoToArrows.h
- * \brief Header file containing CGoToArrows class used for 
+ * \brief Header file containing CGoToArrows class used for drawing mark destination of player movement.
  *
  * \author Petar Bajic, MPE (C) All Rights Reserved, Homepage: www.mystic-peanut.com
  * \date July, 21 2008.

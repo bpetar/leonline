@@ -25,11 +25,11 @@
 	<Introlevel>
 		<Static filename="land"/>
 		<Static filename="windmill"/>
-    <Static filename="uhouse"/>
+		<Static filename="uhouse"/>
 		<Static filename="introt"/>
 		<Static filename="barn"/>
 		<Static filename="barrel"/>
-    <Static filename="campfire"/>
+		<Static filename="campfire"/>
 		<Static filename="fence"/>
 		<Static filename="flower_pink"/>
 		<Static filename="flower_white"/>
