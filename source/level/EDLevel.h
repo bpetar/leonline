@@ -170,6 +170,7 @@ public:
 	s32 m_WallHeight;
 	CGridSceneNode* m_Grid;
 	ITerrainSceneNode* terrain;
+	CGameObject* m_gameObjectWithTrajectoryPathVisible;
 
 	stringw m_LevelMusic_MusicFile;
 	stringw m_LevelMusic_SoundFile;

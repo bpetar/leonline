@@ -128,6 +128,9 @@ bool CEditorManager::StorePropertiesToConfigFile(stringc filename)
 	xml->writeElement(L"Fullscreen",true,L"value",stringw(m_bFullscreen?"true":"false").c_str()); 
 	xml->writeLineBreak();
 
+	xml->writeElement(L"ID",true,L"value",stringw(m_ID).c_str()); 
+	xml->writeLineBreak();
+
 	xml->writeClosingTag(L"Config");
 	xml->writeLineBreak();
 
@@ -194,6 +197,10 @@ bool CEditorManager::LoadPropertiesFromConfigFile(stringc filename)
 					{
 						m_bFullscreen = false;
 					}
+				}
+				else if (core::stringw("ID") == xml->getNodeName())
+				{
+					m_ID = xml->getAttributeValueAsInt(L"value");
 				}
 			}
 			break;
@@ -333,6 +340,10 @@ bool CEditorManager::LoadProperties()
 	{
 		//initial default settings
 	}
+
+	//fix cross monitor settings (if config file stores dimension bigger than this screen, adjust it)
+	if(m_Resolution.Width > m_DesktopResolution.Width) m_Resolution.Width = m_DesktopResolution.Width;
+	if(m_Resolution.Height > m_DesktopResolution.Height) m_Resolution.Height = m_DesktopResolution.Height;
 
 	nulldevice->drop();
 	return true;
