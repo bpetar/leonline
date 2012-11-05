@@ -1555,7 +1555,7 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						gameObject->mesh = attr->getAttributeAsString("Mesh");
 						gameObject->root = Util_GetRootNameFromPath(meshPath);
 
-						gameObject->hasTrajectoryPath = attr->getAttributeAsBool("hasTrajectoryPath"); //this path is different from mesh path
+						gameObject->hasTrajectoryPath = attr->getAttributeAsBool("hasTrajectoryPath"); //this path is different from mesh directory path
 						if(gameObject->hasTrajectoryPath) 
 						{
 							if(gameObject->isPickable) m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/pickables");
@@ -1566,6 +1566,22 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 							if(xml)
 							{
 								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr()); //this path refers to game object moving trajectory
+								
+								for(u32 i=0; i < gameObject->m_ListOfTrajectoryPaths.size(); i++)
+								{
+									//usualy there is only one path
+									for (u32 j=0; j< gameObject->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+									{
+										CGameObject* pathNodeGO = new CGameObject();
+										pathNodeGO->isTrajectoryNode = true;
+										//set position, rotation, scale and id
+										pathNodeGO->pos = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].position;
+										pathNodeGO->rot = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].rotation;
+										pathNodeGO->scale = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].scale;
+										pathNodeGO->id = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].id;
+										m_ListOfGameObjects.push_back(pathNodeGO);
+									}
+								}
 							}
 
 							m_EditorManager->backToWorkingDirectory();
@@ -2569,7 +2585,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 					if(m_SelectedGameObject)
 					{
 						//turn off invisible old trajectory paths
-						if((m_gameObjectWithTrajectoryPathVisible)&&(go != m_gameObjectWithTrajectoryPathVisible))
+						if((!go->isTrajectoryNode)&&(m_gameObjectWithTrajectoryPathVisible)&&(go != m_gameObjectWithTrajectoryPathVisible))
 						{
 							if(m_gameObjectWithTrajectoryPathVisible->hasTrajectoryPath)
 							{
@@ -2588,7 +2604,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							}
 						}
 
-						if(go->hasTrajectoryPath)
+						if((!go->isTrajectoryNode)&&(go->hasTrajectoryPath))
 						{
 							if(go != m_gameObjectWithTrajectoryPathVisible)
 							{

@@ -29,6 +29,7 @@ CGameObject::CGameObject()
 	isInvisible = false;
 	isIllusion = false;
 	hasTrajectoryPath = false;
+	isTrajectoryNode = false;
 	m_Radius = 20.0f;
 	m_HP = 10;
 	m_Exp = 50;
@@ -72,6 +73,7 @@ CGameObject::CGameObject(stringw _path, stringw _name, bool _static, IVideoDrive
 	isTile = false;
 	isWall = false;
 	hasTrajectoryPath = false;
+	isTrajectoryNode = false;
 	m_IconTexture = NULL;
 	if (_static) isStatic = true;
 	description = L"No description specified";
@@ -122,6 +124,7 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	isTile = false;
 	isWall = false;
 	hasTrajectoryPath = false;
+	isTrajectoryNode = false;
 	m_IconTexture = 0;
 	description = L"No description specified";
 	script = _name + ".script"; //default, but can be different
@@ -174,7 +177,7 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 						SColor color = SColor(155,10,10,255);
 						f32 size = 10;
 						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh("trajectory_arrow", color, color, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,pathNode.id,pathNode.position,vector3df(180,0,0));
-						//pathNode.sceneNode->setPosition(pathNode.position);
+						//pathNode.sceneNode->setPosition(pathNode.position); //why is this commented out??
 						pathNode.sceneNode->setVisible(false);
 						path.nodes.push_back(pathNode);
 					}
