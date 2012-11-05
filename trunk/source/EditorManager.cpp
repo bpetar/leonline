@@ -26,6 +26,7 @@ CEditorManager::CEditorManager()
 	m_bFullscreen = false;
 	m_SelectedLanguage = "en";
 	m_bMaximized = true;
+	m_bObjectPropertiesVisible = true;
 }
 
 /**
@@ -49,7 +50,7 @@ void CEditorManager::Init()
 	m_WorkingDirectory = m_FS->getWorkingDirectory();
 	#endif
 	//create GUI
-	m_pGuiManager = new CEditorGUI();
+	m_pGuiManager = new CEditorGUI(m_bObjectPropertiesVisible);
 	m_pGuiManager->Init(this);
 	//create "level 3D environment handling class": edilevel
 	m_pEdiLevel = new CEditorLevel();
@@ -131,6 +132,9 @@ bool CEditorManager::StorePropertiesToConfigFile(stringc filename)
 	xml->writeElement(L"ID",true,L"value",stringw(m_ID).c_str()); 
 	xml->writeLineBreak();
 
+	xml->writeElement(L"ObjectPropertiesVisible",true,L"value",stringw(m_pGuiManager->m_bObjectPropertiesVisible?"true":"false").c_str()); 
+	xml->writeLineBreak();
+
 	xml->writeClosingTag(L"Config");
 	xml->writeLineBreak();
 
@@ -196,6 +200,18 @@ bool CEditorManager::LoadPropertiesFromConfigFile(stringc filename)
 					else
 					{
 						m_bFullscreen = false;
+					}
+				}
+				else if (core::stringw("ObjectPropertiesVisible") == xml->getNodeName())
+				{
+					figo = xml->getAttributeValue(L"value");
+					if(figo.equals_ignore_case("true"))
+					{
+						m_bObjectPropertiesVisible = true;
+					}
+					else
+					{
+						m_bObjectPropertiesVisible = false;
 					}
 				}
 				else if (core::stringw("ID") == xml->getNodeName())

@@ -56,7 +56,7 @@ void CreateMenu(CEditorManager* editorManager)
 	submenu->addItem(L"Select All", GUI_ID_MENU_SELECT_ALL, true, false );
 
 	editorManager->getGUIManager()->m_ViewMenu = menu->getSubMenu(2);
-	editorManager->getGUIManager()->m_ViewMenuItem_Properties = editorManager->getGUIManager()->m_ViewMenu->addItem(L"Object Properties", GUI_ID_MENU_VIEW_OBJECT_PROPERTIES, true, false, true);
+	editorManager->getGUIManager()->m_ViewMenuItem_Properties = editorManager->getGUIManager()->m_ViewMenu->addItem(L"Object Properties", GUI_ID_MENU_VIEW_OBJECT_PROPERTIES, true, false, editorManager->getGUIManager()->m_bObjectPropertiesVisible);
 	editorManager->getGUIManager()->m_ViewMenuItem_GameObjects = editorManager->getGUIManager()->m_ViewMenu->addItem(L"Game Objects", GUI_ID_MENU_VIEW_GAME_OBJECTS, true, false, true);
 	editorManager->getGUIManager()->m_ViewMenuItem_ObjectPreview = editorManager->getGUIManager()->m_ViewMenu->addItem(L"Object Preview", GUI_ID_MENU_VIEW_OBJECT_PREVIEW, true, false, true);
 
@@ -183,12 +183,14 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 				edGui->m_wnd_Properties->remove();
 				edGui->m_wnd_Properties = 0;
 				edGui->m_ViewMenu->setItemChecked(edGui->m_ViewMenuItem_Properties,false);
+				edGui->m_bObjectPropertiesVisible = false;
 			}
 			else
 			{
 				//create window
 				edGui->m_wnd_Properties = MakePropertiesWindow(editorManager);
 				edGui->m_ViewMenu->setItemChecked(edGui->m_ViewMenuItem_Properties,false);
+				edGui->m_bObjectPropertiesVisible = true;
 			}
 		}
 		break;

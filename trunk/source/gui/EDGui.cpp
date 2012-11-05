@@ -25,7 +25,7 @@
  * \author Petar Bajic 
  * \date July, 21 2008.
  */
-CEditorGUI::CEditorGUI()
+CEditorGUI::CEditorGUI(bool objectPropertiesVisible)
 :
 	m_EditorManager(NULL),
 
@@ -56,6 +56,19 @@ CEditorGUI::CEditorGUI()
 	m_wnd_GameItems(0),
 	m_wnd_LevelMusic(0),
 	m_wnd_ParticleSystem(0),  
+	m_PropButton_Pos_X_Up(0),
+	m_PropButton_Pos_X_Down(0),
+	m_PropButton_Pos_Y_Up(0),
+	m_PropButton_Pos_Y_Down(0),
+	m_PropButton_Pos_Z_Up(0),
+	m_PropButton_Pos_Z_Down(0),
+	m_PropButton_Rot_X_Up(0),
+	m_PropButton_Rot_X_Down(0),
+	m_PropButton_Rot_Y_Up(0),
+	m_PropButton_Rot_Y_Down(0),
+	m_PropButton_Rot_Z_Up(0),
+	m_PropButton_Rot_Z_Down(0),
+
 
 	m_DialogButton_Warning(0),
 	m_DialogButton_AddText(0),
@@ -117,7 +130,8 @@ CEditorGUI::CEditorGUI()
 	m_TriggerEditBox_ActionTargetID(0),
 	m_TriggerEditBox_ActionAttribute(0),
 	m_TriggerEditBox_ActionValue(0),
-	m_TriggerEditBox_State(0)
+	m_TriggerEditBox_State(0),
+	m_bObjectPropertiesVisible(objectPropertiesVisible)
 {
 }
 
@@ -380,74 +394,74 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 			if ((m_wnd_GameItems && m_wnd_GameItems->getAbsolutePosition().isPointInside(mouse_pos)) || 
 				(m_wnd_Properties && m_wnd_Properties->getAbsolutePosition().isPointInside(mouse_pos)))
 			{
-				if(m_PropButton_Pos_X_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				if(m_PropButton_Pos_X_Up && m_PropButton_Pos_X_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bMoveModel = true;
 					m_eMoveDirection = LE_X_UP;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Pos_X_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Pos_X_Down && m_PropButton_Pos_X_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bMoveModel = true;
 					m_eMoveDirection = LE_X_DOWN;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Pos_Y_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Pos_Y_Up && m_PropButton_Pos_Y_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bMoveModel = true;
 					m_eMoveDirection = LE_Y_UP;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Pos_Y_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Pos_Y_Down && m_PropButton_Pos_Y_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bMoveModel = true;
 					m_eMoveDirection = LE_Y_DOWN;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Pos_Z_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Pos_Z_Up && m_PropButton_Pos_Z_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bMoveModel = true;
 					m_eMoveDirection = LE_Z_UP;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Pos_Z_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Pos_Z_Down && m_PropButton_Pos_Z_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bMoveModel = true;
 					m_eMoveDirection = LE_Z_DOWN;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
 				//rotation
-				else if(m_PropButton_Rot_X_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Rot_X_Up && m_PropButton_Rot_X_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bRotateModel = true;
 					m_eRotateDirection = LE_X_UP;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Rot_X_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Rot_X_Down && m_PropButton_Rot_X_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bRotateModel = true;
 					m_eRotateDirection = LE_X_DOWN;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Rot_Y_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Rot_Y_Up && m_PropButton_Rot_Y_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bRotateModel = true;
 					m_eRotateDirection = LE_Y_UP;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Rot_Y_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Rot_Y_Down && m_PropButton_Rot_Y_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bRotateModel = true;
 					m_eRotateDirection = LE_Y_DOWN;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Rot_Z_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Rot_Z_Up && m_PropButton_Rot_Z_Up->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bRotateModel = true;
 					m_eRotateDirection = LE_Z_UP;
 					m_uClickStartTime = m_EditorManager->getDevice()->getTimer()->getRealTime();
 				}
-				else if(m_PropButton_Rot_Z_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
+				else if(m_PropButton_Rot_Z_Down && m_PropButton_Rot_Z_Down->getAbsolutePosition().isPointInside(mouse_pos) && (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN))
 				{
 					m_bRotateModel = true;
 					m_eRotateDirection = LE_Z_DOWN;
@@ -705,6 +719,7 @@ bool CEditorGUI::OnEvent(const SEvent& event)
 					{
 						m_wnd_Properties = 0;
 						m_ViewMenu->setItemChecked(m_ViewMenuItem_Properties,false);
+						m_bObjectPropertiesVisible = false;
 					}
 					if(event.GUIEvent.Caller == m_wnd_GameItems)
 					{
@@ -1497,8 +1512,11 @@ bool CEditorGUI::Init(CEditorManager* edMngr)
 	CreateMenu(m_EditorManager);
 
 	/*Properties window*/
-	m_wnd_Properties = MakePropertiesWindow(m_EditorManager);
-	ClearProperties();
+	if(m_bObjectPropertiesVisible)
+	{
+		m_wnd_Properties = MakePropertiesWindow(m_EditorManager);
+		ClearProperties();
+	}
 
 	/*Game Objects window*/
 	m_wnd_GameItems = MakeGameObjectsWindow(m_EditorManager);
