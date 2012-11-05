@@ -272,7 +272,7 @@ class CEditorGUI
 {
 
 public:
-	CEditorGUI();
+	CEditorGUI(bool objectPropertiesVisible);
 	~CEditorGUI();
 	void OnNewMap();
 	bool Init(CEditorManager* edMngr);
@@ -509,6 +509,8 @@ public:
 	bool m_bLevelMusicOpenDialog;
 	bool m_bLevelSoundOpenDialog;
 	bool m_bLevelNarationOpenDialog;
+
+	bool m_bObjectPropertiesVisible;
 
 	//container GUI
 	IGUICheckBox* m_PickCheckBox_DirectPick;

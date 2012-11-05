@@ -115,6 +115,8 @@ public:
 
 	stringc m_WorkingDirectory;
 
+	bool m_bObjectPropertiesVisible;
+
 protected:
 	
 
