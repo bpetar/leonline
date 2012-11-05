@@ -151,6 +151,7 @@ public:
 	bool isAnimated;
 	bool isAnchored;
 	bool hasTrajectoryPath;
+	bool isTrajectoryNode; //this is true if this game object is acctually a trajectory node!
 	stringw description;
 	u32 descriptionID;
 	stringw script;
