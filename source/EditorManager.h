@@ -51,6 +51,7 @@ using namespace gui;
 #define PROCEDURAL_TREE_MESH "procedural_tree_mesh"
 #define PARTICLE_GAME_OBJECT "particle_game_object_mesh"
 #define LIGHT_GAME_OBJECT "light_game_object_mesh"
+#define TRAJECTORY_NODE_GAME_OBJECT "trajectory_node_game_object"
 
 #define LEVEL_EDITOR_CONFIG_FILE "level_editor_config.xml"
 

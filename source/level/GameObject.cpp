@@ -174,10 +174,11 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 						pathNode.scale = Util_getVectorFromString(xml->getAttributeValue(L"scale"));
 						pathNode.pause = xml->getAttributeValueAsFloat(L"pause");
 						pathNode.id = xml->getAttributeValueAsInt(L"id");
-						SColor color = SColor(155,10,10,255);
+						SColor color = SColor(255,10,10,155);
+						SColor color2 = SColor(255,10,10,185);
 						f32 size = 10;
-						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh("trajectory_arrow", color, color, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,pathNode.id,pathNode.position,vector3df(180,0,0));
-						//pathNode.sceneNode->setPosition(pathNode.position); //why is this commented out??
+						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh(TRAJECTORY_NODE_GAME_OBJECT, color, color2, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,pathNode.id,pathNode.position,vector3df(180,0,0));
+						//pathNode.sceneNode->setPosition(pathNode.position); //q: why is this commented out?? a: i guess its up there in the list of arguments of addArrowMesh
 						pathNode.sceneNode->setVisible(false);
 						path.nodes.push_back(pathNode);
 					}

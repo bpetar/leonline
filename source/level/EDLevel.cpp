@@ -1298,6 +1298,8 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 	if (!writer || !node)
 		return;
 
+	CGameObject* gameObject = 0;
+
 	if (node == m_EditorManager->getSceneMngr()->getRootSceneNode())
 	{
 		writer->writeElement(L"LevelEditorMap", false);
@@ -1315,116 +1317,144 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 	}
 	else if (node->getID() > -1)
 	{
-		CGameObject* gameObject = _getGameObjectFromID(node->getID());
+		gameObject = _getGameObjectFromID(node->getID());
 
-		writer->writeElement(L"GameObject", false);
-		writer->writeLineBreak();
-
-		// write properties
-		io::IAttributes* attr = m_EditorManager->getDevice()->getFileSystem()->createEmptyAttributes(m_EditorManager->getDriver());
-		attr->addString("Name",node->getName());
-		attr->addInt("NameID",gameObject->nameID);
-		attr->addInt("ID",node->getID());
-		attr->addString("Mesh",gameObject->mesh.c_str());
-		attr->addString("Path",gameObject->path.c_str());
-		attr->addVector3d("Position",node->getPosition());
-		attr->addVector3d("Rotation",node->getRotation());
-		attr->addVector3d("Scale",node->getScale());
-		if (gameObject->isInvisible)
-			//adding attribute isInvisible
-			attr->addBool("isInvisible",true);
-		if (gameObject->isIllusion)
-			//adding attribute isIllusion
-			attr->addBool("isIllusion",true);
-		if (gameObject->isTrigger)
-			//adding atribute isTrigger
-			attr->addBool("isTrigger",true);
-		if (gameObject->isStatic)
-			//adding atribute isStatic
-			attr->addBool("isStatic",true);
-		if (gameObject->isTerrain)
-			//adding atribute isTerrain
-			attr->addBool("isTerrain",true);
-		if (gameObject->isAnchored)
-			//adding atribute isAnchored
-			attr->addBool("isAnchored",true);
-		if (gameObject->isPickable)
-			//adding atribute isPickable
-			attr->addBool("isPickable",true);
-		if (gameObject->isMonster)
-			//adding atribute isMonster
-			attr->addBool("isMonster",true);
-		if (gameObject->isNPC)
-			//adding atribute isNPC
-			attr->addBool("isNPC",true);
-		if (gameObject->isContainer)
-			//adding attribute isContainer
-			attr->addBool("isContainer",true);
-		if (gameObject->isArea)
-			//adding attribute isArea
-			attr->addBool("isArea",true);
-		if (gameObject->script != stringw(L""))
-			attr->addString("Script",gameObject->script.c_str());
-		if (gameObject->state != stringw(L""))
-			attr->addString("State",gameObject->state.c_str());
-
-		if (gameObject->isMonster)
+		if(gameObject->name.equals_ignore_case(TRAJECTORY_NODE_GAME_OBJECT))
 		{
-			//Monster attributes are written only if differ from default values in xml
-			if (gameObject->m_Mood != gameObject->m_Mood_Default)
-				attr->addInt("Mood", gameObject->m_Mood);
-			if (gameObject->m_Radius != gameObject->m_Radius_Default)
-				attr->addFloat("Radius", gameObject->m_Radius);
+			//trajectory nodes are not written to map file but to script file - any particular reason beside "thats how we randomly chosen at first"?
+			//pickable items that belong to one game object like container are written to map file and not separate script, so why not trajectory arrows?
+
+			//write to script of parent object:
+			
+			//Script looks like this...
+
+			//<Script>
+				//<OnClick state="closed">
+					//<InfoGUI target="" attribute="100" value="101" />
+					//<MovePath target="self" attribute="loop" value="path1" />
+				//</OnClick>
+			//</Script>
+
+			//<Path name="path1" loop="true">
+				//<Coord id="1030" speed="100" position="1 1 1" rotation="0 0 0" scale="1 1 1" pause="0"/>
+				//<Coord id="1031" speed="100" position="10 10 10" rotation="0 0 0" scale="1 1 1" pause="0"/>
+				//...
+			//</Path>
 		}
-
-		if (gameObject->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
-			attr->addFloat("Radius", gameObject->m_Radius);
-
-		attr->write(writer);
-		//writer->writeLineBreak();
-		attr->drop();
-
-		//Monster attributes are written only if differ from xml default values
-		if (gameObject->isMonster)
+		else
 		{
-			for(u32 i=0; i<gameObject->m_ListOfAbilities.size(); i++)
-			{
-				s32 value = gameObject->m_ListOfAbilities[i].value;
-				s32 max = gameObject->m_ListOfAbilities[i].max;
-				s32 defaultValue = gameObject->m_ListOfAbilities_Default[i].value;
-				if(value != defaultValue)
-				{
-					writer->writeElement(L"Ability",true,L"name",gameObject->m_ListOfAbilities[i].abilityName.c_str(), L"value",stringw(value).c_str(),L"max",stringw((value>max)?value:max).c_str());
-					writer->writeLineBreak();
-				}
-			}
-
-			for(u32 i=0; i<gameObject->m_ListOfSkills.size(); i++)
-			{
-				s32 min = gameObject->m_ListOfSkills[i].min;
-				s32 defaultMin = gameObject->m_ListOfSkills_Default[i].min;
-				s32 max = gameObject->m_ListOfSkills[i].max;
-				s32 defaultMax = gameObject->m_ListOfSkills_Default[i].max;
-				if((min != defaultMin) || (max != defaultMax))
-				{
-					writer->writeElement(L"Skill",true,L"name",gameObject->m_ListOfSkills[i].skillName.c_str(), L"min",stringw(min).c_str(),L"max",stringw(max).c_str());
-					writer->writeLineBreak();
-				}
-			}
-		}
-
-		//Write container content
-		if (gameObject->isContainer)
-		{
-			writer->writeElement(L"Container",false); 
+			writer->writeElement(L"GameObject", false);
 			writer->writeLineBreak();
-			for ( s32 index = 0; index < gameObject->GetNumberOfPickableItems(); index++)
+
+			// write properties
+			io::IAttributes* attr = m_EditorManager->getDevice()->getFileSystem()->createEmptyAttributes(m_EditorManager->getDriver());
+			attr->addString("Name",node->getName());
+			attr->addInt("NameID",gameObject->nameID);
+			attr->addInt("ID",node->getID());
+			attr->addString("Mesh",gameObject->mesh.c_str());
+			attr->addString("Path",gameObject->path.c_str());
+			attr->addVector3d("Position",node->getPosition());
+			attr->addVector3d("Rotation",node->getRotation());
+			attr->addVector3d("Scale",node->getScale());
+			if (gameObject->isInvisible)
+				//adding attribute isInvisible
+				attr->addBool("isInvisible",true);
+			if (gameObject->isIllusion)
+				//adding attribute isIllusion
+				attr->addBool("isIllusion",true);
+			if (gameObject->isTrigger)
+				//adding atribute isTrigger
+				attr->addBool("isTrigger",true);
+			if (gameObject->isStatic)
+				//adding atribute isStatic
+				attr->addBool("isStatic",true);
+			if (gameObject->isTerrain)
+				//adding atribute isTerrain
+				attr->addBool("isTerrain",true);
+			if (gameObject->isAnchored)
+				//adding atribute isAnchored
+				attr->addBool("isAnchored",true);
+			if (gameObject->isPickable)
+				//adding atribute isPickable
+				attr->addBool("isPickable",true);
+			if (gameObject->isMonster)
+				//adding atribute isMonster
+				attr->addBool("isMonster",true);
+			if (gameObject->isNPC)
+				//adding atribute isNPC
+				attr->addBool("isNPC",true);
+			if (gameObject->hasTrajectoryPath)
+				//adding atribute hasTrajectoryPath
+				attr->addBool("hasTrajectoryPath",true);
+			if (gameObject->isContainer)
+				//adding attribute isContainer
+				attr->addBool("isContainer",true);
+			if (gameObject->isArea)
+				//adding attribute isArea
+				attr->addBool("isArea",true);
+			if (gameObject->script != stringw(L""))
+				attr->addString("Script",gameObject->script.c_str());
+			if (gameObject->state != stringw(L""))
+				attr->addString("State",gameObject->state.c_str());
+
+			if (gameObject->isMonster)
 			{
-				writer->writeElement(L"Pickables",true,L"root",gameObject->GetPickableItemRoot(index).c_str(), L"id", stringw(gameObject->GetPickableItemID(index)).c_str());
+				//Monster attributes are written only if differ from default values in xml
+				if (gameObject->m_Mood != gameObject->m_Mood_Default)
+					attr->addInt("Mood", gameObject->m_Mood);
+				if (gameObject->m_Radius != gameObject->m_Radius_Default)
+					attr->addFloat("Radius", gameObject->m_Radius);
+			}
+
+			if (gameObject->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
+				attr->addFloat("Radius", gameObject->m_Radius);
+
+			attr->write(writer);
+			//writer->writeLineBreak();
+			attr->drop();
+
+			//Monster attributes are written only if differ from xml default values
+			if (gameObject->isMonster)
+			{
+				for(u32 i=0; i<gameObject->m_ListOfAbilities.size(); i++)
+				{
+					s32 value = gameObject->m_ListOfAbilities[i].value;
+					s32 max = gameObject->m_ListOfAbilities[i].max;
+					s32 defaultValue = gameObject->m_ListOfAbilities_Default[i].value;
+					if(value != defaultValue)
+					{
+						writer->writeElement(L"Ability",true,L"name",gameObject->m_ListOfAbilities[i].abilityName.c_str(), L"value",stringw(value).c_str(),L"max",stringw((value>max)?value:max).c_str());
+						writer->writeLineBreak();
+					}
+				}
+
+				for(u32 i=0; i<gameObject->m_ListOfSkills.size(); i++)
+				{
+					s32 min = gameObject->m_ListOfSkills[i].min;
+					s32 defaultMin = gameObject->m_ListOfSkills_Default[i].min;
+					s32 max = gameObject->m_ListOfSkills[i].max;
+					s32 defaultMax = gameObject->m_ListOfSkills_Default[i].max;
+					if((min != defaultMin) || (max != defaultMax))
+					{
+						writer->writeElement(L"Skill",true,L"name",gameObject->m_ListOfSkills[i].skillName.c_str(), L"min",stringw(min).c_str(),L"max",stringw(max).c_str());
+						writer->writeLineBreak();
+					}
+				}
+			}
+
+			//Write container content
+			if (gameObject->isContainer)
+			{
+				writer->writeElement(L"Container",false); 
+				writer->writeLineBreak();
+				for ( s32 index = 0; index < gameObject->GetNumberOfPickableItems(); index++)
+				{
+					writer->writeElement(L"Pickables",true,L"root",gameObject->GetPickableItemRoot(index).c_str(), L"id", stringw(gameObject->GetPickableItemID(index)).c_str());
+					writer->writeLineBreak();
+				}
+				writer->writeClosingTag(L"Container"); 
 				writer->writeLineBreak();
 			}
-			writer->writeClosingTag(L"Container"); 
-			writer->writeLineBreak();
 		}
 	}
 
@@ -1439,13 +1469,15 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 		if (node == m_EditorManager->getSceneMngr()->getRootSceneNode())
 		{
 			writer->writeClosingTag(L"LevelEditorMap");
+			writer->writeLineBreak();
+			writer->writeLineBreak();
 		}
-		else
+		else if(gameObject && !gameObject->name.equals_ignore_case(TRAJECTORY_NODE_GAME_OBJECT))
 		{
 			writer->writeClosingTag(L"GameObject");
+			writer->writeLineBreak();
+			writer->writeLineBreak();
 		}
-		writer->writeLineBreak();
-		writer->writeLineBreak();
 	}
 }
 
@@ -1574,6 +1606,8 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 									{
 										CGameObject* pathNodeGO = new CGameObject();
 										pathNodeGO->isTrajectoryNode = true;
+										pathNodeGO->name = TRAJECTORY_NODE_GAME_OBJECT;
+										pathNodeGO->mesh = TRAJECTORY_NODE_GAME_OBJECT;
 										//set position, rotation, scale and id
 										pathNodeGO->pos = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].position;
 										pathNodeGO->rot = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].rotation;
