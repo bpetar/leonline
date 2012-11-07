@@ -122,7 +122,7 @@ public:
 
 	//moving game objects have trajectory
 	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr);
-	void SaveTrajectoryPaths();
+	void SaveTrajectoryPaths(IXMLWriter* writer);
 	void AddTrajectoryPath();
 	void DeleteTrajectoryPath();
 	array <TPath> m_ListOfTrajectoryPaths;

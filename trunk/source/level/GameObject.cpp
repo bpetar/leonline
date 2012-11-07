@@ -203,13 +203,18 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 }
 
 /* 
- * If trajectory path has been edited, it should be saved to script file.
- * Script file should remain the same and only changed path nodes should be updated.
- * This function reads existing script file and writes 
+ * If trajectory path has been edited, it should be saved to path file.
+ * 
  */
-void CGameObject::SaveTrajectoryPaths()
+void CGameObject::SaveTrajectoryPaths(IXMLWriter* writer)
 {
-	
+	//IXMLWriter* writer = m_EditorManager->getDevice()->getFileSystem()->createXMLWriter(m_MapName.c_str());
+	writer->writeXMLHeader(); xml->writeLineBreak();
+	xml->writeLineBreak();
+
+	xml->writeElement(L"Path",false,L"name", "", "loop", ""); xml->writeLineBreak();
+
+	writer->drop();
 }
 
 void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)
