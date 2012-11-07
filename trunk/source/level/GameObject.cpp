@@ -152,7 +152,7 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 	{
 		switch(xml->getNodeType())
 		{
-			case io::EXN_ELEMENT:
+		case io::EXN_ELEMENT:
 			{
 				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
 				{
@@ -197,6 +197,16 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 			}
 		}
 	}
+}
+
+/* 
+ * If trajectory path has been edited, it should be saved to script file.
+ * Script file should remain the same and only changed path nodes should be updated.
+ * This function reads existing script file and writes 
+ */
+void CGameObject::SaveTrajectoryPaths()
+{
+	
 }
 
 void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)

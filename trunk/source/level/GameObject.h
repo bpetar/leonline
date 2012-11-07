@@ -119,7 +119,13 @@ public:
 	void ClearScriptActions();
 	void SetDriver(IVideoDriver* _driver) {m_Driver = _driver;}
 	void SetPositionRotationScaleFromNode(ISceneNode* node);
+
+	//moving game objects have trajectory
 	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr);
+	void SaveTrajectoryPaths();
+	void AddTrajectoryPath();
+	void DeleteTrajectoryPath();
+	array <TPath> m_ListOfTrajectoryPaths;
 
 	//properties
 	stringw name;
@@ -169,7 +175,6 @@ public:
 	array <TSkill> m_ListOfSkills;
 	array <TAbility> m_ListOfAbilities_Default;
 	array <TSkill> m_ListOfSkills_Default;
-	array <TPath> m_ListOfTrajectoryPaths;
 
 	//only container objects have this list to asociate them to pickable items they contain
 	ITexture* m_IconTexture;
