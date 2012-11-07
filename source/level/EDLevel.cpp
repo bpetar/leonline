@@ -1598,7 +1598,8 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 							if(xml)
 							{
 								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr()); //this path refers to game object moving trajectory
-								
+								xml->drop();
+
 								for(u32 i=0; i < gameObject->m_ListOfTrajectoryPaths.size(); i++)
 								{
 									//usualy there is only one path
