@@ -161,6 +161,7 @@ public:
 	stringw description;
 	u32 descriptionID;
 	stringw script;
+	stringw trajectoryPath;
 	stringw state;
 	stringw icon;
 	stringw root;

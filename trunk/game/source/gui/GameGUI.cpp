@@ -1107,7 +1107,7 @@ void CGameGUI::DisplayPickableInfo(IGUIEnvironment* env, CGameObject* go, recti 
 	else
 		pickInfoDescription = env->addStaticText(go->description.c_str(), recti(20,130,180,190),false,true,m_wnd_pickInfo);
 
-	pickInfoDescription->setOverrideFont(fontGaramond12);
+	pickInfoDescription->setOverrideFont(fontGaramond14);
 	pickInfoImage = env->addImage(go->m_IconTexture, vector2di(68,30), true, m_wnd_pickInfo);
 	//pickInfoDescription->setTextAlignment(EGUIA_CENTER,EGUIA_UPPERLEFT);
 }
@@ -1455,7 +1455,7 @@ bool CGameGUI::InitGameGUI()
 
 	m_PickInfoBackgroundTexture = m_GameManager->getDriver()->getTexture("media/Icons/pickBackground.png");
 
-	fontGaramond12 = m_GameManager->getGUIEnvironment()->getFont("media/Garamond12.xml");
+	fontGaramond14 = m_GameManager->getGUIEnvironment()->getFont("media/Garamond14.xml");
 
 	printf("Game GUI Initialized");
 
