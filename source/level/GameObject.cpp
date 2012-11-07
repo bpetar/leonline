@@ -44,6 +44,7 @@ CGameObject::CGameObject()
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
 	m_ListOfTrajectoryPaths.clear();
+	trajectoryPath = "";
 }
 /**
  * Advanced constructor.
@@ -88,6 +89,7 @@ CGameObject::CGameObject(stringw _path, stringw _name, bool _static, IVideoDrive
 	m_Sound_Hello = "";
 	m_Sound_Wound = "";
 	m_Sound_Die = "";
+	trajectoryPath = "";
 	m_Driver = driver;
 	nameID = 0;
 }
@@ -131,6 +133,7 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	icon = _name + ".png"; //default, but can be different
 	m_Driver = driver;
 	nameID = 0;
+	trajectoryPath = "";
 
 	if(xml)
 	{

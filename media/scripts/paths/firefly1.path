@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+
+<Path name="path1" loop="true">
+	<Coord id="1030" speed="100" position="1 1 1" rotation="0 0 0" scale="1 1 1" pause="0"/>
+	<Coord id="1031" speed="100" position="10 10 10" rotation="0 0 0" scale="1 1 1" pause="0"/>
+	<Coord id="1032" speed="100"  position="20 20 20" rotation="0 0 0" scale="1 1 1" pause="0"/>
+</Path>

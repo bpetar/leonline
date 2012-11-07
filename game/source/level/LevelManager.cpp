@@ -23,6 +23,7 @@
  */
 CLevelManager::CLevelManager()
 {
+	m_pCamera = NULL;
 	m_GameManager = NULL;
 	m_CurrentZoom = vector3df(1.0f,1.0f,1.0f);
 	m_NumberOfLoadedLevels = 0;
@@ -872,10 +873,13 @@ bool CLevelManager::OnEvent(const SEvent& ovent)
 		{
 			case EMIE_MOUSE_MOVED:
 				{
-					m_pHoverOverMonsterNode = m_pLevels[m_LevelIndex]->isMonsterUnderMousePointer();
+					if(m_LevelIndex >= 0)
+					{
+						m_pHoverOverMonsterNode = m_pLevels[m_LevelIndex]->isMonsterUnderMousePointer();
 						
-					if(m_pHoverOverMonsterNode == 0)
-						m_pHoverOverActionNode = m_pLevels[m_LevelIndex]->isActionItemUnderMousePointer();
+						if(m_pHoverOverMonsterNode == 0)
+							m_pHoverOverActionNode = m_pLevels[m_LevelIndex]->isActionItemUnderMousePointer();
+					}
 				}
 				break;
 			default:
@@ -884,7 +888,7 @@ bool CLevelManager::OnEvent(const SEvent& ovent)
 	}
 	
 	//hehe, 'Uvent'
-	m_pCamera->OnUvent(ovent);
+	if(m_pCamera) m_pCamera->OnUvent(ovent);
 
 	return false;
 }

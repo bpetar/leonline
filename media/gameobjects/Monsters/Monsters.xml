@@ -6,7 +6,8 @@
 		<Monsters filename="cat"/>
 		<Monsters filename="dog"/>
 		<Monsters filename="rat"/>
-    <Monsters filename="sheep"/>
+		<Monsters filename="sheep"/>
+		<Monsters filename="firefly01"/>
 		<Monsters filename="turtle"/>
 	</Animals>
 	<Humanoids>

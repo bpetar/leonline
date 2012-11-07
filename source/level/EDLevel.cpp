@@ -1385,7 +1385,7 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 				attr->addBool("isNPC",true);
 			if (gameObject->hasTrajectoryPath)
 				//adding atribute hasTrajectoryPath
-				attr->addBool("hasTrajectoryPath",true);
+				attr->addString("TrajectoryPath",gameObject->trajectoryPath.c_str());
 			if (gameObject->isContainer)
 				//adding attribute isContainer
 				attr->addBool("isContainer",true);
@@ -1587,13 +1587,14 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						gameObject->mesh = attr->getAttributeAsString("Mesh");
 						gameObject->root = Util_GetRootNameFromPath(meshPath);
 
-						gameObject->hasTrajectoryPath = attr->getAttributeAsBool("hasTrajectoryPath"); //this path is different from mesh directory path
+						gameObject->trajectoryPath = attr->getAttributeAsStringW("TrajectoryPath"); //this path is different from mesh directory path
+						if(gameObject->trajectoryPath.size()>0) gameObject->hasTrajectoryPath = true;
+
 						if(gameObject->hasTrajectoryPath) 
 						{
-							if(gameObject->isPickable) m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/pickables");
-							else m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/static");
+							m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/paths");
 
-							IXMLReader* xml = m_EditorManager->getFS()->createXMLReader(stringc(gameObject->script).c_str());
+							IXMLReader* xml = m_EditorManager->getFS()->createXMLReader(stringc(gameObject->trajectoryPath).c_str());
 
 							if(xml)
 							{

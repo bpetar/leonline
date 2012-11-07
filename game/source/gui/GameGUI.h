@@ -140,7 +140,7 @@ private:
 	IGUIStaticText* pickInfoDescription;
 	IGUIStaticText* pickInfoName;
 	IGUIImage* pickInfoImage;
-	IGUIFont* fontGaramond12;
+	IGUIFont* fontGaramond14;
 	IGUIWindow* m_wnd_Msg;
 	IGUIWindow* m_wnd_containerContent;
 	IGUIWindow* m_wnd_options;
