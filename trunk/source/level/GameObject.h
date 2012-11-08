@@ -56,11 +56,7 @@ typedef struct S_Skill
 
 typedef struct S_PathNode
 {
-	vector3df position;
-	vector3df rotation;
-	vector3df scale;
 	f32 speed;
-	s32 id;
 	f32 pause;
 	ISceneNode* sceneNode;
 } TPathNode;

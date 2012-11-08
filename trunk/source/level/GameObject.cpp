@@ -171,17 +171,15 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 					if(stringw("Coord").equals_ignore_case(xml->getNodeName()))
 					{
 						TPathNode pathNode;
-						pathNode.speed = xml->getAttributeValueAsFloat(L"speed");
-						pathNode.position = Util_getVectorFromString(xml->getAttributeValue(L"position"));
-						pathNode.rotation = Util_getVectorFromString(xml->getAttributeValue(L"rotation"));
-						pathNode.scale = Util_getVectorFromString(xml->getAttributeValue(L"scale"));
 						pathNode.pause = xml->getAttributeValueAsFloat(L"pause");
-						pathNode.id = xml->getAttributeValueAsInt(L"id");
-						SColor color = SColor(255,10,10,155);
-						SColor color2 = SColor(255,10,10,185);
-						f32 size = 10;
-						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh(TRAJECTORY_NODE_GAME_OBJECT, color, color2, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,pathNode.id,pathNode.position,vector3df(180,0,0));
-						//pathNode.sceneNode->setPosition(pathNode.position); //q: why is this commented out?? a: i guess its up there in the list of arguments of addArrowMesh
+						pathNode.speed = xml->getAttributeValueAsFloat(L"speed");
+						SColor color = SColor(155,10,10,155);
+						SColor color2 = SColor(155,10,10,185);
+						f32 size = 3;
+						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh(TRAJECTORY_NODE_GAME_OBJECT, color, color2, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,xml->getAttributeValueAsInt(L"id"),Util_getVectorFromString(xml->getAttributeValue(L"position")));
+						//pathNode.sceneNode->setPosition(Util_getVectorFromString(xml->getAttributeValue(L"position"))); //q: why is this commented out?? a: i guess its up there in the list of arguments of addArrowMesh
+						pathNode.sceneNode->setRotation(Util_getVectorFromString(xml->getAttributeValue(L"rotation")));
+						pathNode.sceneNode->setScale(Util_getVectorFromString(xml->getAttributeValue(L"scale")));
 						pathNode.sceneNode->setVisible(false);
 						path.nodes.push_back(pathNode);
 					}
@@ -209,11 +207,42 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 void CGameObject::SaveTrajectoryPaths(IXMLWriter* writer)
 {
 	//IXMLWriter* writer = m_EditorManager->getDevice()->getFileSystem()->createXMLWriter(m_MapName.c_str());
-	writer->writeXMLHeader(); xml->writeLineBreak();
-	xml->writeLineBreak();
+	writer->writeXMLHeader(); writer->writeLineBreak();
+	writer->writeLineBreak();
 
-	xml->writeElement(L"Path",false,L"name", "", "loop", ""); xml->writeLineBreak();
+	for(u32 i=0; i < m_ListOfTrajectoryPaths.size(); i++)
+	{
+		//usualy there is only one path
+		writer->writeElement(L"Path",false,L"name", m_ListOfTrajectoryPaths[i].name.c_str(), L"loop", m_ListOfTrajectoryPaths[i].loop?L"true":L"false"); writer->writeLineBreak();
 
+		for (u32 j=0; j< m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+		{
+			array<stringw> names;
+			array<stringw> values;
+			names.push_back(L"id");
+			names.push_back(L"position");
+			names.push_back(L"rotation");
+			names.push_back(L"scale");
+			names.push_back(L"speed");
+			names.push_back(L"pause");
+			values.push_back(stringw(m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getID()));
+			values.push_back(Util_getStringFromVector(m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getPosition()));
+			values.push_back(Util_getStringFromVector(m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getRotation()));
+			values.push_back(Util_getStringFromVector(m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getScale()));
+			values.push_back(stringw(m_ListOfTrajectoryPaths[i].nodes[j].speed));
+			values.push_back(stringw(m_ListOfTrajectoryPaths[i].nodes[j].pause));
+
+			//<Coord id="1030" speed="100" position="1 1 1" rotation="0 0 0" scale="1 1 1" pause="0"/>
+			writer->writeElement(L"Coord", true, names, values); writer->writeLineBreak();
+			
+			/*writer->writeElement(L"Coord", true, L"id", stringw(m_ListOfTrajectoryPaths[i].nodes[j].id).c_str(), L"speed", stringw(m_ListOfTrajectoryPaths[i].nodes[j].speed).c_str(),
+								 L"position", Util_getStringFromVector(m_ListOfTrajectoryPaths[i].nodes[j].position).c_str(), L"rotation", Util_getStringFromVector(m_ListOfTrajectoryPaths[i].nodes[j].rotation).c_str(),
+								 L"scale", Util_getStringFromVector(m_ListOfTrajectoryPaths[i].nodes[j].scale).c_str(), L"pause", stringw(m_ListOfTrajectoryPaths[i].nodes[j].pause).c_str()); writer->writeLineBreak();*/
+		}
+
+		writer->writeClosingTag(L"Path"); writer->writeLineBreak();
+		writer->writeLineBreak();
+	}
 	writer->drop();
 }
 
