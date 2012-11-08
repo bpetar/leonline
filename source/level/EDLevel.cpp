@@ -1383,9 +1383,6 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 			if (gameObject->isNPC)
 				//adding atribute isNPC
 				attr->addBool("isNPC",true);
-			if (gameObject->hasTrajectoryPath)
-				//adding atribute hasTrajectoryPath
-				attr->addString("TrajectoryPath",gameObject->trajectoryPath.c_str());
 			if (gameObject->isContainer)
 				//adding attribute isContainer
 				attr->addBool("isContainer",true);
@@ -1396,6 +1393,18 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 				attr->addString("Script",gameObject->script.c_str());
 			if (gameObject->state != stringw(L""))
 				attr->addString("State",gameObject->state.c_str());
+
+			if (gameObject->hasTrajectoryPath)
+			{
+				//adding atribute hasTrajectoryPath
+				attr->addString("TrajectoryPath",gameObject->trajectoryPath.c_str());
+
+				//write nodes to path file
+				m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/paths");
+				IXMLWriter* pathWriter = m_EditorManager->getDevice()->getFileSystem()->createXMLWriter(gameObject->trajectoryPath.c_str());
+				gameObject->SaveTrajectoryPaths(pathWriter);
+				m_EditorManager->backToWorkingDirectory();
+			}
 
 			if (gameObject->isMonster)
 			{
@@ -1611,10 +1620,10 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 										pathNodeGO->name = TRAJECTORY_NODE_GAME_OBJECT;
 										pathNodeGO->mesh = TRAJECTORY_NODE_GAME_OBJECT;
 										//set position, rotation, scale and id
-										pathNodeGO->pos = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].position;
-										pathNodeGO->rot = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].rotation;
-										pathNodeGO->scale = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].scale;
-										pathNodeGO->id = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].id;
+										pathNodeGO->pos = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getPosition();
+										pathNodeGO->rot = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getRotation();
+										pathNodeGO->scale = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getScale();
+										pathNodeGO->id = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getID();
 										m_ListOfGameObjects.push_back(pathNodeGO);
 									}
 								}

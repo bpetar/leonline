@@ -114,3 +114,10 @@ vector3df Util_getVectorFromString(stringw str)
    swscanf_s(str.c_str(), L"%f %f %f", &vector.X,&vector.Y,&vector.Z ); 
    return vector; 
 }
+
+stringw Util_getStringFromVector(vector3df v) 
+{ 
+   stringw v_str; 
+   v_str = stringw(v.X) + stringw(" ") + stringw(v.Y) + stringw(" ") + stringw(v.Z); 
+   return v_str; 
+}

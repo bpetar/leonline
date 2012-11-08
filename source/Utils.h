@@ -24,6 +24,7 @@ stringw Util_GetRootNameFromPath(stringw path);
 stringw Util_GetRootPathFromPath(stringw path);
 void PropagateEnabled(TreeNode* node, bool enabled);
 vector3df Util_getVectorFromString(stringw str);
+stringw Util_getStringFromVector(vector3df v);
 stringw GetPathFromRootName(stringw root);
 
 #endif;
