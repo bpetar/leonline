@@ -117,11 +117,14 @@ public:
 	void SetPositionRotationScaleFromNode(ISceneNode* node);
 
 	//moving game objects have trajectory
-	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr);
+	CGameObject* CreateTrajectoryNodeGO(TPath* trajectoryPath, vector3df position, vector3df rotation, vector3df scale, s32 id, f32 pause, f32 speed, ISceneManager* smgr);
+	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list <CGameObject*> listOfGameObjects);
 	void SaveTrajectoryPaths(IXMLWriter* writer);
 	void AddTrajectoryPath();
 	void DeleteTrajectoryPath();
+	TPath* findNodeTrajectory(s32 id);
 	array <TPath> m_ListOfTrajectoryPaths;
+	CGameObject* trajectoryParent;
 
 	//properties
 	stringw name;
@@ -157,7 +160,7 @@ public:
 	stringw description;
 	u32 descriptionID;
 	stringw script;
-	stringw trajectoryPath;
+	stringw trajectoryPathFile;
 	stringw state;
 	stringw icon;
 	stringw root;
