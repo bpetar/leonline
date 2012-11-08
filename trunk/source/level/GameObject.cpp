@@ -44,7 +44,8 @@ CGameObject::CGameObject()
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
 	m_ListOfTrajectoryPaths.clear();
-	trajectoryPath = "";
+	trajectoryPathFile = "";
+	trajectoryParent = NULL;
 }
 /**
  * Advanced constructor.
@@ -89,9 +90,10 @@ CGameObject::CGameObject(stringw _path, stringw _name, bool _static, IVideoDrive
 	m_Sound_Hello = "";
 	m_Sound_Wound = "";
 	m_Sound_Die = "";
-	trajectoryPath = "";
+	trajectoryPathFile = "";
 	m_Driver = driver;
 	nameID = 0;
+	trajectoryParent = NULL;
 }
 
 /**
@@ -127,13 +129,14 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	isWall = false;
 	hasTrajectoryPath = false;
 	isTrajectoryNode = false;
+	trajectoryParent = NULL;
 	m_IconTexture = 0;
 	description = L"No description specified";
 	script = _name + ".script"; //default, but can be different
 	icon = _name + ".png"; //default, but can be different
 	m_Driver = driver;
 	nameID = 0;
-	trajectoryPath = "";
+	trajectoryPathFile = "";
 
 	if(xml)
 	{
@@ -146,10 +149,62 @@ CGameObject::~CGameObject()
 {
 }
 
-void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
+/**
+ *
+ */
+TPath* CGameObject::findNodeTrajectory(s32 id)
+{
+	for(u32 i=0; i < m_ListOfTrajectoryPaths.size(); i++)
+	{
+		//usualy there is only one path
+		for (u32 j=0; j< m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+		{
+			if(m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getID() == id) 
+			{
+				return &m_ListOfTrajectoryPaths[i];
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
+ *
+ *
+ */
+CGameObject* CGameObject::CreateTrajectoryNodeGO(TPath* trajectoryPath, vector3df position, vector3df rotation, vector3df scale, s32 id, f32 pause, f32 speed, ISceneManager* smgr)
+{
+	SColor color = SColor(155,10,10,155);
+	SColor color2 = SColor(155,10,10,185);
+	f32 size = 3;
+	TPathNode pathNode;
+	pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh(TRAJECTORY_NODE_GAME_OBJECT, color, color2, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,id,position);
+	//pathNode.sceneNode->setPosition(position); //q: why is this commented out?? a: i guess its up there in the list of arguments of addArrowMesh
+	pathNode.sceneNode->setRotation(rotation);
+	pathNode.sceneNode->setScale(scale);
+	pathNode.sceneNode->setVisible(false);
+
+	trajectoryPath->nodes.push_back(pathNode);
+
+	CGameObject* pathNodeGO = new CGameObject();
+	pathNodeGO->isTrajectoryNode = true;
+	pathNodeGO->name = TRAJECTORY_NODE_GAME_OBJECT;
+	pathNodeGO->mesh = TRAJECTORY_NODE_GAME_OBJECT;
+	//set position, rotation, scale and id
+	pathNodeGO->pos = position;
+	pathNodeGO->rot = rotation;
+	pathNodeGO->scale = scale;
+	pathNodeGO->id = pathNode.sceneNode->getID();
+	pathNodeGO->trajectoryParent = this;
+
+	return pathNodeGO;
+}
+
+void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list <CGameObject*> listOfGameObjects)
 {
 	bool startStoringPathNodes = false;
-	TPath path;
+	TPath t_path;
 
 	while(xml->read())
 	{
@@ -160,28 +215,26 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
 				{
 					startStoringPathNodes = true;
-					path.name = xml->getAttributeValue(L"name");
+					t_path.name = xml->getAttributeValue(L"name");
 					stringw loopStrValue = xml->getAttributeValue(L"loop");
-					if(loopStrValue.equals_ignore_case("true")) path.loop = true;
-					else path.loop = false;
-					path.nodes.clear();
+					if(loopStrValue.equals_ignore_case("true")) t_path.loop = true;
+					else t_path.loop = false;
+					t_path.nodes.clear();
 				}
 				if(startStoringPathNodes)
 				{
 					if(stringw("Coord").equals_ignore_case(xml->getNodeName()))
 					{
-						TPathNode pathNode;
-						pathNode.pause = xml->getAttributeValueAsFloat(L"pause");
-						pathNode.speed = xml->getAttributeValueAsFloat(L"speed");
-						SColor color = SColor(155,10,10,155);
-						SColor color2 = SColor(155,10,10,185);
-						f32 size = 3;
-						pathNode.sceneNode = smgr->addAnimatedMeshSceneNode(smgr->addArrowMesh(TRAJECTORY_NODE_GAME_OBJECT, color, color2, 4, 8, 10.f*size, 6.f*size, 1.f*size, 3.f*size),0,xml->getAttributeValueAsInt(L"id"),Util_getVectorFromString(xml->getAttributeValue(L"position")));
-						//pathNode.sceneNode->setPosition(Util_getVectorFromString(xml->getAttributeValue(L"position"))); //q: why is this commented out?? a: i guess its up there in the list of arguments of addArrowMesh
-						pathNode.sceneNode->setRotation(Util_getVectorFromString(xml->getAttributeValue(L"rotation")));
-						pathNode.sceneNode->setScale(Util_getVectorFromString(xml->getAttributeValue(L"scale")));
-						pathNode.sceneNode->setVisible(false);
-						path.nodes.push_back(pathNode);
+						f32 n_pause = xml->getAttributeValueAsFloat(L"pause");
+						f32 n_speed = xml->getAttributeValueAsFloat(L"speed");
+						vector3df n_rotation = Util_getVectorFromString(xml->getAttributeValue(L"rotation"));
+						vector3df n_position = Util_getVectorFromString(xml->getAttributeValue(L"position"));
+						vector3df n_scale = Util_getVectorFromString(xml->getAttributeValue(L"scale"));
+						s32 n_id = xml->getAttributeValueAsInt(L"id");
+						
+						CGameObject* pathNodeGO = CreateTrajectoryNodeGO(&t_path, n_position, n_rotation, n_scale, n_id, n_pause, n_speed, smgr);
+						//listOfGameObjects.push_back(pathNodeGO);
+
 					}
 				}
 			}
@@ -192,7 +245,7 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr)
 				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
 				{
 					//Path loaded.
-					m_ListOfTrajectoryPaths.push_back(path);
+					m_ListOfTrajectoryPaths.push_back(t_path);
 					startStoringPathNodes = false;
 				}
 			}

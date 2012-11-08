@@ -27,6 +27,8 @@ CEditorManager::CEditorManager()
 	m_SelectedLanguage = "en";
 	m_bMaximized = true;
 	m_bObjectPropertiesVisible = true;
+	m_pEdiLevel = NULL;
+	m_pGuiManager = NULL;
 }
 
 /**
@@ -462,14 +464,23 @@ bool CEditorManager::OnEvent(const SEvent& event)
 	if (!m_pDriver)
 		return false;
 
+	bool gui_handles = false;
 	//Gui Handles its own events here
-	bool gui_handles = m_pGuiManager->OnEvent(event);
+	if(m_pGuiManager)
+	{
+		gui_handles = m_pGuiManager->OnEvent(event);
+	}
 
 	//3D level environment handles events here
 	if (!gui_handles)
 	{
-		if (m_pEdiLevel->OnEvent(event))
-			return true;
+		if (m_pEdiLevel)
+		{
+			if (m_pEdiLevel->OnEvent(event))
+			{
+				return true;
+			}
+		}
 	}
 
 	if (event.EventType == EET_KEY_INPUT_EVENT)

@@ -1397,11 +1397,11 @@ void CEditorLevel::WriteSceneNode(IXMLWriter* writer, ISceneNode* node)
 			if (gameObject->hasTrajectoryPath)
 			{
 				//adding atribute hasTrajectoryPath
-				attr->addString("TrajectoryPath",gameObject->trajectoryPath.c_str());
+				attr->addString("TrajectoryPath",gameObject->trajectoryPathFile.c_str());
 
 				//write nodes to path file
 				m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/paths");
-				IXMLWriter* pathWriter = m_EditorManager->getDevice()->getFileSystem()->createXMLWriter(gameObject->trajectoryPath.c_str());
+				IXMLWriter* pathWriter = m_EditorManager->getDevice()->getFileSystem()->createXMLWriter(gameObject->trajectoryPathFile.c_str());
 				gameObject->SaveTrajectoryPaths(pathWriter);
 				m_EditorManager->backToWorkingDirectory();
 			}
@@ -1596,21 +1596,21 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						gameObject->mesh = attr->getAttributeAsString("Mesh");
 						gameObject->root = Util_GetRootNameFromPath(meshPath);
 
-						gameObject->trajectoryPath = attr->getAttributeAsStringW("TrajectoryPath"); //this path is different from mesh directory path
-						if(gameObject->trajectoryPath.size()>0) gameObject->hasTrajectoryPath = true;
+						gameObject->trajectoryPathFile = attr->getAttributeAsStringW("TrajectoryPath"); //this path is different from mesh directory path
+						if(gameObject->trajectoryPathFile.size()>0) gameObject->hasTrajectoryPath = true;
 
 						if(gameObject->hasTrajectoryPath) 
 						{
 							m_EditorManager->getFS()->changeWorkingDirectoryTo("media/scripts/paths");
 
-							IXMLReader* xml = m_EditorManager->getFS()->createXMLReader(stringc(gameObject->trajectoryPath).c_str());
+							IXMLReader* xml = m_EditorManager->getFS()->createXMLReader(stringc(gameObject->trajectoryPathFile).c_str());
 
 							if(xml)
 							{
-								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr()); //this path refers to game object moving trajectory
+								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr(), m_ListOfGameObjects); //this path refers to game object moving trajectory
 								xml->drop();
 
-								for(u32 i=0; i < gameObject->m_ListOfTrajectoryPaths.size(); i++)
+								/*for(u32 i=0; i < gameObject->m_ListOfTrajectoryPaths.size(); i++)
 								{
 									//usualy there is only one path
 									for (u32 j=0; j< gameObject->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
@@ -1626,7 +1626,8 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 										pathNodeGO->id = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getID();
 										m_ListOfGameObjects.push_back(pathNodeGO);
 									}
-								}
+								}*/
+
 							}
 
 							m_EditorManager->backToWorkingDirectory();
@@ -2375,6 +2376,10 @@ void CEditorLevel::DrawNormals()
  */
 bool CEditorLevel::OnEvent(const SEvent& eventer)
 {
+	CGameObject* go = 0;
+	if(m_SelectedGameObject)
+		go = _getGameObjectFromID(m_SelectedGameObject->getID());
+
 	if(eventer.EventType == EET_KEY_INPUT_EVENT)
 	{
 		int keycode = eventer.KeyInput.Key;
@@ -2421,6 +2426,22 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 		if((eventer.KeyInput.PressedDown) && (eventer.KeyInput.Key == KEY_KEY_N))
 		{
 			DrawNormals();
+		}
+		if((eventer.KeyInput.PressedDown) && (eventer.KeyInput.Key == KEY_KEY_T))
+		{
+			//add trajectory node for selected object, 
+			//if game object is selected, add whole new trajectory path, if trajectory node is selected, add new node to selected path
+			if(go->isTrajectoryNode)
+			{
+				//add new node to the same path as selected trajectory node
+				TPath* trajectoryPath = go->trajectoryParent->findNodeTrajectory(go->id);
+				vector3df position = vector3df(0,0,0); //mouse intersect terrain;
+				s32 id = m_EditorManager->m_ID++; //increment map id
+				go->trajectoryParent->CreateTrajectoryNodeGO(trajectoryPath, position, vector3df(0.0,0.0,0.0), vector3df(1.0,1.0,1.0), id, 0, 100, m_EditorManager->getSceneMngr());
+			}
+			else
+			{
+			}
 		}
 		if(eventer.KeyInput.Key == KEY_KEY_X)
 		{
@@ -2485,25 +2506,22 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 		//Delete selected game object
 		if ((eventer.KeyInput.PressedDown) && (eventer.KeyInput.Key == KEY_DELETE) && (m_SelectedGameObject) && (!m_EditorManager->getGUIManager()->m_bGUIFocused))
 		{
-			int id = m_SelectedGameObject->getID();
-			CGameObject* gameObject = _getGameObjectFromID(id);
-			
 			//first store undo action data, so user can undo delete
 			TUndoAction undoAction;
 			undoAction.type = E_UNDO_ACTION_DELETED;
-			undoAction.go = gameObject;
+			undoAction.go = go;
 			m_EditorManager->AddUndoAction(undoAction);
 
-			if(gameObject->isStatic && m_SelectedGameObject->getTriangleSelector())
+			if(go->isStatic && m_SelectedGameObject->getTriangleSelector())
 			{
 				m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
 			}
-			_eraseGameObject(id);
+			_eraseGameObject(go->id);
 			//delete the bastard
 			m_SelectedGameObject->remove();
 			m_SelectedGameObject = NULL;
 			m_EditorManager->getGUIManager()->ClearProperties();
-			m_EditorManager->getGUIManager()->RemoveNodeFromSceneTree(id);
+			m_EditorManager->getGUIManager()->RemoveNodeFromSceneTree(go->id);
 		}
 		//ESc while object at hand will cancel (delete the object)
 		if((eventer.KeyInput.PressedDown) && (eventer.KeyInput.Key == KEY_ESCAPE))
@@ -2522,10 +2540,6 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 
 	if(eventer.EventType == EET_MOUSE_INPUT_EVENT)
 	{
-		CGameObject* go = 0;
-		if(m_SelectedGameObject)
-			go = _getGameObjectFromID(m_SelectedGameObject->getID());
-
 		switch(eventer.MouseInput.Event)
 		{
 			case EMIE_LMOUSE_PRESSED_DOWN:
@@ -2589,19 +2603,19 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 							m_MoveOldPosition = m_SelectedGameObject->getPosition();
 							m_SelectedBox = m_SelectedGameObject->getBoundingBox();
 							m_CurrentZoom = m_SelectedGameObject->getScale();
-							CGameObject* gameObject = _getGameObjectFromID(m_SelectedGameObject->getID());
-							if(gameObject->isStatic && m_SelectedGameObject->getTriangleSelector())
+							go = _getGameObjectFromID(m_SelectedGameObject->getID());
+							if(go->isStatic && m_SelectedGameObject->getTriangleSelector())
 							{
 								m_LevelMetaTriangleSelector->removeTriangleSelector(m_SelectedGameObject->getTriangleSelector());
 							}
 							m_objectMoveOffset = m_SelectedGameObject->getPosition() - GetIntersectionPoint(0);
 
 							//tell gui to change properties to this selected item
-							m_EditorManager->getGUIManager()->SetProperties(gameObject);
+							m_EditorManager->getGUIManager()->SetProperties(go);
 							m_EditorManager->getGUIManager()->SetSelectedElementInTheTreeofSceneNodes(m_SelectedGameObject->getID());
 
 							//set lights
-							if(gameObject->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
+							if(go->mesh.equals_ignore_case(LIGHT_GAME_OBJECT))
 							{
 								//enlight scene
 								EnlightAllNodes();
