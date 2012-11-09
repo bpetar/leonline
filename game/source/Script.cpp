@@ -12,6 +12,7 @@ using namespace io;
 #include "Script.h"
 #include "GameManager.h"
 #include "Particles.h"
+#include "Utils.h"
 
 /**
  * \brief Standard constructor.
@@ -30,13 +31,6 @@ CScript::CScript()
  */
 CScript::~CScript()
 {
-}
-
-vector3df getVectorFromString(stringw str) 
-{ 
-   vector3df vector; 
-   swscanf_s(str.c_str(), L"%f %f %f", &vector.X,&vector.Y,&vector.Z ); 
-   return vector; 
 }
 
 /**
@@ -808,7 +802,7 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 
 		stringc translationVectorEndPositionStr = action->attribute;
 		stringc translationTimeStr = action->value;
-		vector3df translationVectorEndPosition = getVectorFromString(translationVectorEndPositionStr.c_str());
+		vector3df translationVectorEndPosition = Util_getVectorFromString(translationVectorEndPositionStr.c_str());
 		u32 translationTime = atoi(translationTimeStr.c_str());
 
 		if(action->target.equals_ignore_case("self"))
@@ -837,7 +831,7 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 	else if(action->name == stringw("PlacePickable"))
 	{
 		bool obstacle = false;
-		vector3df vectorPosition = getVectorFromString(action->value.c_str());
+		vector3df vectorPosition = Util_getVectorFromString(action->value.c_str());
 		if(action->attribute.equals_ignore_case("obstacle")) obstacle = true;
 		m_GameManager->getLevelManager()->DropPickableToMap(m_GameManager->getGameGUI()->m_pDraggedPickableItem, vectorPosition, obstacle);
 		m_GameManager->getGameGUI()->m_pDraggedPickableItem = 0;

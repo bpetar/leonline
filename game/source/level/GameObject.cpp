@@ -10,6 +10,7 @@
 
 #include "GameObject.h"
 #include "../GameManager.h"
+#include "../Utils.h"
 
 CGameObject::CGameObject()
 {
@@ -37,6 +38,15 @@ CGameObject::CGameObject()
 	m_ListOfSkills_Default.clear();
 
 	nameID = 0;
+
+	//trajectory
+	hasTrajectoryPath = false;
+	isTrajectoryNode = false;
+	m_ListOfTrajectoryPaths.clear();
+	trajectoryPathFile = "";
+	trajectoryParent = NULL;
+	currentTrajectoryPath = NULL;
+	currentTrajectoryNode = -1;
 }
 
 /**
@@ -73,6 +83,15 @@ CGameObject::CGameObject(IXMLReader* xml, IVideoDriver* driver)
 
 	m_ListOfAbilities_Default.clear();
 	m_ListOfSkills_Default.clear();
+
+	//trajectory
+	hasTrajectoryPath = false;
+	isTrajectoryNode = false;
+	m_ListOfTrajectoryPaths.clear();
+	trajectoryPathFile = "";
+	trajectoryParent = NULL;
+	currentTrajectoryPath = NULL;
+	currentTrajectoryNode = -1;
 
 	if(xml)
 	{
@@ -126,6 +145,15 @@ CGameObject::CGameObject(stringw _root, s32 _id, IXMLReader* xml, IVideoDriver* 
 	m_Radius = 15;
 	m_Mood = Touchy;
 
+	//trajectory
+	hasTrajectoryPath = false;
+	isTrajectoryNode = false;
+	m_ListOfTrajectoryPaths.clear();
+	trajectoryPathFile = "";
+	trajectoryParent = NULL;
+	currentTrajectoryPath = NULL;
+	currentTrajectoryNode = -1;
+
 	if(xml)
 	{
 		LoadPropertiesFromXMLFile(xml);
@@ -146,6 +174,94 @@ s32 CGameObject::GetPickableItemID(s32 index)
 {
 	return m_ListOfPickableItems[index]->id;
 }
+
+/**
+ *
+ */
+TPath* CGameObject::findNodeTrajectory(s32 id)
+{
+	for(u32 i=0; i < m_ListOfTrajectoryPaths.size(); i++)
+	{
+		//usualy there is only one path
+		for (u32 j=0; j< m_ListOfTrajectoryPaths[i].nodes.size(); j++)
+		{
+			if(m_ListOfTrajectoryPaths[i].nodes[j].id == id) 
+			{
+				return &m_ListOfTrajectoryPaths[i];
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
+ *
+ *
+ */
+void CGameObject::LoadTrajectoryPaths(IXMLReader* xml)
+{
+	bool startStoringPathNodes = false;
+	TPath t_path;
+
+	while(xml->read())
+	{
+		switch(xml->getNodeType())
+		{
+		case io::EXN_ELEMENT:
+			{
+				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
+				{
+					startStoringPathNodes = true;
+					t_path.name = xml->getAttributeValue(L"name");
+					
+					stringw loopStrValue = xml->getAttributeValue(L"loop");
+					if(loopStrValue.equals_ignore_case("true")) t_path.loop = true;
+					else t_path.loop = false;
+
+					stringw autostartStrValue = xml->getAttributeValue(L"autostart");
+					if(autostartStrValue.equals_ignore_case("true")) t_path.autostart = true;
+					else t_path.autostart = false;
+					
+					t_path.nodes.clear();
+				}
+				if(startStoringPathNodes)
+				{
+					if(stringw("Coord").equals_ignore_case(xml->getNodeName()))
+					{
+						TPathNode pathNode;
+						pathNode.pause = xml->getAttributeValueAsFloat(L"pause");
+						pathNode.speed = xml->getAttributeValueAsFloat(L"speed");
+						pathNode.rotation = Util_getVectorFromString(xml->getAttributeValue(L"rotation"));
+						pathNode.position = Util_getVectorFromString(xml->getAttributeValue(L"position"));
+						pathNode.scale = Util_getVectorFromString(xml->getAttributeValue(L"scale"));
+						pathNode.id = xml->getAttributeValueAsInt(L"id");
+						
+						t_path.nodes.push_back(pathNode);
+
+					}
+				}
+			}
+			break;
+
+			case io::EXN_ELEMENT_END:
+			{
+				if (stringw("Path").equals_ignore_case(xml->getNodeName()))
+				{
+					//Path loaded.
+					m_ListOfTrajectoryPaths.push_back(t_path);
+					if (t_path.autostart)
+					{
+						currentTrajectoryPath = &m_ListOfTrajectoryPaths.getLast();
+						currentTrajectoryNode = 0;
+					}
+					startStoringPathNodes = false;
+				}
+			}
+		}
+	}
+}
+
 
 void CGameObject::LoadPropertiesFromXMLFile(IXMLReader* xml)
 {

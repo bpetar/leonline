@@ -17,6 +17,7 @@ using namespace irr;
 using namespace core;
 using namespace video;
 using namespace io;
+using namespace scene;
 
 /**
  * \brief TAnimationRanges is struct describing animated object animation frames.
@@ -38,6 +39,23 @@ typedef struct S_AnimationRanges
 
 } TAnimationRange;
 
+typedef struct S_PathNode
+{
+	f32 speed;
+	f32 pause;
+	vector3df position;
+	vector3df rotation;
+	vector3df scale;
+	s32 id;
+} TPathNode;
+
+typedef struct S_Path
+{
+	bool loop;
+	bool autostart;
+	stringw name;
+	array <TPathNode> nodes;
+} TPath;
 
 typedef struct S_Ability
 {
@@ -86,6 +104,22 @@ public:
 	void ClearPickableItems();
 	s32 GetNumberOfPickableItems();
 	void ClearScriptActions();
+
+	//moving game objects have trajectory
+	//CGameObject* CreateTrajectoryNodeGO(TPath* trajectoryPath, vector3df position, vector3df rotation, vector3df scale, s32 id, f32 pause, f32 speed, ISceneManager* smgr);
+	void LoadTrajectoryPaths(IXMLReader* xml);
+	//void SaveTrajectoryPaths(IXMLWriter* writer);
+	//void AddTrajectoryPath();
+	//void DeleteTrajectoryPath();
+	TPath* findNodeTrajectory(s32 id);
+	array <TPath> m_ListOfTrajectoryPaths;
+	CGameObject* trajectoryParent;
+	bool hasTrajectoryPath;
+	bool isTrajectoryNode; //this is true if this game object is acctually a trajectory node!
+	stringw trajectoryPathFile;
+	TPath* currentTrajectoryPath;
+	s32 currentTrajectoryNode;
+
 
 	//helper function to set skill values
 	void setSkillValues(stringw name, s32 _min, s32 _max)

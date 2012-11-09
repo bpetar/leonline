@@ -802,6 +802,37 @@ void CLevel::ReadSceneNode(IXMLReader* reader)
 							//node->setMaterialFlag(EMF_WIREFRAME, true);
 						}*/
 
+						//Load trajectory nodes
+						gameObject->trajectoryPathFile = attr->getAttributeAsStringW("TrajectoryPath"); //this path is different from mesh directory path
+						if(gameObject->trajectoryPathFile.size()>0) gameObject->hasTrajectoryPath = true;
+
+						if(gameObject->hasTrajectoryPath) 
+						{
+							m_pFS->changeWorkingDirectoryTo("media/scripts/paths");
+
+							IXMLReader* xml = m_pFS->createXMLReader(stringc(gameObject->trajectoryPathFile).c_str());
+
+							if(xml)
+							{
+								gameObject->LoadTrajectoryPaths(xml); //this path refers to game object moving trajectory
+								xml->drop();
+
+								if(gameObject->currentTrajectoryPath != NULL)
+								{
+									//autostart path means object should start moving on level load
+									vector3df nextPos = gameObject->currentTrajectoryPath->nodes[1].position;
+									f32 distance = node->getPosition().getDistanceFrom(nextPos);
+									f32 speed = gameObject->currentTrajectoryPath->nodes[0].speed;
+									if (speed==0) speed=1; //we need to ensure against division with zero.
+									f32 timeToNextNode = distance*1000/speed;
+									AddTranslateGameObject(node, nextPos, (u32)timeToNextNode);
+								}
+							}
+
+							m_GameManager->backToWorkingDirectory();
+						}
+
+
 						//if(!gameObject->isInvisible)
 						//{
 							m_LevelMetaTriangleSelector->addTriangleSelector(node->getTriangleSelector());
@@ -1158,6 +1189,9 @@ void CLevel::UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerChara
 
 void CLevel::UpdateTranslateGameObject(f32 elapsed_time)
 {
+	//List of nodes that need to start new translation right after this one is finished
+	list<ISceneNode*> reinstantiateList;
+
 	for(u32 i=0; i < m_TranslateGameObject.size(); i++)
 	{
 		f32 currentTime = (f32)m_pDevice->getTimer()->getTime();
@@ -1176,8 +1210,64 @@ void CLevel::UpdateTranslateGameObject(f32 elapsed_time)
 			{
 				m_GameManager->getPC()->m_bTranslated = false;
 			}
+			//if game object has path it moves on, we might need to continue his movement after this translation is finished
+			CGameObject* go = getGameObjectFromID(m_TranslateGameObject[i]->node->getID());
+			if(go->hasTrajectoryPath && go->currentTrajectoryPath != NULL)
+			{
+				reinstantiateList.push_back(m_TranslateGameObject[i]->node);
+			}
 			m_TranslateGameObject.erase(i);
 			i--;
+		}
+	}
+
+	//Some Game objects have path to move on, this path has many nodes, we add translation between each nodes of the path
+	//Once translation ends, we need to reinstantiate the node in the list of translation objects, this time with next path node
+	if(reinstantiateList.getSize() > 0)
+	{
+		list<ISceneNode*>::Iterator it = reinstantiateList.begin();
+	
+		for (; it != reinstantiateList.end(); ++it)
+		{
+			s32 nodeID = (*it)->getID();
+			CGameObject* go = getGameObjectFromID(nodeID);
+			u32 numberOfPathNodes = go->currentTrajectoryPath->nodes.size();
+			if(go->currentTrajectoryNode + 1 < (s32)numberOfPathNodes)
+			{
+				go->currentTrajectoryNode++; //we arrived at new destination
+			}
+			else if(go->currentTrajectoryPath->loop)
+			{
+				go->currentTrajectoryNode = 0; //new destination is node 0 in case of looping paths
+			}
+			vector3df curentPos = go->currentTrajectoryPath->nodes[go->currentTrajectoryNode].position;
+			f32 speed = go->currentTrajectoryPath->nodes[go->currentTrajectoryNode].speed;
+			vector3df nextPos;
+
+			//check if there is another node in the path, if this is looping path - go to begining
+			if(go->currentTrajectoryNode + 1 < (s32)numberOfPathNodes)
+			{
+				nextPos = go->currentTrajectoryPath->nodes[go->currentTrajectoryNode+1].position;
+			}
+			else if(go->currentTrajectoryPath->loop)
+			{
+				nextPos = go->currentTrajectoryPath->nodes[0].position;
+			}
+			else
+			{
+				go->currentTrajectoryNode = -1;
+				go->currentTrajectoryPath = NULL;
+			}
+
+			if (go->currentTrajectoryNode > -1)
+			{
+				f32 distance = curentPos.getDistanceFrom(nextPos);
+
+				if (speed==0) speed=1; //we need to ensure against division with zero.
+				f32 timeToNextNode = distance*1000/speed;
+				//calculate next path node distance and time
+				AddTranslateGameObject((*it), go->currentTrajectoryPath->nodes[go->currentTrajectoryNode].position, (u32)timeToNextNode);
+			}
 		}
 	}
 }
