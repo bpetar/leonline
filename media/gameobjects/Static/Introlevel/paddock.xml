@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
 	<Name value="Old Paddock" id="137"/>
-	<Model value="paddock.x"/>
+	<Model value="paddock.3ds"/>
 	<Description value="Old wooden paddock." id="138"/>
 </Config>
