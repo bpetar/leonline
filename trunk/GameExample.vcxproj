@@ -105,6 +105,7 @@
     <ClInclude Include="game\source\Particles.h" />
     <ClInclude Include="game\source\PlayerCharacter.h" />
     <ClInclude Include="game\source\Script.h" />
+    <ClInclude Include="game\source\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game\source\CCharacter.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="game\source\Particles.cpp" />
     <ClCompile Include="game\source\PlayerCharacter.cpp" />
     <ClCompile Include="game\source\Script.cpp" />
+    <ClCompile Include="game\source\Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
