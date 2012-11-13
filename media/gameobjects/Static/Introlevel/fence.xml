@@ -1,6 +1,6 @@
 <!-- Game Object Configuration File -->
 <Config>
 	<Name value="Fence" id="151"/>
-	<Model value="fence.3ds"/>
+	<Model value="fence.x"/>
 	<Description value="Yellow fence." id="152"/>
 </Config>

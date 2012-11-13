@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Crate" id="75"/>
+	<Model value="crate.x"/>
+	<Description value="Wooden crate. Obligatory game prop." id="76"/>
+</Config>
