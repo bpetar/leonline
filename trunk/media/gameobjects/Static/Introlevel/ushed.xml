@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Shed" id="73"/>
+	<Model value="ushed.x"/>
+	<Description value="For tools and grains." id="74"/>
+</Config>

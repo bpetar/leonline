@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Wagon" id="145"/>
+	<Model value="wagon.x"/>
+	<Description value="Small wooden cart." id="146"/>
+</Config>
