@@ -118,7 +118,7 @@ public:
 
 	//moving game objects have trajectory
 	CGameObject* CreateTrajectoryNodeGO(TPath* trajectoryPath, vector3df position, vector3df rotation, vector3df scale, s32 id, f32 pause, f32 speed, ISceneManager* smgr);
-	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list <CGameObject*> listOfGameObjects);
+	void LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list <CGameObject*> *listOfGameObjects);
 	void SaveTrajectoryPaths(IXMLWriter* writer);
 	void AddTrajectoryPath();
 	void DeleteTrajectoryPath();

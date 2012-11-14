@@ -1607,27 +1607,8 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 
 							if(xml)
 							{
-								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr(), m_ListOfGameObjects); //this path refers to game object moving trajectory
+								gameObject->LoadTrajectoryPaths(xml, m_EditorManager->getSceneMngr(), &m_ListOfGameObjects); //this path refers to game object moving trajectory
 								xml->drop();
-
-								/*for(u32 i=0; i < gameObject->m_ListOfTrajectoryPaths.size(); i++)
-								{
-									//usualy there is only one path
-									for (u32 j=0; j< gameObject->m_ListOfTrajectoryPaths[i].nodes.size(); j++)
-									{
-										CGameObject* pathNodeGO = new CGameObject();
-										pathNodeGO->isTrajectoryNode = true;
-										pathNodeGO->name = TRAJECTORY_NODE_GAME_OBJECT;
-										pathNodeGO->mesh = TRAJECTORY_NODE_GAME_OBJECT;
-										//set position, rotation, scale and id
-										pathNodeGO->pos = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getPosition();
-										pathNodeGO->rot = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getRotation();
-										pathNodeGO->scale = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getScale();
-										pathNodeGO->id = gameObject->m_ListOfTrajectoryPaths[i].nodes[j].sceneNode->getID();
-										m_ListOfGameObjects.push_back(pathNodeGO);
-									}
-								}*/
-
 							}
 
 							m_EditorManager->backToWorkingDirectory();
@@ -2437,7 +2418,8 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 				TPath* trajectoryPath = go->trajectoryParent->findNodeTrajectory(go->id);
 				vector3df position = vector3df(0,0,0); //mouse intersect terrain;
 				s32 id = m_EditorManager->m_ID++; //increment map id
-				go->trajectoryParent->CreateTrajectoryNodeGO(trajectoryPath, position, vector3df(0.0,0.0,0.0), vector3df(1.0,1.0,1.0), id, 0, 100, m_EditorManager->getSceneMngr());
+				CGameObject* pathNodeGO = go->trajectoryParent->CreateTrajectoryNodeGO(trajectoryPath, position, vector3df(0.0,0.0,0.0), vector3df(1.0,1.0,1.0), id, 0, 100, m_EditorManager->getSceneMngr());
+				m_ListOfGameObjects.push_back(pathNodeGO);
 			}
 			else
 			{
