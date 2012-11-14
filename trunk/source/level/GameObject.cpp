@@ -201,7 +201,7 @@ CGameObject* CGameObject::CreateTrajectoryNodeGO(TPath* trajectoryPath, vector3d
 	return pathNodeGO;
 }
 
-void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list <CGameObject*> listOfGameObjects)
+void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list <CGameObject*> *listOfGameObjects)
 {
 	bool startStoringPathNodes = false;
 	TPath t_path;
@@ -233,7 +233,7 @@ void CGameObject::LoadTrajectoryPaths(IXMLReader* xml, ISceneManager* smgr, list
 						s32 n_id = xml->getAttributeValueAsInt(L"id");
 						
 						CGameObject* pathNodeGO = CreateTrajectoryNodeGO(&t_path, n_position, n_rotation, n_scale, n_id, n_pause, n_speed, smgr);
-						//listOfGameObjects.push_back(pathNodeGO);
+						listOfGameObjects->push_back(pathNodeGO);
 
 					}
 				}
