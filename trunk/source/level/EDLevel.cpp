@@ -3224,7 +3224,7 @@ void CEditorLevel::EnlightAllNodes()
 {
 	list<CGameObject*>::Iterator it = m_ListOfGameObjects.begin();
 	
-	m_EditorManager->getSceneMngr()->setAmbientLight(SColorf(0.2f, 0.2f, 0.1f, 0.8f));
+	m_EditorManager->getSceneMngr()->setAmbientLight(SColorf(0.1f, 0.1f, 0.05f, 0.6f));
 
 	for (; it != m_ListOfGameObjects.end(); ++it)
 	{
