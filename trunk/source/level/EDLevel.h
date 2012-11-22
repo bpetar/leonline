@@ -85,11 +85,13 @@ public:
 	void ReadSceneNode(IXMLReader* reader);
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	void OnSaveMap();
-	CTreeSceneNode* createTree(PROCEDURAL_TREE_TYPE treeType);
+	CTreeSceneNode* CreateTree(PROCEDURAL_TREE_TYPE treeType);
+	ISceneNode* CreateWater();
 	void InsertLight();
 	void InsertDancingLight();
 	void InsertParticles(PARTICLE_SYSTEM_TYPE, TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void InsertTree(PROCEDURAL_TREE_TYPE treeType);
+	void InsertWater();
 	void InsertTerrainGrass(int param);
 	void InsertFlag();
 	void CreateCamera(vector3df position);
@@ -180,7 +182,6 @@ public:
 	CTreeGenerator* m_OakTreeGenerator;
 	CTreeGenerator* m_PineTreeGenerator;
 	CTreeGenerator* m_WillowTreeGenerator;
-	CTreeSceneNode* m_Tree;
 	video::ITexture* m_AspenTreeTexture;
     video::ITexture* m_AspenLeafTexture;
 	video::ITexture* m_OakTreeTexture;

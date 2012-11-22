@@ -720,7 +720,35 @@ PARTICLE_SYSTEM_TYPE getParticleTypeFromName(stringc name)
 	return LE_PS_FIRE;
 }
 
-CTreeSceneNode* CEditorLevel::createTree(PROCEDURAL_TREE_TYPE treeType)
+ISceneNode* CEditorLevel::CreateWater()
+{
+	/*
+	Now, for the first special effect: Animated water. It works like this:
+	The WaterSurfaceSceneNode takes a mesh as input and makes it wave like
+	a water surface. And if we let this scene node use a nice material like
+	the EMT_REFLECTION_2_LAYER, it looks really cool. We are doing this
+	with the next few lines of code. As input mesh, we create a hill plane
+	mesh, without hills. But any other mesh could be used for this, you
+	could even use the room.3ds (which would look really strange) if you
+	want to.
+	*/
+
+	IAnimatedMesh* mesh = m_EditorManager->getSceneMngr()->addHillPlaneMesh( "waterBed",
+		dimension2d<f32>(20,20),
+		dimension2d<u32>(40,40), 0, 0,
+		dimension2d<f32>(0,0),
+		dimension2d<f32>(10,10));
+
+	ISceneNode* node = m_EditorManager->getSceneMngr()->addWaterSurfaceSceneNode(mesh->getMesh(0), 0.5f, 400.0f, 10.0f, 0, m_EditorManager->m_ID);
+	node->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture("media/stones.jpg"));
+	node->setMaterialTexture(1, m_EditorManager->getDriver()->getTexture("media/water.jpg"));
+	node->setMaterialType(video::EMT_REFLECTION_2_LAYER);
+	node->setName("Water Surface");
+
+	return node;
+}
+
+CTreeSceneNode* CEditorLevel::CreateTree(PROCEDURAL_TREE_TYPE treeType)
 {
 	CTreeSceneNode* tree = new CTreeSceneNode( m_EditorManager->getSceneMngr()->getRootSceneNode(), m_EditorManager->getSceneMngr(), m_EditorManager->m_ID);
     tree->setMaterialFlag( EMF_LIGHTING, false );
@@ -1048,7 +1076,7 @@ void CEditorLevel::InsertParticles(PARTICLE_SYSTEM_TYPE type, TEEmiterType emite
  */
 void CEditorLevel::InsertTree(PROCEDURAL_TREE_TYPE treeType)
 {
-	m_SelectedGameObject = m_Tree = createTree(treeType);
+	m_SelectedGameObject = CreateTree(treeType);
 
 	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
 	//m_SelectedGameObject->setName(treeName.c_str());
@@ -1066,6 +1094,31 @@ void CEditorLevel::InsertTree(PROCEDURAL_TREE_TYPE treeType)
 	gameObject->isStatic = false; //true should involve triangle selector thingy*/
 	gameObject->id = m_EditorManager->m_ID;
 	gameObject->description = L"Procedural tree";
+	gameObject->script = L"";
+	m_ListOfGameObjects.push_back(gameObject);
+
+	m_EditorManager->m_ID++;
+
+	m_bMoveSelectedNode = true;
+}
+
+/**
+ * \brief Insert water surface
+ * \author Petar Bajic 
+ * \date November, 22 2012.
+ */
+void CEditorLevel::InsertWater()
+{
+	m_SelectedGameObject = CreateWater();
+
+	m_SelectedBox = m_SelectedGameObject->getBoundingBox();
+	//m_SelectedGameObject->setName(treeName.c_str());
+
+	CGameObject* gameObject = new CGameObject();
+	gameObject->mesh = WATER_MESH;
+	gameObject->name = m_SelectedGameObject->getName();
+	gameObject->id = m_EditorManager->m_ID;
+	gameObject->description = L"Dynamically created water surface.";
 	gameObject->script = L"";
 	m_ListOfGameObjects.push_back(gameObject);
 
@@ -1522,7 +1575,14 @@ void CEditorLevel::ReadSceneNode(IXMLReader* reader)
 						//recreate procedural mesh here
 						gameObject = new CGameObject();
 						gameObject->mesh = PROCEDURAL_TREE_MESH;
-						node = createTree(getProceduralTreeTypeFromName(attr->getAttributeAsString("Name")));
+						node = CreateTree(getProceduralTreeTypeFromName(attr->getAttributeAsString("Name")));
+					}
+					if(meshPath == stringc(WATER_MESH))
+					{
+						//recreate procedural mesh here
+						gameObject = new CGameObject();
+						gameObject->mesh = WATER_MESH;
+						node = CreateWater();
 					}
 					else if(meshPath == stringc(PARTICLE_GAME_OBJECT))
 					{
@@ -2412,7 +2472,7 @@ bool CEditorLevel::OnEvent(const SEvent& eventer)
 		{
 			//add trajectory node for selected object, 
 			//if game object is selected, add whole new trajectory path, if trajectory node is selected, add new node to selected path
-			if(go->isTrajectoryNode)
+			if(go && go->isTrajectoryNode)
 			{
 				//add new node to the same path as selected trajectory node
 				TPath* trajectoryPath = go->trajectoryParent->findNodeTrajectory(go->id);

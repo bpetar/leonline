@@ -66,6 +66,7 @@ void CreateMenu(CEditorManager* editorManager)
 	submenu = menu->getSubMenu(3);
 	submenu->addItem(L"Cube", GUI_ID_MENU_INSERT_CUBE);
 	submenu->addItem(L"Sphere", GUI_ID_MENU_INSERT_SPHERE);
+	submenu->addItem(L"Water", GUI_ID_MENU_INSERT_WATER);
 	submenu->addItem(L"Procedural Tree", -1, true, true);
 	submenu->addItem(L"Terrain Grass", GUI_ID_MENU_INSERT_GRASS);
 	submenu->addItem(L"Terrain from Heightmap", GUI_ID_MENU_INSERT_TERRAIN);
@@ -75,7 +76,7 @@ void CreateMenu(CEditorManager* editorManager)
 	submenu->addItem(L"Light", GUI_ID_MENU_INSERT_LIGHT);
 	submenu->addItem(L"Dancing Light", GUI_ID_MENU_INSERT_DANCING_LIGHT);
 
-	editorManager->getGUIManager()->m_TreeSubmenu = submenu->getSubMenu(2);
+	editorManager->getGUIManager()->m_TreeSubmenu = submenu->getSubMenu(3);
 	editorManager->getGUIManager()->m_TreeSubmenu->addItem(L"Aspen Tree", GUI_ID_MENU_INSERT_TREE_ASPEN);
 	editorManager->getGUIManager()->m_TreeSubmenu->addItem(L"Oak Tree", GUI_ID_MENU_INSERT_TREE_OAK);
 	editorManager->getGUIManager()->m_TreeSubmenu->addItem(L"Pine Tree", GUI_ID_MENU_INSERT_TREE_PINE);
@@ -192,6 +193,13 @@ bool HandleMenuClick(CEditorManager* editorManager, s32 id)
 				edGui->m_ViewMenu->setItemChecked(edGui->m_ViewMenuItem_Properties,false);
 				edGui->m_bObjectPropertiesVisible = true;
 			}
+		}
+		break;
+		//Insert Water
+		case GUI_ID_MENU_INSERT_WATER:
+		{
+			edGui->AddNodeToSceneTree(editorManager->m_ID,L"Water Surface");
+			editorManager->getEdiLevel()->InsertWater();
 		}
 		break;
 		//Insert->Procedural Tree-> Aspen
