@@ -25,6 +25,7 @@
 	<Introlevel>
 		<Static filename="land"/>
 		<Static filename="windmill"/>
+		<Static filename="bridge"/>
 		<Static filename="uhouse"/>
 		<Static filename="ushed"/>
 		<Static filename="intro"/>

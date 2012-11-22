@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Bridge" id="0"/>
+	<Model value="bridge.x"/>
+	<Description value="Wooden moat bridge." id="0"/>
+</Config>

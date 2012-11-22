@@ -49,6 +49,7 @@ using namespace gui;
 #define IRRLOGO_FILE "media/irrlichtlogo2.png"
 
 #define PROCEDURAL_TREE_MESH "procedural_tree_mesh"
+#define WATER_MESH "water_mesh"
 #define PARTICLE_GAME_OBJECT "particle_game_object_mesh"
 #define LIGHT_GAME_OBJECT "light_game_object_mesh"
 #define TRAJECTORY_NODE_GAME_OBJECT "trajectory_node_game_object"
