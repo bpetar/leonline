@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="DH Walls" id="0"/>
+	<Model value="Dwarven Hall walls.x"/>
+	<Script value="halls.script"/>
+	<Description value="Entrance to dwarven lands.." id="0"/>
+</Config>
