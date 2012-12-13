@@ -1,0 +1,7 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="DH Floors" id="0"/>
+	<Model value="Dwarven Hall floor.x"/>
+	<Script value="halls.script"/>
+	<Description value="Entrance to dwarven lands.." id="0"/>
+</Config>
