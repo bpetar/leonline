@@ -743,6 +743,7 @@ ISceneNode* CEditorLevel::CreateWater()
 	node->setMaterialTexture(0, m_EditorManager->getDriver()->getTexture("media/stones.jpg"));
 	node->setMaterialTexture(1, m_EditorManager->getDriver()->getTexture("media/water.jpg"));
 	node->setMaterialType(video::EMT_REFLECTION_2_LAYER);
+	node->setMaterialType(EMT_TRANSPARENT_ADD_COLOR);
 	node->setName("Water Surface");
 
 	return node;

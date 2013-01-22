@@ -1165,6 +1165,7 @@ void CEditorGUI::SetPropertiesRotation(f32 x, f32 y, f32 z)
  */
 void CEditorGUI::SetProperties(CGameObject* go)
 {
+	//TODO: If properties window is not shown it crashes!
 	m_PropEditBox_Name->setText(go->name.c_str());
 	m_PropEditBox_Pos_X->setText(stringw(go->pos.X).c_str());
 	m_PropEditBox_Pos_Y->setText(stringw(go->pos.Y).c_str());
