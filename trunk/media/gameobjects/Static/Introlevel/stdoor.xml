@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Stone Door"/>
+	<Model value="stdoor.x"/>
+	<Description value="Stone Door to fit in stone portal."/>
+</Config>

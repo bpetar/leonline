@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Ladder"/>
+	<Model value="ladder.x"/>
+	<Description value="For climbing trees and crossing streams."/>
+</Config>
