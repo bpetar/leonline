@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Rock"/>
+	<Model value="rock.x"/>
+	<Description value="Rock."/>
+</Config>

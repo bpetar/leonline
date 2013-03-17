@@ -1,0 +1,6 @@
+<!-- Game Object Configuration File -->
+<Config>
+	<Name value="Stone Portal"/>
+	<Model value="stones.x"/>
+	<Description value="Stone portal."/>
+</Config>
