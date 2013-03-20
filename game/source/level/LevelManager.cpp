@@ -112,6 +112,7 @@ void CLevelManager::Update(IVideoDriver* driver, IrrlichtDevice* pDevice, f32 el
 {
 	m_pLevels[m_LevelIndex]->UpdateMonsters(driver, elapsed_time, pc, font, m_pCamera);
 	m_pLevels[m_LevelIndex]->UpdateTranslateGameObject(elapsed_time);
+	m_pLevels[m_LevelIndex]->UpdateRotateGameObject(elapsed_time);
 	m_pLevels[m_LevelIndex]->UpdateParticles(elapsed_time);
 
 	//debug draw bounding box:
@@ -287,7 +288,7 @@ void CLevelManager::AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, bool loop, 
 }
 
 /**
- * \brief Animates an object with given keyframes
+ * \brief Translates an object with given id.
  * \author Petar Bajic 
  * \date July, 21 2011.
  */
@@ -302,6 +303,22 @@ void CLevelManager::TranslateGameObject(ISceneNode* node, vector3df translationV
 	m_pLevels[m_LevelIndex]->AddTranslateGameObject(node,translationVectorEndPosition,translationTime);
 }
 
+
+/**
+ * \brief Rotates an object with given id.
+ * \author Petar Bajic 
+ * \date July, 21 2011.
+ */
+void CLevelManager::RotateGameObject(ISceneNode* node, vector3df rotationVectorEndPosition, u32 rotationTime)
+{
+	
+	if(node != m_GameManager->getPC()->getNode())
+	{
+		//remove from obstacles (for sliding platforms we would surely want to have obstacle triangle selector move with the plaform, but like above, physic engine is proper solution for that.
+		m_pLevels[m_LevelIndex]->m_ObstacleMetaTriangleSelector->removeTriangleSelector(node->getTriangleSelector());
+	}
+	m_pLevels[m_LevelIndex]->AddRotateGameObject(node,rotationVectorEndPosition,rotationTime);
+}
 
 /**
  * \brief Creates camera in initial position (used for loading map)

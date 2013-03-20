@@ -33,6 +33,14 @@ typedef struct
 
 typedef struct
 {
+	ISceneNode* node;
+	vector3df angle;
+	f32 rotationTime;
+	f32 endTime;
+} RotateGameObject;
+
+typedef struct
+{
 	float lifeTime;
 	float afterLifeTime;
 	bool followPlayer;
@@ -78,11 +86,13 @@ public:
 	void NotifyMonsterOfAttack(s32 id);
 	void UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerCharacter* pc, IGUIFont* font, ICameraSceneNode* cam);
 	void UpdateTranslateGameObject(f32 elapsed_time);
+	void UpdateRotateGameObject(f32 elapsed_time);
 	void UpdateParticles(f32 elapsed_time);
 	ISceneNode* CreateLight(f32 radius);
 	IParticleSystemSceneNode* CreateParticles(PARTICLES_EFFECT_TYPE type);
 	IParticleSystemSceneNode* InsertParticlesNode(TEEmiterType emiterType, aabbox3df emiterSize, vector3df direction, stringc texture, stringc name, s32 emitRateMin, s32 emitRateMax, s32 angle, bool outlineOnly);
 	void AddTranslateGameObject(ISceneNode* node, vector3df translationVectorEndPosition, u32 translationTime);
+	void AddRotateGameObject(ISceneNode* node, vector3df rotationVectorEndPosition, u32 rotationTime);
 	void ReadSceneNode(IXMLReader* reader);
 	void WriteSceneNode(IXMLWriter* writer, ISceneNode* node);
 	CGameObject* createPickableGameObject(stringw rootName, s32 id);
@@ -136,6 +146,7 @@ public:
 	stringc m_MapAmbientSound;
 	stringc m_MapNarationFile;
 	array <TranslateGameObject*> m_TranslateGameObject;
+	array <RotateGameObject*> m_RotateGameObject;
 	bool firstObstacle;
 	ISceneNode* rootObstacleNode;
 

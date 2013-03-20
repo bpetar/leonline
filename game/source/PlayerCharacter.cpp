@@ -346,7 +346,7 @@ void CPlayerCharacter::notifyAttackEnd()
 
 void CPlayerCharacter::addAnimator(ITriangleSelector* selector)
 {
-	ISceneNodeAnimator* anim = m_GameManager->getSceneMngr()->createCollisionResponseAnimator(selector, node, vector3df(6,3,6),vector3df(0,-3,0),vector3df(0,1,0));
+	ISceneNodeAnimator* anim = m_GameManager->getSceneMngr()->createCollisionResponseAnimator(selector, node, vector3df(11,8,11),vector3df(0,-3,0),vector3df(0,1,0));
 	node->addAnimator(anim);
 	anim->drop();  // Drop the animator when we're done referring to it.
 }

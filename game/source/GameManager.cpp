@@ -853,6 +853,15 @@ void CGameManager::TranslateGameObject(s32 id, vector3df translationVectorEndPos
 }
 
 /**
+ * \brief This function will rotate object with given id.
+ */
+void CGameManager::RotateGameObject(s32 id, vector3df rotationVectorEndPosition, u32 rotationTime)
+{
+	ISceneNode* node = m_pLevelManager->m_pLevels[m_pLevelManager->m_LevelIndex]->m_SMGR->getSceneNodeFromId(id);
+	m_pLevelManager->RotateGameObject(node, rotationVectorEndPosition, rotationTime);
+}
+
+/**
  * \brief When player needs to be moved around by some force, this function will translate it
  * translationVector is relative, translationTime is in miliseconds.
  */

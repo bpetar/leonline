@@ -1187,6 +1187,41 @@ void CLevel::UpdateMonsters(IVideoDriver* driver, f32 elapsed_time, CPlayerChara
 	}
 }
 
+void CLevel::UpdateRotateGameObject(f32 elapsed_time)
+{
+	for(u32 i=0; i < m_RotateGameObject.size(); i++)
+	{
+		f32 currentTime = (f32)m_pDevice->getTimer()->getTime();
+		debugPrint("Rotating object. id:%d, currentTime:%f, endTime:%f\n", m_RotateGameObject[i]->node->getID(), currentTime, m_RotateGameObject[i]->endTime);
+		if(currentTime < m_RotateGameObject[i]->endTime)
+		{
+			f32 newXRot = m_RotateGameObject[i]->node->getRotation().X + m_RotateGameObject[i]->angle.X*elapsed_time*1000.f/m_RotateGameObject[i]->rotationTime;
+			f32 newYRot = m_RotateGameObject[i]->node->getRotation().Y + m_RotateGameObject[i]->angle.Y*elapsed_time*1000.f/m_RotateGameObject[i]->rotationTime;
+			f32 newZRot = m_RotateGameObject[i]->node->getRotation().Z + m_RotateGameObject[i]->angle.Z*elapsed_time*1000.f/m_RotateGameObject[i]->rotationTime;
+			m_RotateGameObject[i]->node->setRotation(vector3df(newXRot, newYRot, newZRot));
+			debugPrint("Rotating object. x:%f, y:%f, z:%f\n",newXRot, newYRot, newZRot);
+		}
+		else
+		{
+			//TODO
+			//if(m_RotateGameObject[i]->node == m_GameManager->getPC()->getNode())
+			//{
+				//m_GameManager->getPC()->m_bRotated = false;
+			//}
+
+			//if game object has path it moves on, we might need to continue his movement after this translation is finished
+			//CGameObject* go = getGameObjectFromID(m_TranslateGameObject[i]->node->getID());
+			//if(go->hasTrajectoryPath && go->currentTrajectoryPath != NULL)
+			//{
+			//	reinstantiateList.push_back(m_TranslateGameObject[i]->node);
+			//}
+			m_ObstacleMetaTriangleSelector->addTriangleSelector(m_RotateGameObject[i]->node->getTriangleSelector());
+			m_RotateGameObject.erase(i);
+			i--;
+		}
+	}
+}
+
 void CLevel::UpdateTranslateGameObject(f32 elapsed_time)
 {
 	//List of nodes that need to start new translation right after this one is finished
@@ -1282,6 +1317,18 @@ void CLevel::AddTranslateGameObject(ISceneNode* node, vector3df translationVecto
 	newTranslator->endTime = (f32) (m_pDevice->getTimer()->getTime() + translationTime);
 	debugPrint("AddTranslateGameObject. Distance.X:%f, Distance.Y:%f, Distance.Z:%f\n",newTranslator->Distance.X, newTranslator->Distance.Y, newTranslator->Distance.Z);
 	m_TranslateGameObject.push_back(newTranslator);
+}
+
+void CLevel::AddRotateGameObject(ISceneNode* node, vector3df rotationVectorEndPosition, u32 rotationTime)
+{
+	//TODO: If node not already being rotated!
+	RotateGameObject* newRotator = new RotateGameObject;
+	newRotator->node = node;
+	newRotator->angle = rotationVectorEndPosition - node->getRotation();
+	newRotator->rotationTime = (f32) rotationTime;
+	newRotator->endTime = (f32) (m_pDevice->getTimer()->getTime() + rotationTime);
+	debugPrint("AddRotateGameObject. angle.X:%f, angle.Y:%f, angle.Z:%f\n",newRotator->angle.X, newRotator->angle.Y, newRotator->angle.Z);
+	m_RotateGameObject.push_back(newRotator);
 }
 
 bool CLevel::EraseElement(int id)
