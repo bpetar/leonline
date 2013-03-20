@@ -58,6 +58,7 @@ public:
 	void SetMonstersCollisionAnimator();
 	void AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, bool loop, f32 animationSpeed);
 	void TranslateGameObject(ISceneNode* node, vector3df translationVectorEndPosition, u32 translationTime);
+	void RotateGameObject(ISceneNode* node, vector3df rotationVectorEndPosition, u32 rotationTime);
 	void  RemoveContainerContent(int containerID);
 	void RemoveContainerContent(s32 containerID, s32 itemID);
 	void  AddContainerItem(int containerID, CGameObject* pick);

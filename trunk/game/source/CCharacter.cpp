@@ -57,7 +57,7 @@ bool CCharacter::Init(ISceneManager *smgr, const c8* meshPath)
    {
 		node->setMaterialFlag(video::EMF_LIGHTING, false);
 
-		fSpeed = 849.f;
+		fSpeed = 49.f;
 
 		curState = Idle;
 		oldState = Idle;
@@ -294,7 +294,7 @@ void CCharacter::move(core::vector3df pos, f32 elapsed_time)
 	}
 	else
 	{
-		if (node->getPosition().getDistanceFrom(pos) < 9)
+		if (node->getPosition().getDistanceFrom(pos) < 19)
 		{
 			idle();
 			//notify that character reached the goal

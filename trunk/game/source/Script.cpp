@@ -822,6 +822,33 @@ void CScript::ExecuteScriptAction(TAction* action, bool consumePickable, s32 id)
 
 		m_GameManager->TranslateGameObject(TargetID, translationVectorEndPosition, translationTime);
 	}
+	else if(action->name == stringw("RotateGameObject"))
+	{
+		u32 TargetID = 0;
+
+		stringc rotationVectorEndPositionStr = action->attribute;
+		stringc rotationTimeStr = action->value;
+		vector3df rotationVectorEndPosition = Util_getVectorFromString(rotationVectorEndPositionStr.c_str());
+		u32 rotationTime = atoi(rotationTimeStr.c_str());
+
+		if(action->target.equals_ignore_case("self"))
+		{
+			//This action is usually called when player clicks on trigger
+			//Object should be moved to coordinates given as attributes
+			TargetID = id;
+		}
+		else if(action->target.equals_ignore_case("player"))
+		{
+			//TODO
+			//m_GameManager->RotatePlayer(rotationVectorEndPosition, rotationTime);
+		}
+		else
+		{
+			TargetID = atoi(stringc(action->target).c_str());
+		}
+
+		m_GameManager->RotateGameObject(TargetID, rotationVectorEndPosition, rotationTime);
+	}
 	else if(action->name == stringw("ChangeCondition"))
 	{
 		stringw ConditionName = action->attribute;

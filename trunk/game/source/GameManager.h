@@ -129,6 +129,7 @@ public:
 	void AddPCExperience(s32 experience);
 	void AnimateTrigger(s32 id, u32 keyStart, u32 keyEnd, f32 animationSpeed);
 	void TranslateGameObject(s32 id, vector3df translationVectorEndPosition, u32 translationTime);
+	void RotateGameObject(s32 id, vector3df translationVectorEndPosition, u32 translationTime);
 	void TranslatePlayer(vector3df translationVectorEndPosition, u32 translationTime);
 	void ChangeLevel(stringc mapname, s32 startPositionFlagID);
 	void ChangeCondition(stringw cond, stringw value);
